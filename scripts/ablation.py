@@ -36,12 +36,12 @@ def run_ablation() -> List[Tuple[str, str, float, int]]:
     """Run core leave-one-out ablation suite."""
     specs = [
         ("core", "Full Core (M1-M6)"),
-        ("core,-mm", "w/o M1 (cross-modal)"),
-        ("core,-trace", "w/o M2 (trace-origin)"),
-        ("core,-typing", "w/o M3 (mechanism typing)"),
-        ("core,-load", "w/o M4 (load explain-away)"),
-        ("core,-text", "w/o M5 (text sensor)"),
-        ("core,-chain", "w/o M6 (causal chain)"),
+        ("no_mm", "w/o M1 (cross-modal)"),
+        ("no_trace", "w/o M2 (trace-origin)"),
+        ("no_typing", "w/o M3 (mechanism typing)"),
+        ("no_load", "w/o M4 (load explain-away)"),
+        ("no_text", "w/o M5 (text sensor)"),
+        ("no_chain", "w/o M6 (causal chain)"),
         ("base", "Base model (M0 only)"),
         ("hybrid", "Hybrid (+ bounded LLM)"),
     ]

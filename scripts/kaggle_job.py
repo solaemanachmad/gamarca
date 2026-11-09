@@ -82,8 +82,7 @@ def main():
     assert a.arm in D["ARMS"], f"unknown arm {a.arm!r}; --list shows the arms"
     assert a.model in D["MODELS"], f"unknown model {a.model!r}; --list shows the models"
 
-    named = {"all": D["ALL_IDS"], "odd": D["DEV_ODD"], "even": D["VAL_EVEN"]}
-    cases = named.get(a.cases) or [c.strip() for c in a.cases.split(",") if c.strip()]
+    cases = D["ALL_IDS"] if a.cases == "all" else [c.strip() for c in a.cases.split(",") if c.strip()]
     shard = None
     if a.shard:
         k, n = (int(x) for x in a.shard.split("/"))

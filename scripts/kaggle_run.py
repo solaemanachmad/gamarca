@@ -63,12 +63,12 @@ ARMS = {                                                          # name -> extr
     "A": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "base"},                       # configuration A (M0 only)
     "GAMA_CORE": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "core"},
     "GAMA_LLM": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "full"},
-    **{f"GAMA_CORE_NO_{name}": {"_SYSTEM": "gama", **W, "GAMA_MODULES": f"core,-{mod}"}
+    **{f"GAMA_CORE_NO_{name}": {"_SYSTEM": "gama", **W, "GAMA_MODULES": f"no_{mod}"}
+       for name, mod in (("MM", "mm"), ("TRACE", "trace"), ("TYPE", "typing"), ("LOAD", "load"), ("TEXT", "text"), ("CHAIN", "chain"))},
+    **{f"NO_{name}": {"_SYSTEM": "gama", **W, "GAMA_MODULES": f"no_{mod}"}
        for name, mod in (("MM", "mm"), ("TRACE", "trace"), ("TYPE", "typing"), ("LOAD", "load"), ("TEXT", "text"), ("CHAIN", "chain"))},
 }
 _MF = os.path.join(DATA, "manifest.txt")                  # absent when only the presets are read (scripts/aiops2025_run.py --model)
 ALL_IDS = [l.strip() for l in open(_MF) if l.strip()] if os.path.exists(_MF) else []
-DEV_ODD = [c for c in ALL_IDS if int(c[1:]) % 2 == 1]     # internal record of the v5 development protocol (PREREGISTRATION_V5.md)
-VAL_EVEN = [c for c in ALL_IDS if int(c[1:]) % 2 == 0]
 
 # %% Cell end
