@@ -57,14 +57,15 @@ def run_ablation() -> List[Tuple[str, str, float, int]]:
 def print_table(rows: List[Tuple[str, str, float, int]]) -> None:
     """Print markdown ablation table."""
     print("\n# GAMARCA Module Ablation Study\n")
-    print("| Switch Spec | Description | Mean Conf | Chain Steps |")
+    print("| Switch Spec | Description | Posterior P(e*) | Chain Steps |")
     print("|:---|:---|:---:|:---:|")
     base_conf = rows[0][2]
     for spec, desc, conf, steps in rows:
         delta = conf - base_conf
         diff_str = f"({delta:+.3f})" if abs(delta) > 1e-4 else " [ref]"
         print(f"| `{spec}` | {desc} | {conf:.3f} {diff_str} | {steps} |")
-    print("\n*Evaluated deterministically across all benchmark scenarios.*")
+    print("\n*Note: Posterior P(e*) reflects internal Bayesian confidence, NOT ground-truth accuracy.*")
+    print("*On 103 real cases (Table 5 in paper), removing M2 drops Final score by -5.6 points (overconfidence).*")
 
 
 def main() -> int:
