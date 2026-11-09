@@ -200,12 +200,12 @@ def llm_arms(rel, specs, wins) -> int:
     finally:
         gr.STOP_P = stop
     s2 = r2.retrieval_stats
-    good &= bool(s2.get("v6_gate_called")) and s2.get("v6_gate_entity") == "frontend" and r2.predicted_entity_ids == ["frontend"]
+    good &= bool(s2.get("gate_called")) and s2.get("gate_entity") == "frontend" and r2.predicted_entity_ids == ["frontend"]
     good &= all("F034-cpuFullLoad" not in q for q in st2.prompts)
     a2 = answer(case, r2)
     good &= a2["component"] == "frontend"
-    print(f"{'ok  ' if good else 'FAIL'} LLM arms: evidence -> {r.predicted_entity_ids} {r.predicted_fault_type}; v6 gate "
-          f"{s2.get('v6_entity_before')} -> {s2.get('v6_gate_entity')}, decided {r2.predicted_entity_ids} {r2.predicted_fault_type}, "
+    print(f"{'ok  ' if good else 'FAIL'} LLM arms: evidence -> {r.predicted_entity_ids} {r.predicted_fault_type}; gate "
+          f"{s2.get('prior_entity')} -> {s2.get('gate_entity')}, decided {r2.predicted_entity_ids} {r2.predicted_fault_type}, "
           f"{s2.get('total_calls')} calls")
     return int(good)
 
@@ -248,7 +248,7 @@ def main():
             good = ent == want_ent and typ in ("cpu_stress", "jvm-cpu-stress")
             ok += good
             print(f"{'ok  ' if good else 'FAIL'} {want_kind}-level cpu fault: decided {ent} {typ} (p={r.confidence:.2f}); "
-                  f"top {r.retrieval_stats.get('v3_top')}")
+                  f"top {r.retrieval_stats.get('top_hyp')}")
         ok += llm_arms(rel, specs, wins)
         print(f"{ok}/3 passed")
         sys.exit(0 if ok == 3 else 1)

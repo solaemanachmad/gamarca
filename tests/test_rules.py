@@ -87,23 +87,23 @@ def gate_asks_only_when_unsure_and_types_the_new_entity_with_the_model():
     try:
         gr.STOP_P = 0.0                                   # never unsure -> no second opinion
         llm = Scripted(entity=other)
-        r = run_case(sc_load_and_cpu(), llm, Modules.parse("v6"))
+        r = run_case(sc_load_and_cpu(), llm, Modules.parse("hybrid"))
         st = r.retrieval_stats
-        assert st["v6_gate_called"] is False and not any('"root_cause_entity"' in p for p in llm.calls), st
-        before = st["v6_entity_before"]
+        assert st["gate_called"] is False and not any('"root_cause_entity"' in p for p in llm.calls), st
+        before = st["prior_entity"]
         gr.STOP_P = 1.01                                  # always unsure -> one second opinion
         target = other if before != other else "frontend"
         llm = Scripted(entity=target)
-        r = run_case(sc_load_and_cpu(), llm, Modules.parse("v6"))
+        r = run_case(sc_load_and_cpu(), llm, Modules.parse("hybrid"))
         st = r.retrieval_stats
-        assert st["v6_gate_called"] and st["v6_gate_changed"] and st["v6_gate_entity"] == target, st
+        assert st["gate_called"] and st["gate_changed"] and st["gate_entity"] == target, st
         assert sum('"root_cause_entity"' in p for p in llm.calls) == 1
         assert "Statistical diagnosis" not in next(p for p in llm.calls if '"root_cause_entity"' in p)   # independent opinion
         assert r.retrieval_stats["_trace"]["decided"]["entity"] == target
         assert r.predicted_fault_type != "x"              # the LLM's type is not used: the model types the entity
         llm = Scripted(entity="no-such-entity")           # unknown name -> computed decision stands
-        r = run_case(sc_load_and_cpu(), llm, Modules.parse("v6"))
-        assert r.retrieval_stats["v6_gate_changed"] is False and r.retrieval_stats["_trace"]["decided"]["entity"] == before
+        r = run_case(sc_load_and_cpu(), llm, Modules.parse("hybrid"))
+        assert r.retrieval_stats["gate_changed"] is False and r.retrieval_stats["_trace"]["decided"]["entity"] == before
     finally:
         gr.STOP_P = saved
 

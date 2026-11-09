@@ -17,10 +17,13 @@ test:        ## Run unit and golden-snapshot tests (no GPU/API needed)
 	@$(PYTHON) tests/test_gama.py | tail -1
 	@$(PYTHON) tests/test_aiops2025.py | tail -1
 	@$(PYTHON) tests/test_api_client.py | tail -1
-	@$(PYTHON) tests/test_v6.py | tail -1
+	@$(PYTHON) tests/test_rules.py | tail -1
+
+ablation:    ## Run leave-one-out ablation suite
+	@$(PYTHON) scripts/ablation.py
 
 lint:        ## Run pyflakes linter on active code
-	$(PYTHON) -m pyflakes $$(git ls-files '*.py' 2>/dev/null || find . -name "*.py" -not -path "*/archive/*" -not -path "*/.venv/*")
+	$(PYTHON) -m pyflakes $$(git ls-files '*.py' 2>/dev/null | grep -v '^archive/' | grep -v '^\.venv/')
 
 clean:       ## Remove Python cache and temporary files
 	find . -type d -name "__pycache__" -exec rm -rf {} +
