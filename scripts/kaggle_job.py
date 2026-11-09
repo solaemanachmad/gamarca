@@ -35,6 +35,12 @@ import subprocess
 import sys
 import time
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 LOCAL_DATA = os.path.expanduser("~/Developments/RCA100")
