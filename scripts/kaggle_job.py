@@ -162,14 +162,17 @@ def main():
     if os.path.exists(out_csv):
         import pandas as pd
         d = pd.read_csv(out_csv)
-        cols = [c for c in ("entity_localization", "fault_identification_exact", "fault_group_identification", "reasoning_process",
-                            "final_score", "total_pipeline_time_s") if c in d.columns]
+        cols = [c for c in ("entity_loc", "fault_type", "fault_group", "reasoning", "final_score", "duration_s",
+                            "entity_localization", "fault_identification_exact", "fault_group_identification",
+                            "reasoning_process", "total_pipeline_time_s") if c in d.columns]
         print(f"\n{len(d)} rows")
-        print(d[[c for c in ("case_id", "entity_localization", "predicted_fault_type", "gt_fault_type", "final_score")
-                 if c in d.columns]].to_string(index=False))
+        show_cols = [c for c in ("case_id", "entity_loc", "pred_entity", "gt_entity", "pred_type", "gt_type",
+                                 "final_score", "entity_localization", "predicted_fault_type", "gt_fault_type")
+                     if c in d.columns]
+        print(d[show_cols].to_string(index=False))
         print(d[cols].mean(numeric_only=True).round(4).to_string())
     z = f"{a.out}/{name}_all.zip"
-    subprocess.run(f"cd {a.out} && rm -f {name}_all.zip && zip -qr {name}_all.zip {name}.csv {name}.log {name}.commit.txt {name}.manifest.json "
+    subprocess.run(f"cd {a.out} && rm -f {name}_all.zip && zip -qr {name}_all.zip {name}.csv {name}.jsonl {name}.log {name}.commit.txt {name}.manifest.json "
                    f"{name}_trace 2>/dev/null", shell=True)
     print("\ndownload:", z if os.path.exists(z) else "(zip failed)")
 

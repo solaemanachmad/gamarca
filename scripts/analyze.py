@@ -76,6 +76,23 @@ def load_arm(spec):
         calls += c
     d = pd.concat(frames, ignore_index=True)
     d = d[d["case_id"].notna()].drop_duplicates("case_id", keep="last").set_index("case_id")   # resume: last row wins
+    aliases = {
+        "final_score_nodes": "final_score",
+        "entity_localization": "entity_loc",
+        "fault_identification_exact": "fault_type",
+        "reasoning_process_nodes": "reasoning",
+        "fault_group_identification": "fault_group",
+    }
+    for canon, clean in aliases.items():
+        if canon not in d or d[canon].isna().all():
+            if clean in d:
+                d[canon] = d[clean]
+    if "rcl_exact" not in d and "pred_entity" in d and "gt_entity" in d:
+        d["rcl_exact"] = ((d["pred_entity"].notna()) & (d["pred_entity"] == d["gt_entity"])).astype(float)
+    if "ft_binary" not in d and "fault_type" in d:
+        d["ft_binary"] = d["fault_type"]
+    if "joint_exact" not in d and "rcl_exact" in d and "ft_binary" in d:
+        d["joint_exact"] = d["rcl_exact"] * d["ft_binary"]
     err = d["error"].fillna("").astype(str).str.strip().ne("") if "error" in d else pd.Series(False, index=d.index)
     for _, col in METRICS + COUNTS + OPTIONAL:
         d[col] = pd.to_numeric(d[col], errors="coerce") if col in d else np.nan   # NaN = not scored in that run (older column)
