@@ -22,6 +22,7 @@ Usage in an entry-point script:
 """
 
 import argparse
+import os
 
 
 def build_parser(parser: argparse.ArgumentParser = None) -> argparse.ArgumentParser:
@@ -128,21 +129,15 @@ def get_effective_config() -> dict:
 
 
 def print_effective_config() -> None:
-    """Prints the config values that actually matter for reproducing a run
-    -- handy to log at the start of main.py so results.csv runs
-    are traceable back to the settings that produced them.
-
-    Backend-aware: only shows the model setting for whichever LLM_BACKEND
-    is actually active, not all three possible backends' model names at
-    once. get_effective_config() (used for W&B logging) stays complete/
-    unfiltered, since a full record is useful there for reproducibility;
-    this is just the human-readable console summary."""
+    """Prints a concise summary of the active configuration."""
     cfg = get_effective_config()
-    print("=== Effective config for this run ===")
-    for k, v in cfg.items():
-        if k in _ALWAYS_HIDDEN:
-            continue
-        if cfg.get("USE_LOG_TEMPLATES") and k in _HIDE_WHEN_LOG_TEMPLATES:
-            continue
-        print(f"  {k} = {v}")
+    print("=== Active Configuration ===")
+    print(f"  LLM_BACKEND = {cfg.get('LLM_BACKEND')}")
+    if cfg.get('LLM_BACKEND') == 'api':
+        print(f"  API_MODEL = {os.environ.get('API_MODEL', '-')}")
+        print(f"  API_BASE_URL = {os.environ.get('API_BASE_URL', '-')}")
+    else:
+        print(f"  MODEL = {cfg.get('KAGGLE_MODEL_HANDLE', '-')}")
+    print(f"  GAMA_MODULES = {os.environ.get('GAMA_MODULES', 'core')}")
+    print(f"  FP_SCORING = {cfg.get('FP_SCORING')}")
     print()
