@@ -1,0 +1,176 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{avizienis2004taxonomy}
+A.~Avi{\v{z}}ienis, J.-C. Laprie, B.~Randell, C.~Landwehr, Basic concepts and taxonomy of dependable and secure computing, IEEE Transactions on Dependable and Secure Computing 1~(1) (2004) 11--33.
+
+\bibitem{soldani2022anomaly}
+J.~Soldani, A.~Brogi, Anomaly detection and failure root cause analysis in (micro)service-based cloud applications: A survey, ACM Computing Surveys 55~(3) (2022).
+
+\bibitem{zhang2025survey}
+S.~Zhang, et~al., Failure diagnosis in microservice systems: A comprehensive survey and analysis, ACM Transactions on Software Engineering and Methodology 35~(1) (2025).
+
+\bibitem{fu2025survey}
+L.~Fu, et~al., Intelligent root cause localization in microservice systems: A survey and new perspectives, ACM Computing Surveys 57~(12) (2025).
+
+\bibitem{cai2026benchmark}
+Y.~Cai, et~al., A multi-dataset benchmark for evaluating {LLM} agents in microservice failure diagnosis, arXiv preprint arXiv:2606.29193 (2026).
+
+\bibitem{wu2020microrca}
+L.~Wu, J.~Tordsson, E.~Elmroth, O.~Kao, {MicroRCA}: Root cause localization of performance issues in microservices, in: IEEE/IFIP Network Operations and Management Symposium (NOMS), 2020.
+
+\bibitem{ikram2022rcd}
+A.~Ikram, S.~Chakraborty, S.~Mitra, S.~Saini, S.~Bagchi, M.~Kocaoglu, Root cause analysis of failures in microservices through causal discovery, in: Advances in Neural Information Processing Systems, Vol.~35, 2022, pp. 31158--31170.
+
+\bibitem{pham2024baro}
+L.~Pham, H.~Ha, H.~Zhang, {BARO}: Robust root cause analysis for microservices via multivariate {Bayesian} online change point detection, Proceedings of the ACM on Software Engineering 1~(FSE) (2024) 2214--2237.
+
+\bibitem{li2022circa}
+M.~Li, et~al., Causal inference-based root cause analysis for online service systems with intervention recognition, in: Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, 2022, pp. 3230--3240.
+
+\bibitem{yu2023nezha}
+G.~Yu, P.~Chen, Y.~Li, H.~Chen, X.~Li, Z.~Zheng, Nezha: Interpretable fine-grained root causes analysis for microservices on multi-modal observability data, in: Proceedings of the 31st ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE), 2023, pp. 553--565.
+
+\bibitem{zheng2024mulan}
+L.~Zheng, Z.~Chen, J.~He, H.~Chen, {MULAN}: Multi-modal causal structure learning and root cause analysis for microservice systems, in: Proceedings of the ACM Web Conference (WWW), 2024, pp. 4107--4116.
+
+\bibitem{chen2024rcacopilot}
+Y.~Chen, et~al., Automatic root cause analysis via large language models for cloud incidents, in: Proceedings of the Nineteenth European Conference on Computer Systems (EuroSys), 2024, pp. 674--688.
+
+\bibitem{wang2024rcagent}
+Z.~Wang, et~al., {RCAgent}: Cloud root cause analysis by autonomous agents with tool-augmented large language models, in: Proceedings of the 33rd ACM International Conference on Information and Knowledge Management (CIKM), 2024.
+
+\bibitem{xu2025openrca}
+J.~Xu, et~al., {OpenRCA}: Can large language models locate the root cause of software failures?, in: The Thirteenth International Conference on Learning Representations (ICLR), 2025.
+
+\bibitem{pei2025flowofaction}
+C.~Pei, et~al., Flow-of-action: {SOP} enhanced {LLM}-based multi-agent system for root cause analysis, in: Companion Proceedings of the ACM on Web Conference 2025, 2025, pp. 422--431.
+
+\bibitem{zhang2024mabc}
+W.~Zhang, et~al., {mABC}: Multi-agent blockchain-inspired collaboration for root cause analysis in micro-services architecture, in: Findings of the Association for Computational Linguistics: EMNLP 2024, 2024, pp. 4017--4033.
+
+\bibitem{lu2026beyond}
+X.~Lu, et~al., Beyond fault localization: A trajectory-level study of {LLM} agents for microservice root cause analysis, arXiv preprint arXiv:2608.21310 (2026).
+
+\bibitem{riddell2026stalled}
+M.~Riddell, et~al., Stalled, biased, and confused: Uncovering reasoning failures in {LLMs} for cloud-based root cause analysis, in: Proceedings of FORGE, 2026.
+
+\bibitem{luo2026pos}
+X.~Luo, et~al., Beyond memory: Harnessing long-horizon agents with explicit belief states, arXiv preprint arXiv:2610.01415 (2026).
+
+\bibitem{luo2026graphofstates}
+X.~Luo, et~al., Graph of states: Solving abductive tasks with large language models, arXiv preprint arXiv:2603.21250 (2026).
+
+\bibitem{lin2018microscope}
+J.~Lin, P.~Chen, Z.~Zheng, Microscope: Pinpoint performance issues with causal graphs in micro-service environments, in: International Conference on Service-Oriented Computing (ICSOC), 2018, pp. 3--20.
+
+\bibitem{liu2021microhecl}
+D.~Liu, et~al., {MicroHECL}: High-efficient root cause localization in large-scale microservice systems, in: IEEE/ACM 43rd International Conference on Software Engineering: Software Engineering in Practice (ICSE-SEIP), 2021.
+
+\bibitem{meng2020microcause}
+Y.~Meng, et~al., Localizing failure root causes in a microservice through causality inference, in: IEEE/ACM 28th International Symposium on Quality of Service (IWQoS), 2020, pp. 1--10.
+
+\bibitem{shan2019epsilon}
+H.~Shan, et~al., $\epsilon$-diagnosis: Unsupervised and real-time diagnosis of small-window long-tail latency in large-scale microservice platforms, in: The World Wide Web Conference (WWW), 2019.
+
+\bibitem{li2021tracerca}
+Z.~Li, et~al., Practical root cause localization for microservice systems via trace analysis, in: IEEE/ACM 29th International Symposium on Quality of Service (IWQoS), 2021, pp. 1--10.
+
+\bibitem{yu2021microrank}
+G.~Yu, et~al., {MicroRank}: End-to-end latency issue localization with extended spectrum analysis in microservice environments, in: Proceedings of the Web Conference (WWW), 2021.
+
+\bibitem{guo2020graphtrace}
+X.~Guo, et~al., Graph-based trace analysis for microservice architecture understanding and problem diagnosis, in: Proceedings of ESEC/FSE, 2020.
+
+\bibitem{zhang2023diagfusion}
+S.~Zhang, et~al., Robust failure diagnosis of microservice system through multimodal data, IEEE Transactions on Services Computing 16~(6) (2023).
+
+\bibitem{lee2023eadro}
+C.~Lee, T.~Yang, Z.~Chen, Y.~Su, M.~R. Lyu, Eadro: An end-to-end troubleshooting framework for microservices on multi-source data, in: IEEE/ACM 45th International Conference on Software Engineering (ICSE), 2023.
+
+\bibitem{pearl1988probabilistic}
+J.~Pearl, Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference, Morgan Kaufmann, 1988.
+
+\bibitem{bahl2007sherlock}
+P.~Bahl, R.~Chandra, A.~Greenberg, S.~Kandula, D.~A. Maltz, M.~Zhang, Towards highly reliable enterprise network services via inference of multi-level dependencies, in: Proceedings of ACM SIGCOMM, 2007.
+
+\bibitem{rish2005adaptive}
+I.~Rish, et~al., Adaptive diagnosis in distributed systems, IEEE Transactions on Neural Networks 16~(5) (2005).
+
+\bibitem{lindley1956information}
+D.~V. Lindley, On a measure of the information provided by an experiment, The Annals of Mathematical Statistics 27~(4) (1956) 986--1005.
+
+\bibitem{efron2004null}
+B.~Efron, Large-scale simultaneous hypothesis testing: The choice of a null hypothesis, Journal of the American Statistical Association 99~(465) (2004) 96--104.
+
+\bibitem{vovk2005conformal}
+V.~Vovk, A.~Gammerman, G.~Shafer, Algorithmic Learning in a Random World, Springer, 2005.
+
+\bibitem{yao2023react}
+S.~Yao, J.~Zhao, D.~Yu, N.~Du, I.~Shafran, K.~Narasimhan, Y.~Cao, {ReAct}: Synergizing reasoning and acting in language models, in: International Conference on Learning Representations (ICLR), 2023.
+
+\bibitem{roy2024exploring}
+D.~Roy, et~al., Exploring {LLM}-based agents for root cause analysis, in: Companion Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering (FSE Companion), 2024.
+
+\bibitem{tian2025gala}
+Y.~Tian, Y.~Liu, Z.~Chong, Z.~Huang, H.-A. Jacobsen, {GALA}: Can graph-augmented large language model agentic workflows elevate root cause analysis?, arXiv preprint arXiv:2508.12472 (2025).
+
+\bibitem{pham2025rcaeval}
+L.~Pham, H.~Zhang, H.~Ha, F.~Salim, X.~Zhang, {RCAEval}: A benchmark for root cause analysis of microservice systems with telemetry data, in: Companion Proceedings of the ACM on Web Conference 2025, 2025, pp. 777--780.
+
+\bibitem{chen2025aiopslab}
+Y.~Chen, et~al., {AIOpsLab}: A holistic framework to evaluate {AI} agents for enabling autonomous clouds, Proceedings of Machine Learning and Systems 7 (2025).
+
+\bibitem{fang2026openrca2}
+A.~Fang, et~al., {OpenRCA} 2.0: From outcome labels to causal process supervision, arXiv preprint arXiv:2606.27154 (2026).
+
+\bibitem{han2024oneshot}
+Y.~Han, et~al., The potential of one-shot failure root cause analysis: Collaboration of the large language model and small classifier, in: Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering (ASE), 2024.
+
+\bibitem{zhang2024lmpace}
+D.~Zhang, et~al., {LM-PACE}: Confidence estimation by large language models for effective root causing of cloud incidents, in: Companion Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering (FSE Companion), 2024.
+
+\bibitem{venktesh2025verify}
+V.~Venktesh, M.~Rathee, A.~Anand, Trust but verify! {A} survey on verification design for test-time scaling, arXiv preprint arXiv:2508.16665 (2025).
+
+\bibitem{gao2023alce}
+T.~Gao, H.~Yen, J.~Yu, D.~Chen, Enabling large language models to generate text with citations, in: Proceedings of EMNLP, 2023.
+
+\bibitem{kaelbling1998pomdp}
+L.~P. Kaelbling, M.~L. Littman, A.~R. Cassandra, Planning and acting in partially observable stochastic domains, Artificial Intelligence 101~(1--2) (1998) 99--134.
+
+\bibitem{tang2026trupomdp}
+W.~Tang, et~al., Tru-{POMDP}: Task planning under uncertainty via tree of hypotheses and open-ended {POMDPs}, in: Advances in Neural Information Processing Systems, Vol.~38, 2026.
+
+\bibitem{dempster1977em}
+A.~P. Dempster, N.~M. Laird, D.~B. Rubin, Maximum likelihood from incomplete data via the {EM} algorithm, Journal of the Royal Statistical Society: Series B 39~(1) (1977) 1--38.
+
+\bibitem{beyer2016sre}
+B.~Beyer, C.~Jones, J.~Petoff, N.~R. Murphy, Site Reliability Engineering: How {Google} Runs Production Systems, O'Reilly Media, 2016.
+
+\bibitem{chaosmesh}
+{Chaos Mesh Authors}, Chaos mesh: A chaos engineering platform for {Kubernetes}, \url{https://chaos-mesh.org} (2020).
+
+\bibitem{qwen2025qwen25}
+{Qwen Team}, {Qwen2.5} technical report, arXiv preprint arXiv:2412.15115 (2024).
+
+\bibitem{openai2025gptoss}
+{OpenAI}, gpt-oss-120b and gpt-oss-20b model card, \url{https://openai.com/index/introducing-gpt-oss/} (2025).
+
+\bibitem{efron1993bootstrap}
+B.~Efron, R.~J. Tibshirani, An Introduction to the Bootstrap, Chapman \& Hall, 1993.
+
+\bibitem{wilcoxon1945individual}
+F.~Wilcoxon, Individual comparisons by ranking methods, Biometrics Bulletin 1~(6) (1945) 80--83.
+
+\bibitem{holm1979simple}
+S.~Holm, A simple sequentially rejective multiple test procedure, Scandinavian Journal of Statistics 6~(2) (1979) 65--70.
+
+\bibitem{mcnemar1947note}
+Q.~McNemar, Note on the sampling error of the difference between correlated proportions or percentages, Psychometrika 12~(2) (1947) 153--157.
+
+\end{thebibliography}

@@ -1,0 +1,30 @@
+\section{Problem statement and evaluation metrics}\label{sec:problem}
+
+\paragraph{Incident}
+An incident (case) consists of an alert window $W=[w_0,w_1]$ with an alert text and, when available, the alerted service and
+operation; a topology graph $G$ whose nodes are services, operations, pods and hosts (nodes) and whose edges are \emph{calls} and
+\emph{hosting} relations; and the telemetry of the window and of the time before it: metric series per entity, log lines, spans of
+distributed traces and Kubernetes events. No label is available at diagnosis time.
+
+\paragraph{Output}
+A diagnosis is a triple $(e^\ast,\tau^\ast,C)$: the root-cause entity $e^\ast$ (a service or a node), its fault type $\tau^\ast$ from a
+fixed taxonomy $\mathcal{T}$, and a causal chain $C$ of steps \emph{cause} $\rightarrow$ \emph{propagation} $\rightarrow$
+\emph{impact}, each naming an entity and the evidence (signal and value) that supports it. Following the dependability vocabulary
+\citep{avizienis2004taxonomy}, the root cause is the component where the fault is activated; the chain records how the resulting
+errors and load cross component boundaries to the alerted operation.
+
+\paragraph{Metrics}
+We use the three pillars of the RCA100 protocol \citep{cai2026benchmark}. \emph{Entity localisation} (EL) is 1 for the true entity
+and $0.5^d$ for an entity at topological distance $d$. \emph{Fault identification} (FI) is 1 for the exact type and 0 otherwise.
+The \emph{reasoning process} (RP) is the mean of (i) the share of ground-truth chain nodes named by the predicted chain and (ii) the
+share of ground-truth evidence checkpoints satisfied, where a checkpoint is a signal with a numeric constraint (e.g.\
+\texttt{error\_count} $\geq 8829$) that the cited evidence must meet. The Final score is
+\begin{equation}
+\text{Final} = 0.4\,\text{EL} + 0.3\,\text{FI} + 0.3\,\text{RP},
+\end{equation}
+reported on a 0--100 scale. In the headline RP the checkpoints are searched in the evidence the system retrieved; this rewards
+systems that return evidence items and gives zero to a chain written by an LLM without them. We therefore also report a
+\emph{step-anchored} variant (Final$_\text{step}$), in which a checkpoint counts only if the chain step that names the
+checkpoint's target entity cites a value meeting the constraint. An official scoring script was not part of the RCA100 release we used;
+our scorer is a re-implementation of the published protocol and is released with the code. We also count the cases with the exact
+entity, the exact type and both (joint).

@@ -1,0 +1,99 @@
+\section{Experimental setup}\label{sec:setup}
+
+\subsection{Research questions}
+\begin{description}
+\item[RQ1] How accurate is the statistical core of \gama{} without any LLM, compared with LLMs that decide from the same evidence or
+from the alert alone?
+\item[RQ2] What does each module contribute (leave-one-module-out)?
+\item[RQ3] What does a bounded LLM add to the decision and to the explanation, and does a larger model change the answer?
+\item[RQ4] Does the method transfer zero-shot to an unseen system?
+\end{description}
+
+\subsection{Benchmarks}
+\textbf{RCA100} \citep{cai2026benchmark} contains 103 incidents injected into the OpenTelemetry Demo on a managed Kubernetes
+cluster, with metrics, logs, traces, Kubernetes events, alerts and a topology of services, operations, pods and nodes per case.
+Each case has a ground-truth root entity, one of 28 fault types in six groups (\cref{tab:datasets}) and a typed causal chain with
+evidence checkpoints (661 in total, 99.5\% with a numeric constraint). Fourteen cases are node faults and 89 service-level faults.
+\textbf{AIOps2025} \citep{cai2026benchmark} contains 400 incidents injected with Chaos Mesh \citep{chaosmesh} into a HipsterShop
+deployment with TiDB and Redis over 18 days; it has no topology file, 3 pods per service and 11 nodes, and is scored by its own
+protocol (\cref{sec:aiops}). AIOps2025 was never used during the design of \gama{}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Benchmarks. RCA100 fault groups with their number of cases.}\label{tab:datasets}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+& RCA100 & AIOps2025 \\
+\midrule
+System & OpenTelemetry Demo, managed Kubernetes & HipsterShop + TiDB + Redis, Kubernetes \\
+Cases & 103 & 400 \\
+Modalities & metrics, logs, traces, events, alerts, topology & metrics, logs, traces (no topology, no events) \\
+Fault types & 28 in 6 groups & 18 in 9 categories (Chaos Mesh injections) \\
+Levels & service 89, node 14 & service, pod, node \\
+Scoring & EL, FI, RP (chain + checkpoints) & LA, TA, explainability, efficiency \\
+\bottomrule
+\end{tabularx}
+\begin{flushleft}\footnotesize RCA100 groups: application logic 38; cloud resource (node) 14; JVM runtime 16; K8s lifecycle 12;
+middleware \& DB 13; resource \& performance 10.\end{flushleft}
+\end{table}
+
+\subsection{Compared arms}
+All arms receive the same incident input and none reads a label (\cref{tab:arms}). \emph{Evidence$\rightarrow$LLM} gives the LLM the
+same calibrated evidence tables that \gama{} computes (per-entity signals, propagation, infrastructure and trace summaries) together
+with the taxonomy, and lets it decide entity, type and chain in one call; it isolates the value of the computed belief from the value
+of the evidence. \emph{Belief$\rightarrow$LLM} adds \gama{}'s posterior (top entities with their top types and probabilities) to the
+Evidence$\rightarrow$LLM prompt and lets the LLM decide freely; it tests whether the belief helps an LLM that keeps full authority.
+\emph{Direct LLM} sees only the alert. The leave-one-module-out arms remove one of \Mod{1}--\Mod{6} from \core{}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Arms. All run on the 103 RCA100 cases with identical inputs; LLM settings are identical across arms of a backbone.}\label{tab:arms}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X l l@{}}
+\toprule
+Arm & Who decides & LLM calls & Hardware \\
+\midrule
+\core{} (statistical core, \Mod{1}--\Mod{6}) & computed posterior & 0 & CPU \\
+\core{} $-$\Mod{i} (ablation) & computed posterior without module $i$ & 0 & CPU \\
+\core{} + LLM (\Mod{1}--\Mod{7}) & posterior; LLM as sensor, shortlist typing, narrator & $\leq 7$ & GPU / API \\
+Belief$\rightarrow$LLM & LLM, given evidence and posterior & 1 & GPU / API \\
+Evidence$\rightarrow$LLM & LLM, given the calibrated evidence & 1 & GPU / API \\
+Direct LLM & LLM, given the alert only & 1 & GPU \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Backbones}
+Qwen2.5-7B-Instruct \citep{qwen2025qwen25} runs locally (one NVIDIA T4, bfloat16, greedy decoding, at most 1,024 new tokens).
+gpt-oss-120b \citep{openai2025gptoss} (mixture of experts, 5.1B active parameters) is served through an OpenAI-compatible API with
+reasoning effort \emph{medium}, temperature 0, seed 0 and at most 8,192 completion tokens (reasoning included). Prompts, parsers and
+stages are byte-identical across backbones. API decoding is not guaranteed deterministic; every call is therefore stored with its
+prompt, output and token counts, and no run was repeated. Both backbones were released before the RCA100 benchmark, and the LLM
+never receives an answer, a label or a score.
+
+\subsection{Statistics and pre-registration}
+We report means with 95\% percentile bootstrap intervals (5,000 resamples, seed 0) \citep{efron1993bootstrap}. Paired comparisons
+use the Wilcoxon signed-rank test \citep{wilcoxon1945individual} on per-case Final scores, with Holm correction within each family of
+comparisons \citep{holm1979simple}, and McNemar's test \citep{mcnemar1947note} on exact entity and exact type. The analysis plan
+fixed five hypotheses before the LLM runs: \textbf{H1} the statistical core carries localisation
+($|\text{EL}(\core{}+\text{LLM})-\text{EL}(\core{})|\leq3$ points for every backbone); \textbf{H2} the LLM's FI gain is bounded by the
+coverage of the statistical shortlist; \textbf{H3} the narrator's step-anchored checkpoint rate rises with model strength;
+\textbf{H4} structure beats scale (\core{}+LLM with the 7B model $>$ Evidence$\rightarrow$LLM with the large model); \textbf{H5}
+constant cost ($\leq 7$ LLM calls per incident). For Belief$\rightarrow$LLM: \textbf{B1} does a free LLM change the computed decision,
+\textbf{B2} does the belief help the LLM (one-sided against Evidence$\rightarrow$LLM), and \textbf{B3} free versus bounded use of the same
+LLM.
+
+\paragraph{Status of RCA100}
+RCA100 was the development data of \gama{}: earlier versions were designed and evaluated on all 103 cases, and the final modules
+were developed on the odd-numbered cases under a pre-registered protocol with a later run on the even-numbered half. Because
+per-case errors of earlier versions had been inspected on both halves, we report RCA100 as one dataset of 103 cases and make no
+held-out claim on it; generalisation is tested on AIOps2025 (RQ4). Every design change, its constants and its result were recorded
+in a dated pre-registration log before the corresponding run, and all runs are reported, including negative ones.
+
+\subsection{Implementation}
+\gama{} is implemented in Python (pandas, NumPy, NetworkX) as a package with one switch per module; the only dataset-specific
+knowledge is a profile file (metric-name patterns, entity kinds, the status code of a failing span) and the data loader. A golden
+snapshot test fixes the outputs of every module configuration on synthetic incidents, and the refactored package was verified to
+reproduce the frozen development code on all 103 cases (206 of 206 configuration--case pairs identical, including every LLM prompt).
+CPU arms ran on Kaggle CPU sessions (4 cores), the local LLM on one T4 GPU.

@@ -1,0 +1,10 @@
+\section{Conclusion}\label{sec:conclusion}
+
+\gama{} computes the diagnosis of a microservice incident: calibrated multimodal evidence updates a Bayesian belief over (entity,
+fault type) hypotheses that explains symptoms away along the topology, estimates its propagation strength per incident and respects
+temporal precedence; a two-stage decision and an evidence-cited chain follow. Without labels, training or a language model, it
+reaches 62.9 Final on the 103 RCA100 cases on a CPU, 20.2 points above a 7B LLM that decides from the same evidence. In a
+pre-registered study, a bounded LLM did not improve the decision at 7B or at 120B parameters, while the larger model wrote a far
+better explanation. The decision should be computed and the language model should explain it. Future work covers the zero-shot
+AIOps2025 evaluation (\cref{sec:aiops}), node faults without distinctive node signals, and LLM roles that enter the belief only as
+calibrated evidence, evaluated on data not used for their design.

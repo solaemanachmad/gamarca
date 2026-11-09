@@ -1,0 +1,132 @@
+%% GAMA-RCA manuscript -- Elsevier elsarticle (preprint layout for submission).
+%% Build: latexmk -pdf main.tex   (elsarticle.cls and elsarticle-num.bst are shipped in this folder)
+%% Placeholders for runs not yet finished are typeset in orange (\pending, \tbd); search for them before submission.
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{float}
+\usepackage[section]{placeins}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage[table]{xcolor}
+\usepackage{siunitx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage{lineno}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,nameinlink]{cleveref}
+
+\sisetup{detect-all, group-separator={,}, group-minimum-digits=4}
+\setlist{nosep, leftmargin=*}
+\definecolor{pend}{HTML}{C2410C}
+\newcommand{\pending}[1]{\textcolor{pend}{\textbf{[Pending: #1]}}}
+\newcommand{\tbd}{\textcolor{pend}{\textbf{XX}}}
+\newcommand{\gama}{GAMA-RCA}
+\newcommand{\core}{GAMA}
+\newcommand{\Mod}[1]{\textsf{M#1}}
+\newcommand{\sig}[1]{\nolinkurl{#1}}
+\makeatletter\g@addto@macro{\UrlBreaks}{\do\_}\makeatother
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\median}{med}
+\DeclareMathOperator{\mad}{MAD}
+\renewcommand{\arraystretch}{1.12}
+
+\journal{(target journal -- to be decided)}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{\gama: Graph-aware, Multimodal, Abductive Root Cause Analysis for Microservices with a Computed Belief and a Bounded Language Model}
+
+%% Authors and affiliations as in the earlier manuscript -- to be confirmed by the authors.
+\author[ugm]{Achmad Solaeman\corref{cor1}}
+\ead{achmad.solaeman@ugm.ac.id}
+\author[ugm]{Nur Rohman Rosyid}
+\author[ugm]{Ardhi Wicaksono}
+\author[ugm]{Prima Asmara Sejati}
+\author[mpki]{Hamzah}
+\cortext[cor1]{Corresponding author.}
+\affiliation[ugm]{organization={Department of Electrical Engineering and Informatics, Vocational College, Universitas Gadjah Mada},
+            city={Yogyakarta}, country={Indonesia}}
+\affiliation[mpki]{organization={PT Media Pangan Kreatif Indonesia}, country={Indonesia}}
+
+\begin{abstract}
+Root cause analysis (RCA) of microservice failures must name the faulty component, its fault mechanism and the propagation path
+from metrics, logs, traces and events. Agents built on large language models (LLMs) reason over this telemetry at a cost of up to
+millions of tokens per incident, with conclusions that are hard to audit. We present \gama{}, a label-free method in which the
+diagnosis is \emph{computed}. Every signal is scored against the incident's own history and its peers and calibrated on
+pseudo-windows cut from that history; the observations update a Bayesian belief over (entity, fault type) hypotheses with
+fingerprint-based likelihoods, topology explain-away, a per-incident propagation strength estimated by expectation--maximisation,
+and temporal precedence. A two-stage decision names the root entity and its type, and a deterministic chain cites the evidence of
+every step. An optional, bounded LLM may read log text, choose a type from the statistical shortlist and narrate the chain. On the
+103 cases of RCA100, the statistical core reaches a Final score of 62.9 [95\% CI 57.4, 68.5] on a CPU, 20.2 points above an LLM that
+decides from the same evidence ($p=2.8\times10^{-10}$). In a pre-registered study, the bounded LLM lowers the score by 3.7
+(Qwen2.5-7B) and 3.5 points (gpt-oss-120b): scale does not improve the decision, but it improves the explanation, raising the
+narrator's evidence-checkpoint rate from 0.107 to 0.284, close to the computed chain (0.307). \pending{zero-shot AIOps2025 result.}
+\end{abstract}
+
+\begin{highlights}
+\item The diagnosis is a computed posterior over (entity, fault type), not text written by a language model.
+\item Every signal is calibrated against the incident's own history and peers; no labels and no training are used.
+\item The statistical core reaches 62.9 Final on RCA100 on a CPU, 20 points above an LLM given the same evidence.
+\item A larger LLM does not decide better (both backbones lower the score), but it explains far better.
+\item All evaluation runs, hypotheses and amendments were pre-registered and are released with every prompt and output.
+\end{highlights}
+
+\begin{keyword}
+root cause analysis \sep microservices \sep AIOps \sep Bayesian inference \sep observability \sep large language models
+\sep explainability
+\end{keyword}
+
+\end{frontmatter}
+\linenumbers
+
+\input{sec1_intro}
+\input{sec2_related}
+\input{sec3_problem}
+\input{sec4_method}
+\input{sec5_setup}
+\input{sec6_results}
+\input{sec7_discussion}
+\input{sec8_conclusion}
+
+\section*{CRediT authorship contribution statement}
+\pending{roles of each author (Conceptualization, Methodology, Software, Validation, Writing -- original draft, \ldots).}
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to
+influence the work reported in this paper.
+
+\section*{Data and code availability}
+The code (the \texttt{gama/} package, the evaluation scripts, the pre-registration documents and the synthetic tests) is available
+at \url{https://github.com/solaemanachmad/gamarca}. Every run writes a manifest (commit, modules, model, hardware, library versions,
+wall time), the scored results, the decision trail of every case and every LLM call (prompt, output, input and output tokens,
+latency); these artefacts are released with the code. RCA100 (CC BY-NC-SA) and AIOps2025 (CC BY-NC 4.0) are obtained from their
+publishers and are not redistributed.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+\pending{Elsevier declaration: state which AI-assisted tools were used, for which tasks (e.g.\ code development, language editing),
+and that the authors reviewed and edited the content and take full responsibility for it.}
+
+\section*{Acknowledgements}
+This research was supported by the Hibah DAMAS Penelitian 2026 of Sekolah Vokasi, Universitas Gadjah Mada.
+
+\appendix
+\input{secA_appendix}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+
+\end{document}

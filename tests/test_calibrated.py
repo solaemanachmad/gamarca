@@ -1,0 +1,200 @@
+"""tests/test_calibrated.py -- synthetic checks of the calibrated fingerprint layer (pipeline/fault_calibrated.py). No data, no model.
+
+    python tests/test_calibrated.py
+
+Telemetry geometry mirrors RCA100 (check_baseline_length.py): metrics every 30 s with ~55 min of baseline, alert window 6 min,
+traces only inside the window, logs with ~15 min of baseline."""
+import datetime as dt
+import os
+import random
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from test_fingerprint import FakeCase, T0
+from pipeline.fault_calibrated import (compute_signal_db, origin_signals, rank_candidates, mwu_greater, false_alarm_rate)
+
+W0 = T0 - dt.timedelta(minutes=5)
+
+
+def make_case(extra_nodes=8, extra_svcs=8):
+    """FakeCase plus extra nodes/services with ordinary telemetry, so that the within-case null pools have realistic size
+    (RCA100 cases have ~10 nodes and ~12 services)."""
+    from schema import Entity
+    c = FakeCase()
+    for i in range(extra_nodes):
+        n = f"node-x{i}"
+        c.topology.add_node(n, entity=Entity(entity_id=n, entity_type="k8s.node", name=n))
+        metric(c, "k8s.node", n, "node_cpu_usage_rate", 0.3, 0.3, seed=100 + i)
+        metric(c, "k8s.node", n, "node_memory_usage_rate", 0.6, 0.6, seed=200 + i)
+    for i in range(extra_svcs):
+        sname = f"svc{i}"
+        c.topology.add_node(sname, entity=Entity(entity_id=sname, entity_type="apm.service", name=sname))
+        metric(c, "apm.metric.jvm", sname, "arms_jvm_gc_delta", 2.0, 2.0, noise=0.5, seed=300 + i)
+        metric(c, "apm.service.legacy", sname, "rt", 0.1, 0.1, seed=400 + i)
+    return c
+
+
+def metric(c, eset, name, metric_name, base, win, noise=0.05, seed=0):
+    rnd = random.Random(seed)
+    for i in range(110):                                   # baseline: 55 min at 30 s
+        t = W0 - dt.timedelta(seconds=30 * (110 - i))
+        c.observations["metrics"].append(_obs(t, eset, name, metric_name, base * (1 + rnd.uniform(-noise, noise))))
+    for i in range(12):                                    # window: 6 min at 30 s
+        t = W0 + dt.timedelta(seconds=30 * i)
+        c.observations["metrics"].append(_obs(t, eset, name, metric_name, win * (1 + rnd.uniform(-noise, noise))))
+
+
+def _obs(t, eset, name, m, v):
+    from schema import Observation
+    return Observation(None, t, "metrics", "", {"entity_set": eset, "entity_name": name, "metric": m, "value": v})
+
+
+def wspan(c, svc, i, **kw):
+    c.span(svc, W0 + dt.timedelta(seconds=10 + 5 * i), **kw)
+
+
+def types(c, origin):
+    db = compute_signal_db(c, T0)
+    assert "error" not in db, db
+    osig = origin_signals(db, origin)
+    return [(x["type"], x["entity"]) for x in rank_candidates(osig, top_k=0)], osig, db
+
+
+T = []
+
+
+def test(fn):
+    T.append(fn)
+    return fn
+
+
+@test
+def mwu_sanity():
+    assert mwu_greater([10, 11, 12, 13], [1, 2, 3, 4, 5]) < 0.05
+    assert mwu_greater([1, 2, 3, 4], [10, 11, 12, 13, 14]) > 0.9
+    assert mwu_greater([1, 1, 1], [1, 1, 1]) >= 0.5
+    assert mwu_greater([1], [1, 2, 3]) is None
+
+
+@test
+def node_cpu_hypothesis_on_host():
+    c = make_case()
+    metric(c, "k8s.node", "node-a", "node_cpu_usage_rate", 0.30, 0.95)
+    metric(c, "k8s.node", "node-b", "node_cpu_usage_rate", 0.30, 0.30, seed=1)
+    h, _, _ = types(c, "node-a")
+    assert h[0] == ("F026-nodeCpuHigh", "node-a"), h
+    h2, _, _ = types(c, "cart")                          # cart is hosted on node-a: the node hypothesis names the node
+    assert ("F026-nodeCpuHigh", "node-a") in h2, h2
+    h3, _, _ = types(c, "node-b")
+    assert h3 == [], h3
+
+
+@test
+def stable_high_metric_does_not_hold():
+    c = make_case()
+    metric(c, "k8s.node", "node-a", "node_memory_usage_rate", 0.92, 0.92)   # always high = normal for this node
+    h, osig, _ = types(c, "node-a")
+    assert h == [] and not osig["signals"], (h, osig["signals"])
+
+
+@test
+def rate_limit_categorical_beats_metric_symptom():
+    c = make_case()
+    metric(c, "apm.service.legacy", "checkout", "rt", 0.1, 0.4)              # latency symptom
+    for i in range(6):
+        wspan(c, "checkout", i, err=True, code="429", msg="Too Many Requests")
+    h, osig, _ = types(c, "checkout")
+    assert h[0][0] == "F016-rateLimiting", (h, osig["signals"])
+
+
+@test
+def gc_rise_vs_ordinary_gc():
+    c = make_case()
+    metric(c, "apm.metric.jvm", "checkout", "arms_jvm_gc_delta", 2.0, 2.0, noise=0.5)   # bursty but unchanged
+    h, _, _ = types(c, "checkout")
+    assert all(t != "F022-fullGC" for t, _ in h), h
+    c2 = make_case()
+    metric(c2, "apm.metric.jvm", "checkout", "arms_jvm_gc_delta", 2.0, 30.0, noise=0.5)
+    h2, _, _ = types(c2, "checkout")
+    assert h2[0][0] == "F022-fullGC", h2
+
+
+@test
+def scale_down_excludes_flapping():
+    c = make_case()
+    c.event("Deployment", "cart", "ScalingReplicaSet", "Scaled down replica set cart-7d9f8c6b5d to 0", when=W0 + dt.timedelta(minutes=1))
+    c.event("Pod", "cart-7d9f8c6b5d-x2x9k", "Killing", "Stopping container cart", when=W0 + dt.timedelta(minutes=1))
+    h, _, _ = types(c, "cart")
+    assert h[0][0] == "F036-replicaScaleDown" and all(t != "F052-podRestartFlapping" for t, _ in h), h
+
+
+@test
+def events_outside_window_ignored():
+    c = make_case()
+    c.event("Pod", "cart-7d9f8c6b5d-x2x9k", "BackOff", "Back-off restarting", when=W0 - dt.timedelta(minutes=40))
+    h, _, _ = types(c, "cart")
+    assert h == [], h
+
+
+@test
+def slow_db_within_window():
+    c = make_case()
+    for i in range(10):
+        wspan(c, "checkout", i, name="GET /order", dur_ns=20e6)
+        wspan(c, "checkout", i, name="SELECT orders", attrs='"db.system":"postgresql",', dur_ns=2500e6)
+    h, _, _ = types(c, "checkout")
+    assert h[0][0] in ("F010-slowSQL", "F018-dbNetworkLatency"), h
+
+
+@test
+def residual_only_when_nothing_specific():
+    c2 = make_case()
+    for i in range(5):
+        wspan(c2, "checkout", i, err=True, code="500", msg="internal")
+    h2, _, _ = types(c2, "checkout")
+    assert h2 and h2[0][0] == "F014-httpError5xx", h2
+
+
+@test
+def disjunctive_key_with_absent_atom():
+    """Crash in the smoke run (t100, KeyError 'msg_timeout'): key 'msg_timeout|msg_refused' holds through msg_refused alone."""
+    c = make_case()
+    for i in range(6):
+        wspan(c, "checkout", i, err=True, code="503", msg="connection refused")
+    h, _, _ = types(c, "checkout")
+    assert any(t == "F056-networkPolicyIsolation" for t, _ in h), h
+
+
+@test
+def drifting_metric_is_not_an_anomaly():
+    """A series that grows steadily (e.g. disk usage) beats its own history in EVERY window: the raw rank test fires,
+    the calibrated test does not (its pseudo-windows show the same drift). This is the f2e2bf4 false-alarm problem."""
+    c = make_case()
+    from schema import Observation
+    for n in ["node-a", "node-b"] + [f"node-x{i}" for i in range(8)]:
+        for i in range(122):
+            t = W0 - dt.timedelta(seconds=30 * (110 - i))
+            c.observations["metrics"].append(Observation(None, t, "metrics", "", {"entity_set": "k8s.node", "entity_name": n,
+                                                                                   "metric": "node_disk_usage_rate", "value": 0.2 + 0.001 * i}))
+    h, osig, db = types(c, "node-a")
+    assert "node_disk_rise" not in osig["signals"], osig["signals"]
+    far = false_alarm_rate(db)
+    assert far["raw_rate"] > 0.2 and far["rate"] <= 0.1, far
+
+
+# typing_uses_hypothesis_entity_with_level_switch tested agents/multi_agent._apply_entity_typing (archived; see archive/agents/).
+
+
+if __name__ == "__main__":
+    bad = 0
+    for fn in T:
+        try:
+            fn()
+            print("ok  ", fn.__name__)
+        except AssertionError as e:
+            bad += 1
+            print("FAIL", fn.__name__, e)
+    print(f"{len(T) - bad}/{len(T)} passed")
+    sys.exit(1 if bad else 0)

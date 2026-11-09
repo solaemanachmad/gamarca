@@ -1,0 +1,86 @@
+\section{Constants}\label{app:constants}
+
+\begin{table}[H]
+\centering
+\caption{Constants of \gama{}, fixed a priori (none fitted to labels).}\label{tab:constants}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+Symbol & Value & Meaning \\
+\midrule
+$\alpha$ & 0.05 & level at which a calibrated signal holds; background of a continuous observation \\
+$B$, $K$ & 4, 5 & history length (window lengths) and number of pseudo-windows \\
+coverage & 0.8 / 0.5 & minimum sample coverage of the history / the window \\
+scale floors & $0.05|\median|$, 1 & relative floor of the robust scale; floor of own-volatility and peer re-standardisation \\
+peers, pool & $\geq3$, $\geq20$ & minimum peers; minimum null pool (else pooled over the entity kind) \\
+onset & 3 SD, 2 samples & onset threshold of a holding signal \\
+$\theta_K$ & 0.8 & probability that some key signal holds at the true root \\
+$\theta_U$ & 0.6 & support / may signal at the root \\
+$\theta_P$ & 0.6 & own symptom at the root; load explained from upstream \\
+$\alpha_C$ & 0.05 & contradicting signal at the root \\
+categorical background & Beta, 10 pseudo-entities & shrinkage of the per-incident share towards $\alpha$ \\
+$\Pr(h_0)$, fallback weight & 0.1, 0.5 & prior of no fault; prior weight of the two fallback types \\
+$\pi$ & $[0.06,0.95]$, 30 iterations & EM bounds and iteration limit for the propagation strength \\
+$\theta_T$, tolerance & 0.9, 60\,s & temporal precedence (onsets and intra-entity order) \\
+$\theta_M$, $\beta_M$ floor, weight & 0.6, 0.1, 10 & cross-modal corroboration (\Mod{1}) \\
+trace origins & 30\%, 10 / 5 traces & error origin share and minimum error / slow traces (\Mod{2}) \\
+chain & 4 values per step & window values cited per chain step (\Mod{6}) \\
+sensor & $\Pr\geq0.8$, 0.05 bits, 5 probes & stop rule, minimum information gain, budget (\Mod{7}) \\
+typing & top 5, quote $\geq10$ chars & shortlist size and quote length (\Mod{7}) \\
+decoding & temp.\ 0, seed 0 & greedy decoding; 1,024 new tokens (local), 8,192 incl.\ reasoning (API) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Fingerprint examples}\label{app:fingerprints}
+
+\begin{table}[H]
+\centering
+\caption{Excerpt of the RCA100 fingerprint table (roles of signals per fault type; ``a\&b'' requires both). The full table and the
+AIOps2025 table are in the code.}\label{tab:fingerprints}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Type & Key (one of) & Support & Contradiction \\
+\midrule
+nodeCpuHigh & node CPU rise & -- & -- \\
+nodeDown & node NotReady event; node ready drop & node pods drop & scale-down event \\
+cpuFullLoad & CPU rise & latency rise & request rise \\
+memoryPressure & memory rise & GC rise, CPU rise & -- \\
+fullGC & GC rise & GC log rise, GC message, latency rise & -- \\
+rateLimiting & HTTP 429; rate-limit message or log rise & HTTP 403 & -- \\
+trafficSurge & request rise & latency rise, CPU rise & -- \\
+replicaScaleDown & scale-down event; replica / availability drop; unavailable & HTTP 503, connection refused, request drop & crash-loop, unschedulable \\
+redisUnavailable & failing Redis spans; Redis message & connection refused, timeout & -- \\
+slowSQL & slow database spans & latency rise, SQL message & failing database spans \\
+httpError5xx (fallback) & HTTP 5xx & failing spans, error rise & -- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Agent failure modes ruled out by construction}\label{app:failuremodes}
+
+\begin{table}[H]
+\centering
+\caption{Failure modes of LLM agents catalogued by Lu et al.\ \citep{lu2026beyond} and the mechanism of \gama{} that prevents each.}
+\label{tab:failuremodes}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{4.3cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Failure mode & Mechanism in \gama{} \\
+\midrule
+Baseline gap (no comparison with normal behaviour) & every signal is scored against the incident's own history (stage 1) \\
+Edge untested & propagation is explained only along topology edges; trace origins test caller--callee spans (\Mod{2}) \\
+Resource gap & the resource signals of every entity are always computed; there is no query choice \\
+Ranking gap & peer re-standardisation rejects shifts common to all entities of a kind \\
+Timing gap & onset precedence (stage 2) and intra-entity signal order (\Mod{3}) \\
+Silence taken as health & availability and replica drops are observations \\
+Salience bias (chronically noisy entity) & own-volatility re-standardisation; EM penalises wide hypotheses \\
+Caller / callee semantics reversed & trace origin with callee relay (\Mod{2}); directional load explain-away (\Mod{4}) \\
+Anchor lock & no sequential anchoring: all hypotheses are scored at once \\
+Schema-out claim (type outside the taxonomy) & typed hypothesis space; the LLM chooses only within the shortlist (\Mod{7}) \\
+Friction stop & fixed pipeline without a tool loop \\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,0 +1,957 @@
+{
+ "sc_load_and_cpu|base": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "propagation: checkout svc_request_rise (workload: baseline median=101, window max=312 (robust shift 41) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.7805253132044845",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "4d66497c06e6922a977f1679e747cd4d76006884b9abb1802d36d255827157e1",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "c9c1ac3b0b29180af2c6a7c4fc58c9cc1738ce5383b279b6fc7e5271f54bc0e8",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-chain": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "829525a5c3430db9b51966c1e27b60c54b71a86747bc3b0007d60b9f50671f17",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-load": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout svc_request_rise (workload: baseline median=101, window max=312 (robust shift 41) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.7805253132044845",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "e54e81718c114aa135d6801e371f7919eec6c0c74a10cbe78d15aba3846c9e1f",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-mm": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "8176797056004e8fbfb0d6636867ac5fd6b2320d097511f944ad06b13fbee49f",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-text": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "0953dc9c2655f1e3897c794fe60a28861a12bd50794ed7affe48808aad6842f6",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-trace": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "a4db1ccec8a5c8530edb3e67d4fdcf69a6836b15c16e1096a3c9d742555cecee",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|core,-typing": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "b8e02500f64c7b663eab4d6ca159219143466ae390275874b80998ca7fbce446",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|full": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "c28a02a5cf9ff1696e8587c7a9848e7fe5f891528c39f741464b14589f13abd9",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|full,-chain": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "64f1251445453641531257f62d3c81184e2f58b9c7af351a47e89cbae38a7d57",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_load_and_cpu|full,-typing": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "propagation: checkout",
+   "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.8544467143898107",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "7273bc06bc806548802df36de47ac74f220d5734ad1d29283f3c61c286fcca30",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_memory_gc_order|base": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores))",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "0c309f3a701f2316b5425cfb4329bae0e13e97be03c0c1f0878760dc7f0d2137",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "f40691a647d88025fdec2045ff874a8bc8597d3e78e168eb764bce14c3ae3b89",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-chain": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores))",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "fdc4d348aabf77411d45cfd1bf032c0448e956262c01a81e5ce7e5a1f29d481c",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-load": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "6ae5a24056d1c9aaa0beb185195b4bf7c94cd2ff1caaf484f6bf5e312fa81e65",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-mm": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "c0f7b0285ff2adc8734200a6989f68b092864235b21b3b409d323c880825a027",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-text": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "b99d681dbfa21001c672a8f031e7b9b4c3b92fec8f9cb3ac11a84883a0528307",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-trace": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "5d14e2bf0a8efe20419d1ed373abfb52d8dee702c30aa949772e615c757990bf",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|core,-typing": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "1f940501cf38b26ad85f20e60492bb5454a774498cbaefa2c5de01726c29bd2f",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|full": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "31e9a9e46e807b675be15fabf5a0f259935496a2d7564385f86bee045475eaa3",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|full,-chain": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores))",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "c0cd9f8c9913f73b7fab410ca1e036398b0fc101e8928d689ff8f2fd8287833b",
+  "type": "F007-memoryPressure"
+ },
+ "sc_memory_gc_order|full,-typing": {
+  "chain": [
+   "cause: cart F007-memoryPressure svc_mem_rise (heap_used: baseline median=100, window max=419 (robust shift 61) (calibrated p=0.00524 against 190 pseudo-window scores)) | heap_used=419.0; cpu=0.522; gc_time=30.8",
+   "propagation: checkout svc_latency_rise (rt: baseline median=0.101, window max=0.63 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores)) | error=20.9942",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.9995348981223555",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "d46ac53363a47a9e38f7edd3e08143e5c15bfb3091476c9c8b56e189c5fee96f",
+  "type": "F007-memoryPressure"
+ },
+ "sc_msgtarget_and_text|base": {
+  "chain": [
+   "cause: frontend F011-codeDefect error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.4336646301406844",
+  "entity": [
+   "s1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "911ee05dded824ce0e53202dad3a138f9e3b1d845267299002b8029d6382b5d7",
+  "type": "F011-codeDefect"
+ },
+ "sc_msgtarget_and_text|core": {
+  "chain": [
+   "cause: checkout F023-nullPointerException msg_npe (12 error spans whose message matches 'npe')",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.35603993429398034",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "85cda24ac26025e2af38d02d12dc900b71474d1ffd5672e30ceb87b89ae5e192",
+  "type": "F023-nullPointerException"
+ },
+ "sc_msgtarget_and_text|core,-chain": {
+  "chain": [
+   "cause: checkout F023-nullPointerException msg_npe (12 error spans whose message matches 'npe')",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.35603993429398034",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "45e115f1e3179425c8c1dbe98aff87fdca7e757dba224a6cc78c1e98b01b572e",
+  "type": "F023-nullPointerException"
+ },
+ "sc_msgtarget_and_text|core,-load": {
+  "chain": [
+   "cause: checkout F023-nullPointerException msg_npe (12 error spans whose message matches 'npe')",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.35603993429398034",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "1589d69cc83df2a6303a7cda2206d183c421d4862bc5d633f7f656f1a28f5200",
+  "type": "F023-nullPointerException"
+ },
+ "sc_msgtarget_and_text|core,-mm": {
+  "chain": [
+   "cause: checkout F023-nullPointerException msg_npe (12 error spans whose message matches 'npe')",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.35603993429398034",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "6b3a5c5bfc7d1f41962a49fd315b5bc6342012a7c2437062e582841abe438696",
+  "type": "F023-nullPointerException"
+ },
+ "sc_msgtarget_and_text|core,-text": {
+  "chain": [
+   "cause: cart F036-replicaScaleDown trace_err_origin (errors start here in 12 of 12 failing traces)",
+   "propagation: checkout error_spans (12 error spans of 12 in the window)",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.32563053137673686",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "8e99b78a74acc2072cfa64214d0ceba8d8cd2243926f51425d6fd53e46782a3a",
+  "type": "F036-replicaScaleDown"
+ },
+ "sc_msgtarget_and_text|core,-trace": {
+  "chain": [
+   "cause: checkout F023-nullPointerException msg_npe (12 error spans whose message matches 'npe')",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.4682477700326162",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "5775953d24a994d25757b9564a475b0d4effbd8e62e1bb9eb2b3ac9a041cf67c",
+  "type": "F023-nullPointerException"
+ },
+ "sc_msgtarget_and_text|core,-typing": {
+  "chain": [
+   "cause: cart F036-replicaScaleDown trace_err_origin (errors start here in 12 of 12 failing traces)",
+   "propagation: checkout error_spans (12 error spans of 12 in the window)",
+   "propagation: frontend error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.34995073935100607",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "46c0618b9ea92cad7ee477300f762401586a721c0008d8558051ac91a679a8e4",
+  "type": "F036-replicaScaleDown"
+ },
+ "sc_msgtarget_and_text|full": {
+  "chain": [
+   "cause: frontend F005-messageQueueBacklog error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.49967323048701545",
+  "entity": [
+   "s1"
+  ],
+  "n_llm_calls": 5,
+  "sha256": "8142c58f4511898c82e8066e6c80f24c10820083cd6eff37f4c7b2b09af5c4a8",
+  "type": "F005-messageQueueBacklog"
+ },
+ "sc_msgtarget_and_text|full,-chain": {
+  "chain": [
+   "cause: frontend F005-messageQueueBacklog error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.49967323048701545",
+  "entity": [
+   "s1"
+  ],
+  "n_llm_calls": 5,
+  "sha256": "17c5992c4ec41a833f85078af0d367bde8ab5cf0cd7194f3f92711af11a270a7",
+  "type": "F005-messageQueueBacklog"
+ },
+ "sc_msgtarget_and_text|full,-typing": {
+  "chain": [
+   "cause: frontend F005-messageQueueBacklog error_spans (12 error spans of 12 in the window)",
+   "impact: frontend"
+  ],
+  "confidence": "0.44806492230760486",
+  "entity": [
+   "s1"
+  ],
+  "n_llm_calls": 5,
+  "sha256": "237ac647b60723e4566c64cdfbc2ad64b51c19215ddbc2625e3fa4c30c22e6eb",
+  "type": "F005-messageQueueBacklog"
+ },
+ "sc_node|base": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores))",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.7539316338260995",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "b38473a42feeeef83ca0b84cc66f0a1e091973d47cade16ded5ec9536a3d7e49",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "fdfe6e9bd154002e1ec1dc21ed9fbb482dbc08e855bcf2d802fedfa8004a047e",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-chain": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores))",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "5099a9454469a7daf7ad0c2d6cf595101c59e41b4dbde9cf5e6d5461784ffad0",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-load": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "76793e61d8e73e2b70bfcbf43a1e6bbd664f694108754f6f47005c2c6c9dc2ad",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-mm": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "ce58afd7ecc3c8e6f7ed37f724d9e4fd17a9e1b0c42b087abab63554c0c43adb",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-text": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "1d755331e0ff9302cae462bdab459676c35f90215ce64ca4e6288320f728868c",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-trace": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "2284fa6903caf0dca1edbd1f226a99e8e6775ea743893382aed073e5575c9b41",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|core,-typing": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.7539316338260995",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "a8e2e9a1237b4eca219c00966217c62313755457a9b02bec3f7c5f05f47a0023",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|full": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "0a47fb839cbe86a44ce9066d8a7b9108087962618652092fee78fae02471d25a",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|full,-chain": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores))",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.797063259691066",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "d092dc18245cbf1fbf7791fddc9cfaa730bd07e4c9e8bbca68e09a729ca8af8a",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_node|full,-typing": {
+  "chain": [
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.2, window max=0.518 (robust shift 30) (calibrated p=0.0099 against 100 pseudo-window scores)) | cpu=0.518; rt=0.522",
+   "propagation: checkout",
+   "propagation: frontend svc_latency_rise (rt: baseline median=0.0997, window max=0.523 (robust shift 80) (calibrated p=0.0196 against 50 pseudo-window scores))",
+   "impact: frontend"
+  ],
+  "confidence": "0.7539316338260995",
+  "entity": [
+   "s3"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "0c14fac2decded91fce628f354877bfa30686a03cc50059ad995785080d3b54f",
+  "type": "F034-cpuFullLoad"
+ },
+ "sc_ratelimit|base": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.7609540516496315",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "1c7ee315586d9499ad3b4f205bd0da5a32f207802e7016b3c8e50256ef722b3c",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "c9122d4ec1dad5b96918027a7c549e59b2a6ffb26d2189649ec2717e0611a3ea",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-chain": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "97ff873128db769f722efef2bb36961ed4fc9ea145b5f07162a536fb14ad20e5",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-load": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "c33d12edc62eca27e7268626afea5c336e15a4407aef3faae6718c6856eb50c3",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-mm": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.7609540516496315",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "3319361c110bd94350e240887c319c7e0f0017ec721752b1f7b05d891ed7d23c",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-text": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "993b806ca3c16c0fd355291a81441f24c85de028807568ef56077e8210ea772a",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-trace": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175097",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "2a1c3d131305d4b5c3f6c57c1c1e944a5c458218760d601f2e61a956814da2c3",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|core,-typing": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "8830834c27fd632d5725cb9bc44bb00845d7b6b3693b1f49570d795dc2411445",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|full": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "bcec98ab32fb12c45e0ad5d1890971ef3cb7d84d418eb5386eb5fb12a148ba18",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|full,-chain": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "4ed54d569d1962764a2071e4e66b4da04d56ee39da96a09f4bd92633f7b3af24",
+  "type": "F016-rateLimiting"
+ },
+ "sc_ratelimit|full,-typing": {
+  "chain": [
+   "cause: checkout F016-rateLimiting error_spans (6 error spans of 6 in the window)",
+   "propagation: frontend",
+   "impact: frontend"
+  ],
+  "confidence": "0.9349354633175095",
+  "entity": [
+   "s2"
+  ],
+  "n_llm_calls": 2,
+  "sha256": "19f894ff5e6206f25dcacfe290c24444fbd2c7838c4a41a9ad2e495caf5c1d56",
+  "type": "F016-rateLimiting"
+ },
+ "sc_trace_origin|base": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139898",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "74ef0c9582b0afcbbb58f2a0a886f1c27c145cc6ceeede9658f2f6ecf0d890aa",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "7243d132e36d71458c20d9f47b985b28fd7d040aced1405a21d70cfd31bdf300",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-chain": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "4ea4dba2b718272d3093eeeacff2449e3be5868f6c152c55d2101366de7220b3",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-load": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "f8e4916f4b49dcfc5922ceefa99bf70b3624de522c5353c9cebd47fe7580b105",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-mm": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "e8628261c88b333c2786e3bf66003cfbcf185bafc41d65b12a1322a1d00bbdc3",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-text": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "369a6a5c56172f8f872d064f277ad05da2cf2a375d6a37962da23145ebc37cd4",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-trace": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139898",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "bc1358036674d78f24a9d429406bcd8cb6be044346db12c9b9c0f089948d378f",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|core,-typing": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.7614095966139901",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 0,
+  "sha256": "226538fcc83ea1dda0ad9879e7c144f985e520c1fb6639cc8d53989a283389e9",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|full": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.749010927444268",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 3,
+  "sha256": "d4eb50715491d14bde92bab389e6f8c7343406b0e6aaa2fb2348eac943110123",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|full,-chain": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.749010927444268",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 3,
+  "sha256": "c1a1ac1e116e2c975cceaf6316d5a3a3186a16d40da2087909586dce3f4b6fb7",
+  "type": "F001-nodeDown"
+ },
+ "sc_trace_origin|full,-typing": {
+  "chain": [
+   "cause: node-a F001-nodeDown",
+   "propagation: frontend http5xx (8 error spans with HTTP 5xx {'500': 8})",
+   "impact: frontend"
+  ],
+  "confidence": "0.749010927444268",
+  "entity": [
+   "n1"
+  ],
+  "n_llm_calls": 3,
+  "sha256": "0de99485c06682b72256350a281d60ed86749495edb0d95fed63fb5be670f8f2",
+  "type": "F001-nodeDown"
+ }
+}

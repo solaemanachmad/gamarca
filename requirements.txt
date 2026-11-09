@@ -1,0 +1,16 @@
+# Core
+pandas
+pyarrow
+networkx
+drain3                     # log template mining (LOG_TEMPLATE_ENGINE=drain3)
+jieba                      # Chinese word segmentation for alert text (RCA100 alert titles are largely Chinese)
+numpy
+tqdm
+# LLM (local Qwen2.5-7B-Instruct via transformers)
+torch
+transformers
+accelerate
+# Optional
+wandb                      # --wandb run logging
+python-dotenv
+requests

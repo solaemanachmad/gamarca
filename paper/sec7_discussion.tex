@@ -1,0 +1,43 @@
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Why a computed belief}
+The comparison of Evidence$\rightarrow$LLM, Belief$\rightarrow$LLM and \core{} separates three ingredients: good evidence, a belief
+over hypotheses, and who decides. Calibrated evidence alone lets a 7B model localise as well as the statistical core, but not type
+the fault (FI 20.4 versus 43.7): choosing among 28 types requires weighing many weak signals against each other and against their
+background rates, which a likelihood does consistently and a language model does not. Once the posterior is given, the same model
+adopts it almost always. The belief is therefore the part that carries the diagnosis, and it can be computed. This complements
+belief-state agents \citep{luo2026pos,luo2026graphofstates}: their beliefs are written by the model at a cost of millions of tokens,
+ours is computed from calibrated likelihoods in seconds, and an LLM can still read it.
+
+\paragraph{Where an LLM helps}
+Bounding the LLM did not make it a better decision maker: when the evidence does not separate two types, the model chooses the more
+specific one and loses more often than it wins, at 7B and at 120B alike. Scale changes the narrative instead---the larger model's
+chain cites the right values at the right steps almost as often as the computed chain. The practical design that follows is a
+separation of duties: the decision and its evidence are computed and auditable, and the language model explains them. The results
+also suggest how a later version could let an LLM contribute to the decision without the damage observed here: as a sensor whose
+answers are calibrated like any other categorical observation (against the incident's own background rate), or as a typing step
+that must defer to the posterior unless it quotes evidence that discriminates between the top types. Because these ideas were
+formed after seeing the RCA100 results, they must be evaluated on data not used for their design.
+
+\paragraph{Failure modes ruled out by construction}
+Several reasoning failures that Lu et al.\ \citep{lu2026beyond} observe in LLM agents cannot occur in \gama{} by construction
+(\cref{tab:failuremodes}): every signal is tested against a baseline, every entity's resource signals are computed, timing enters as
+onset precedence, caller and callee roles are fixed by the trace structure and the load direction, and the whole hypothesis space is
+scored at once rather than anchored on the first idea. The remaining errors are mostly limits of the evidence---node faults without a
+distinctive node signal, database faults without database metrics---rather than of the reasoning.
+
+\paragraph{Threats to validity}
+\emph{Internal.} RCA100 was the development data; although each change was pre-registered and the final modules were developed on
+half of the cases, the 103-case results are optimistic, and we make no held-out claim on them. The fingerprint tables were written
+from the published fault definitions, but their additions were informed by development errors. \emph{Construct.} Our scorer
+re-implements the published RCA100 protocol; the retrieval-based half of the headline RP is independent of the decision and
+favours systems that return evidence items, which is why every comparison is also reported with the step-anchored variant. The
+Final weights of the benchmark (0.4 / 0.3 / 0.3) are taken as given. \emph{Statistical.} With 103 cases, differences of about three
+points are at the edge of detectability; we report intervals and exact case counts with every test. API decoding is not
+deterministic; we report the single pre-registered run of each arm. \emph{External.} RCA100 covers one application on one platform;
+the AIOps2025 transfer (\cref{sec:aiops}) tests a second system with different fault types and pod-level faults. Two backbones do not
+span the space of LLMs; a stronger reasoning model or a different interface may behave differently.
+
+\paragraph{Ethics and data}
+No personal data are involved. Both benchmarks are used under their non-commercial licences and are not redistributed. The API runs
+used a provider setting without data retention; prompts contain only benchmark telemetry.

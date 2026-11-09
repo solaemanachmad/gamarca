@@ -1,0 +1,60 @@
+\section{Introduction}\label{sec:intro}
+
+A microservice application is a graph of independently deployed services that call each other over the network and share
+hosts, caches and databases. When one component fails, the failure crosses component boundaries: an exhausted CPU on a node slows
+every service it hosts, a failing payment service returns errors to the checkout service that calls it, and the operator sees
+alerts far from the cause \citep{avizienis2004taxonomy,soldani2022anomaly}. Root cause analysis (RCA) must therefore answer three
+questions from the incident's telemetry---metrics, logs, traces, Kubernetes events and the service topology: \emph{which} entity is
+the root cause, \emph{what} fault mechanism acts there, and \emph{how} the fault propagated to the symptoms
+\citep{zhang2025survey,fu2025survey}. Recent benchmarks score all three. RCA100 \citep{cai2026benchmark} grades entity localisation,
+fault identification over 28 fault types and the reasoning process along a typed causal chain with numeric evidence checkpoints.
+
+Two families of methods address the task. Statistical and causal methods rank candidate components from metric changes, trace
+structure or learned causal graphs \citep{wu2020microrca,ikram2022rcd,pham2024baro,li2022circa,yu2023nezha,zheng2024mulan}. They are
+cheap and reproducible, but they usually return a ranked list of components without a fault type or an explanation. Agents built on
+large language models (LLMs) read the telemetry through tools and write a diagnosis in natural language
+\citep{chen2024rcacopilot,wang2024rcagent,xu2025openrca,pei2025flowofaction,zhang2024mabc}. They produce types and explanations,
+but a trajectory-level study of such agents finds systematic reasoning failures---untested baselines, ignored timing, reversed
+caller / callee semantics, anchoring on the first hypothesis \citep{lu2026beyond,riddell2026stalled}---and the strongest agents
+consume on the order of $10^6$ tokens per incident \citep{lu2026beyond,luo2026pos}. Agents that maintain an explicit belief state
+\citep{luo2026pos,luo2026graphofstates} still ask the LLM to \emph{write} that belief.
+
+This paper takes the opposite position: the belief over root causes can be \emph{computed} from calibrated evidence, and the
+language model, if used at all, should be bounded to the parts that need language. We present \gama{} (Graph-aware, Multimodal,
+Abductive RCA). Every continuous signal of every entity is scored against the incident's own history and its peers, and the score
+is turned into a p-value by an empirical null cut from that history (pseudo-windows); events, status codes, failing spans and log
+text become categorical observations. A Bayesian model over (entity, fault type) hypotheses scores these observations with
+fingerprints that state, for each fault type, which signals are key, supporting, possible consequences or contradictions. Symptoms
+that a hypothesis can explain along the topology are explained away; the propagation strength is a per-incident nuisance parameter
+estimated by expectation--maximisation; and a root may not start after the symptoms it explains. The decision is two-stage (entity,
+then type), and the causal chain is computed along the topology, citing the window values of every step. An optional LLM may read
+log text chosen by expected information gain, choose a type from the statistical shortlist with a verbatim quote, and narrate the
+chain.
+
+We evaluate \gama{} on the 103 cases of RCA100 under a pre-registered protocol (hypotheses, statistics and every amendment
+recorded before the corresponding run) and release every prompt and output. The results support three statements. First, the
+statistical core alone reaches a Final score of 62.9, on a CPU and without labels, 20.2 points above an LLM that decides from the
+same calibrated evidence and 44.1 points above an LLM that reads the alert only. Second, the bounded LLM lowers the decision score
+by 3.7 (Qwen2.5-7B) and 3.5 points (gpt-oss-120b): when the telemetry cannot separate two fault types, the LLM tends to pick the
+more specific one and is more often wrong than right. Third, scale improves the \emph{explanation}: the narrator of the larger model
+hits 2.7 times as many step-anchored evidence checkpoints as the 7B narrator, close to the computed chain. We then transfer the
+method zero-shot to AIOps2025 \citep{cai2026benchmark}, a different system with different fault types, changing only
+dataset knowledge (an adapter and a fingerprint table written from the published fault definitions).
+
+\paragraph{Contributions}
+\begin{enumerate}
+\item \textbf{A computed abductive belief for RCA.} A label-free likelihood model over (entity, fault type) hypotheses with
+fingerprint roles, topology explain-away, per-incident propagation strength (EM) and temporal precedence (\cref{sec:method}).
+\item \textbf{Calibrated multimodal evidence.} Shift scores against the incident's own history and peers, calibrated on
+pseudo-windows, together with trace-origin attribution, direction-aware load explain-away, mechanism-naming text and cross-modal
+corroboration as separable modules (\Mod{1}--\Mod{6}).
+\item \textbf{A pre-registered study of what an LLM adds.} Seven arms on the same 103 cases, from an LLM that sees only the alert
+to the computed belief alone, two backbones (7B local, 120B through an API) and hypotheses fixed in advance
+(\cref{sec:setup,sec:results}): the LLM does not improve the decision at either scale, while scale improves the explanation.
+\item \textbf{A zero-shot transfer protocol} to an unseen system, pre-registered with an implementation audit, and an open
+implementation with equivalence and synthetic tests (\cref{sec:aiops}).
+\end{enumerate}
+
+The paper is organised as follows. \Cref{sec:related} reviews related work, \cref{sec:problem} states the problem and the metrics,
+\cref{sec:method} describes the method, \cref{sec:setup} the experimental protocol, \cref{sec:results} the results,
+\cref{sec:discussion} discusses implications and threats to validity, and \cref{sec:conclusion} concludes.

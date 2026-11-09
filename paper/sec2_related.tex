@@ -1,0 +1,60 @@
+\section{Related work}\label{sec:related}
+
+\paragraph{Statistical and causal RCA}
+Graph-based methods propagate anomaly scores over the call graph \citep{wu2020microrca,lin2018microscope}; MicroHECL distinguishes
+performance, reliability and traffic anomalies by their direction of propagation \citep{liu2021microhecl}. Causal methods learn a
+graph from metric time series or recognise the intervention that a fault represents \citep{ikram2022rcd,li2022circa,meng2020microcause}.
+BARO detects multivariate change points with a Bayesian online model and ranks the changed services \citep{pham2024baro};
+$\epsilon$-Diagnosis tests small windows against history \citep{shan2019epsilon}. Trace-based methods locate the deepest failing or
+slowest span \citep{li2021tracerca,yu2021microrank,guo2020graphtrace}. Multimodal methods fuse metrics, logs and traces into shared
+representations or event graphs, often with training \citep{zhang2023diagfusion,lee2023eadro,yu2023nezha,zheng2024mulan}. These
+methods share our preference for computation over generation, but most output a ranking of components; fault types and an
+evidence-cited causal chain are outside their scope, and the evidence from different modalities is usually fused before any
+reasoning about mechanisms. \gama{} keeps the statistical tests of this line of work but places them in a likelihood over typed
+hypotheses, so that the same model names the entity, the mechanism and the evidence.
+
+\paragraph{Probabilistic diagnosis}
+Explaining away \citep{pearl1988probabilistic} and noisy propagation over dependency graphs \citep{bahl2007sherlock} are the
+classical foundations of our belief model; active probing with information gain \citep{rish2005adaptive,lindley1956information}
+motivates the text sensor. Calibration of test scores against an empirical null \citep{efron2004null} and conformal calibration
+\citep{vovk2005conformal} motivate our pseudo-window p-values. Compared with these works, \gama{} instantiates the hypothesis space
+with fault \emph{types} from a benchmark taxonomy, derives likelihoods from fingerprint roles instead of training, and estimates the
+propagation strength per incident.
+
+\paragraph{LLM-based RCA}
+RCACopilot predicts incident categories from collected diagnostic information \citep{chen2024rcacopilot}; RCAgent and ReAct-style
+agents call tools in an open loop \citep{wang2024rcagent,yao2023react,roy2024exploring}; Flow-of-Action and mABC organise several
+agents around procedures or votes \citep{pei2025flowofaction,zhang2024mabc}; GALA refines a statistical ranking with agentic
+re-ranking \citep{tian2025gala}. OpenRCA, RCAEval, AIOpsLab and RCA100 turn the task into benchmarks
+\citep{xu2025openrca,pham2025rcaeval,chen2025aiopslab,cai2026benchmark}; OpenRCA~2.0 adds causal process supervision
+\citep{fang2026openrca2}. Lu et al.\ \citep{lu2026beyond} analyse agent trajectories on RCA100 and AIOps2025 and catalogue omission,
+misreading and generation failures; Riddell et al.\ \citep{riddell2026stalled} report stalled and biased reasoning. Closest to our
+bounded LLM are the combination of an LLM with a small classifier \citep{han2024oneshot}, confidence estimation for root causing
+\citep{zhang2024lmpace} and grounding / verification of generated claims \citep{venktesh2025verify,gao2023alce}.
+
+\paragraph{Belief states and abduction with LLMs}
+Long-horizon agents that maintain an explicit belief state, or a graph of hypothesis states, improve over memory-only agents on
+abductive tasks including RCA100 \citep{luo2026pos,luo2026graphofstates}; planning under uncertainty with LLM-generated hypotheses
+follows the POMDP view \citep{kaelbling1998pomdp,tang2026trupomdp}. In these systems the LLM writes and updates the belief. In
+\gama{} the belief is a posterior computed from calibrated likelihoods; the LLM can only contribute a likelihood term (sensor) or a
+choice among statistically ranked options (typing).
+
+\Cref{tab:positioning} summarises the positioning, and \cref{tab:failuremodes} (\ref{app:failuremodes}) maps the failure modes
+catalogued by Lu et al.\ \citep{lu2026beyond} to the mechanism of \gama{} that rules each out by construction.
+
+\begin{table}[!htbp]
+\centering
+\caption{Positioning of \gama{} among RCA approaches.}\label{tab:positioning}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X l@{}}
+\toprule
+Approach & Decision made by & Output & Evidence calibration & Labels \\
+\midrule
+Statistical / causal \citep{wu2020microrca,ikram2022rcd,pham2024baro} & scores / causal graph & ranked components & per method & no \\
+Multimodal learned \citep{lee2023eadro,zhang2023diagfusion} & trained model & component, type & learned & yes \\
+LLM agents \citep{wang2024rcagent,xu2025openrca,pei2025flowofaction} & LLM & free text, chain & none (LLM reads raw data) & no \\
+Belief-state agents \citep{luo2026pos} & LLM-written belief & entity, type, chain & none & no \\
+\textbf{\gama{} (this work)} & \textbf{computed posterior} & \textbf{entity, type, cited chain} & \textbf{history, peers, pseudo-windows} & \textbf{no} \\
+\bottomrule
+\end{tabularx}
+\end{table}
