@@ -102,7 +102,6 @@ gamarca/
 ├── evaluation/                # Official scoring protocols (EL, FI, RP, Final)
 ├── scripts/                   # Experiment runners (Kaggle jobs, AIOps2025, analyze_v5)
 ├── tests/                     # Unit tests & deterministic golden snapshots
-├── docs/                      # Pre-registrations, devlogs, and research notes
 └── paper/                     # LaTeX manuscript source, figures, tables, and preprint PDF
 ```
 
@@ -142,16 +141,24 @@ Expected output:
 5/5 passed     (test_gama.py)
 3/3 passed     (test_aiops2025.py)
 3/3 passed     (test_api_client.py)
-4/4 passed     (test_v6.py)
+4/4 passed     (test_rules.py)
 ```
 
-### 3. Re-running Benchmark Analyses
+### 3. Run Leave-One-Out Ablation Study
+
+Run the fast multi-module ablation suite (~2 seconds on CPU):
+
+```bash
+make ablation
+```
+
+### 4. Re-running Benchmark Analyses
 
 To reproduce statistical analyses and figures from scored experiment runs:
 
 ```bash
 # Generate Table A, Table B, and markdown report from run archives
-python scripts/analyze_v5.py \
+python scripts/analyze.py \
   --arm GAMA_CORE="results/GAMA_CORE_*.zip" \
   --arm EVIDENCE_LLM="results/EVIDENCE_LLM_*.zip" \
   --out report.md

@@ -1,4 +1,4 @@
-.PHONY: help install test lint clean
+.PHONY: help install test ablation lint paper clean
 
 PYTHON ?= python3
 
@@ -24,6 +24,9 @@ ablation:    ## Run leave-one-out ablation suite
 
 lint:        ## Run pyflakes linter on active code
 	$(PYTHON) -m pyflakes $$(git ls-files '*.py' 2>/dev/null | grep -v '^archive/' | grep -v '^\.venv/')
+
+paper:       ## Compile LaTeX manuscript (paper/main.pdf)
+	cd paper && (latexmk -pdf main.tex 2>/dev/null || pdflatex -interaction=nonstopmode main.tex)
 
 clean:       ## Remove Python cache and temporary files
 	find . -type d -name "__pycache__" -exec rm -rf {} +
