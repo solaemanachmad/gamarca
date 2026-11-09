@@ -7,7 +7,7 @@ Notebook (2 cells, the same for every run):
   from kaggle_secrets import UserSecretsClient
   tok = UserSecretsClient().get_secret("GITHUB_TOKEN")
   subprocess.run("rm -rf /kaggle/working/gama-rca", shell=True)
-  subprocess.run(["git", "clone", "-q", "--depth", "1", f"https://{tok}@github.com/solaemanachmad/gama-rca.git", "/kaggle/working/gama-rca"])
+  subprocess.run(["git", "clone", "-q", "--depth", "1", f"https://{tok}@github.com/solaemanachmad/gamarca.git", "/kaggle/working/gama-rca"])
   os.chdir("/kaggle/working/gama-rca")
 
   # Cell 2 -- run (change only the arguments)
@@ -37,8 +37,9 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-DEFAULT_DATA = "/kaggle/input/datasets/solaemanachmad/rca100v1-1/RCA100v1.1"
-OUT = "/kaggle/working"
+LOCAL_DATA = os.path.expanduser("~/Developments/RCA100")
+DEFAULT_DATA = os.environ.get("RCA100_ROOT", LOCAL_DATA if os.path.isdir(LOCAL_DATA) else "/kaggle/input/datasets/solaemanachmad/rca100v1-1/RCA100v1.1")
+OUT = os.environ.get("OUT_DIR", "./results" if not os.path.isdir("/kaggle") else "/kaggle/working")
 
 
 def definitions(data):
@@ -72,12 +73,12 @@ def main():
     ap.add_argument("--modules", default=None)
     a = ap.parse_args()
 
-    assert os.path.isdir(os.path.join(a.data, "cases")), f"dataset not found: {a.data} (attach RCA100 or pass --data)"
     D = definitions(a.data)
     if a.list:
         print("ARMS:", ", ".join(D["ARMS"]))
         print("MODELS:", ", ".join(D["MODELS"]))
         return
+    assert os.path.isdir(os.path.join(a.data, "cases")), f"dataset not found: {a.data} (attach RCA100 or pass --data)"
     assert a.arm in D["ARMS"], f"unknown arm {a.arm!r}; --list shows the arms"
     assert a.model in D["MODELS"], f"unknown model {a.model!r}; --list shows the models"
 

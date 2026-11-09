@@ -54,7 +54,9 @@ W = {"ALERT_T0_MODE": "window"}
 ARMS = {                                                          # name -> extra env, on BASE + model preset + FIXED
     "GAMA": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "core"},                    # CPU; kaggle_job --modules core,-trace ... overrides
     "GAMA_FULL": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "full"},               # GPU: + bounded local LLM (M7)
+    "GAMA_HYBRID": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "hybrid"},           # GAMA + Bounded LLM
     "BELIEF_LLM": {"_SYSTEM": "belief_llm", **W, "V3_LOG_MODE": "template"},     # GPU: GAMA's belief, the LLM decides freely
+    "EVIDENCE_LLM": {"_SYSTEM": "evidence_llm", **W, "V3_LOG_MODE": "template", "V4_PARTS": V5_FINAL_PARTS},   # GPU baseline
     "EVIDENCE_LLM_FINAL": {"_SYSTEM": "evidence_llm", **W, "V3_LOG_MODE": "template", "V4_PARTS": V5_FINAL_PARTS},   # GPU baseline
     "DIRECT_LLM": {"_SYSTEM": "direct_llm"},                                     # GPU baseline: alert only
     # names of the reported runs; identical outputs to the frozen development arms (PREREGISTRATION_V5.md, equivalence 206 / 206)
