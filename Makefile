@@ -1,6 +1,6 @@
 .PHONY: help install test ablation lint paper clean
 
-PYTHON ?= python3
+PYTHON ?= $(shell if [ -f .venv/bin/python ]; then echo .venv/bin/python; else echo python3; fi)
 
 help:        ## Show this help message
 	@echo "Available targets:"
