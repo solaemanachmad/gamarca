@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """kaggle_job.py -- one command per run on Kaggle. The notebook never changes; only the arguments do.
 
 Notebook (2 cells, the same for every run):

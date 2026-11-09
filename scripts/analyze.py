@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """analyze_v5.py -- the pre-registered analysis of PREREGISTRATION_V5.md ("Analysis plan v5", fixed 2026-11-03 before the
 evaluation runs). Reads the run outputs as they come from Kaggle (the *_all.zip files, or CSVs / folders), scores are already in
 them (evaluation/scoring.py); nothing is re-run.

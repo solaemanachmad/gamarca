@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Ablation evaluation for GAMARCA modules.
 
 Runs leave-one-out and progressive module ablations across test scenarios.

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """GAMA-RCA on AIOps2025, zero-shot (PREREGISTRATION_AIOPS2025.md). Reads input.json and the telemetry; never opens ground truth.
 
     python scripts/aiops2025_run.py --data /kaggle/input/aiops2025 --out /kaggle/working --shard 0/4            # diagnose
