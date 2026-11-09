@@ -15,7 +15,7 @@ from data.loader import Case, find_service_ancestor
 from data.taxonomy import taxonomy_prompt_block
 from pipeline import belief_diagnosis as bd
 from pipeline.fault_calibrated import compute_signal_db
-from pipeline.fault_v4 import calibrate_v4, new_events, unavailability, B_SPAN
+from pipeline.fault import calibrate as calibrate_v4, new_events, unavailability, B_SPAN
 from pipeline.propagation_evidence import _node_name
 from schema import RCAResult
 
