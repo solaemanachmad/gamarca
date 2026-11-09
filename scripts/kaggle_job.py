@@ -117,14 +117,17 @@ def main():
     if a.dry:
         return
     secret = D["MODELS"][a.model].get("API_KEY_SECRET")
-    if secret:                                                # API backbone: the key from a Kaggle Secret (or the environment);
-        key = os.environ.get(secret)                          # never printed, never written to the manifest or the log
+    if secret:                                                # API backbone: key from environment or Kaggle Secret
+        key = os.environ.get(secret) or os.environ.get("API_KEY")
         if not key:
-            from kaggle_secrets import UserSecretsClient
-            key = UserSecretsClient().get_secret(secret)
-        assert key, f"Kaggle Secret {secret} is empty"
+          try:
+              from kaggle_secrets import UserSecretsClient
+              key = UserSecretsClient().get_secret(secret)
+          except Exception:
+              pass
+        assert key, f"API key not found: please set environment variable {secret}=... (or export API_KEY=...)"
         env["API_KEY"] = key
-    if not a.no_install:
+    if not a.no_install and os.path.isdir("/kaggle"):
         install(D["MODELS"][a.model])
 
     open(f"{a.out}/{name}.commit.txt", "w").write(commit + "\n")

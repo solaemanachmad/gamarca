@@ -38,6 +38,12 @@ MODELS = {
     "gptoss120b_cerebras": {"LLM_BACKEND": "api", "API_BASE_URL": "https://api.cerebras.ai/v1", "API_MODEL": "gpt-oss-120b",
                             "API_KEY_SECRET": "CEREBRAS_API_KEY", "API_REASONING_EFFORT": "medium", "LLM_MAX_TOKENS": "8192",
                             "API_MIN_INTERVAL_S": "13"},          # free trial: 5 requests / minute
+    "llama33_70b_cerebras": {"LLM_BACKEND": "api", "API_BASE_URL": "https://api.cerebras.ai/v1", "API_MODEL": "llama-3.3-70b",
+                             "API_KEY_SECRET": "CEREBRAS_API_KEY", "LLM_MAX_TOKENS": "4096", "API_MIN_INTERVAL_S": "2"},
+    "llama31_70b_cerebras": {"LLM_BACKEND": "api", "API_BASE_URL": "https://api.cerebras.ai/v1", "API_MODEL": "llama3.1-70b",
+                             "API_KEY_SECRET": "CEREBRAS_API_KEY", "LLM_MAX_TOKENS": "4096", "API_MIN_INTERVAL_S": "2"},
+    "llama31_8b_cerebras": {"LLM_BACKEND": "api", "API_BASE_URL": "https://api.cerebras.ai/v1", "API_MODEL": "llama3.1-8b",
+                            "API_KEY_SECRET": "CEREBRAS_API_KEY", "LLM_MAX_TOKENS": "4096", "API_MIN_INTERVAL_S": "2"},
     "gemma2_9b": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "google/gemma-2-9b-it"},
     "qwen3_4b": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen3-4B"},
 }
