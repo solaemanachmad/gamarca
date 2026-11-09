@@ -7,7 +7,6 @@ truth is never opened.
 import os
 import sys
 
-os.environ["DATASET_PROFILE"] = "aiops2025"
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 import builtins       # noqa: E402
@@ -210,7 +209,7 @@ def llm_arms(rel, specs, wins) -> int:
     return int(good)
 
 
-def main():
+def main(exit_on_finish=True):
     root = tempfile.mkdtemp(prefix="aiops2025_synth_")
     try:
         write_release(root)
@@ -251,10 +250,18 @@ def main():
                   f"top {r.retrieval_stats.get('top_hyp')}")
         ok += llm_arms(rel, specs, wins)
         print(f"{ok}/3 passed")
-        sys.exit(0 if ok == 3 else 1)
+        if exit_on_finish:
+            sys.exit(0 if ok == 3 else 1)
+        assert ok == 3
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
 
+def test_suite():
+    import subprocess
+    subprocess.run([sys.executable, __file__], check=True)
+
+
 if __name__ == "__main__":
+    os.environ["DATASET_PROFILE"] = "aiops2025"
     main()

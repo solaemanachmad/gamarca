@@ -167,6 +167,11 @@ def calsensor_keeps_the_probed_entitys_probability():
             del lp0
 
 
+def test_suite():
+    for fn in T:
+        fn()
+
+
 if __name__ == "__main__":
     bad = 0
     for fn in T:

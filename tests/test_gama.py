@@ -219,6 +219,11 @@ def belief_llm_adds_only_the_belief_block_to_the_evidence_prompt():
     assert r.retrieval_stats["belief_kept_type"] is False
 
 
+def test_suite():
+    for fn in T:
+        fn()
+
+
 if __name__ == "__main__":
     if "--regen" in sys.argv:
         regen()
