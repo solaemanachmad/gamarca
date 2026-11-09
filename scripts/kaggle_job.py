@@ -137,6 +137,7 @@ def main():
     if not a.no_install and os.path.isdir("/kaggle"):
         install(D["MODELS"][a.model])
 
+    os.makedirs(a.out, exist_ok=True)
     open(f"{a.out}/{name}.commit.txt", "w").write(commit + "\n")
     manifest = {"commit": commit, "arm": a.arm, "system": system, "modules": env.get("GAMA_MODULES"),
                 "v4_parts": env.get("V4_PARTS"), "model": a.model, "model_env": D["MODELS"][a.model], "cases": cases,
