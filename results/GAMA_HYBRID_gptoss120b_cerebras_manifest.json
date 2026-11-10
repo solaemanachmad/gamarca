@@ -1,0 +1,33 @@
+{
+  "timestamp": "20261110_0107",
+  "results_csv_path": "./results/GAMA_HYBRID_gptoss120b_cerebras.csv",
+  "llm_backend": "api",
+  "llm_model": "api:https://api.cerebras.ai/v1|gpt-oss-120b|effort=medium",
+  "systems": [
+    "gama"
+  ],
+  "n_cases_requested": 2,
+  "case_ids_requested": [
+    "t001",
+    "t002"
+  ],
+  "n_rows_written": 2,
+  "n_error_rows": 0,
+  "effective_config": {
+    "LLM_BACKEND": "api",
+    "GAMA_MODULES": "hybrid",
+    "ALERT_T0_MODE": "window",
+    "FP_SCORING": "calibrated",
+    "FP_ALPHA": 0.05,
+    "FP_TOP_K": 3,
+    "LLM_TEMPERATURE": 0.0,
+    "LLM_SEED": 0,
+    "LLM_MAX_TOKENS": 8192,
+    "API_MODEL": "gpt-oss-120b",
+    "API_BASE_URL": "https://api.cerebras.ai/v1",
+    "API_REASONING_EFFORT": "medium"
+  },
+  "wandb_enabled": false,
+  "wandb_project": null,
+  "wandb_group": null
+}

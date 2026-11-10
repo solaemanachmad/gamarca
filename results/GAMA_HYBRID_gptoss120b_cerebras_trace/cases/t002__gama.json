@@ -1,0 +1,401 @@
+{
+ "case_id": "t002",
+ "system": "gama",
+ "trail": {
+  "alert_text": "cart响应时间突增告警",
+  "alert_service": "cart",
+  "alert_operation": "cart::POST /oteldemo.CartService/GetCart",
+  "parts": [
+   "avail",
+   "conseq",
+   "em",
+   "errclass",
+   "events",
+   "fp",
+   "hostcpu",
+   "keepchain",
+   "llmtype",
+   "loadx2",
+   "mm",
+   "msgtarget",
+   "omsg",
+   "onset",
+   "open",
+   "peer",
+   "prop",
+   "redchain",
+   "retry",
+   "score",
+   "selfnorm",
+   "sigorder2",
+   "textx2",
+   "tiebreak",
+   "torigin3",
+   "twostage",
+   "typecheck",
+   "xcard"
+  ],
+  "n_observations": 881,
+  "n_hypotheses": 385,
+  "holding_observations": [
+   {
+    "entity": "cart",
+    "signal": "svc_request_rise",
+    "ev": "request_count: baseline median=2078, window max=24272 (robust shift 4.6) (calibrated p=0.0217 against 45 pseudo-window scores)"
+   },
+   {
+    "entity": "cart",
+    "signal": "redis_slow",
+    "ev": "redis spans max=210009ms vs the service's other spans median=3.91ms in the window (p=1.23e-109)"
+   },
+   {
+    "entity": "cart",
+    "signal": "error_spans",
+    "ev": "193 error spans of 18431 in the window"
+   },
+   {
+    "entity": "cart",
+    "signal": "msg_timeout",
+    "ev": "167 error spans whose message matches 'timeout'"
+   },
+   {
+    "entity": "cart",
+    "signal": "msg_redis",
+    "ev": "190 error spans whose message matches 'redis'"
+   },
+   {
+    "entity": "cart",
+    "signal": "redis_err",
+    "ev": "190 failing redis spans"
+   },
+   {
+    "entity": "checkout",
+    "signal": "http5xx",
+    "ev": "84 error spans with HTTP 5xx {'500': 84}"
+   },
+   {
+    "entity": "checkout",
+    "signal": "error_spans",
+    "ev": "168 error spans of 24995 in the window"
+   },
+   {
+    "entity": "checkout",
+    "signal": "msg_timeout",
+    "ev": "124 error spans whose message matches 'timeout'"
+   },
+   {
+    "entity": "checkout",
+    "signal": "msg_redis",
+    "ev": "168 error spans whose message matches 'redis'"
+   },
+   {
+    "entity": "frontend",
+    "signal": "redis_slow",
+    "ev": "redis spans max=210017ms vs the service's other spans median=8.07ms in the window (p=1e-130)"
+   },
+   {
+    "entity": "frontend",
+    "signal": "http5xx",
+    "ev": "549 error spans with HTTP 5xx {'500': 549}"
+   },
+   {
+    "entity": "frontend",
+    "signal": "error_spans",
+    "ev": "656 error spans of 60062 in the window"
+   },
+   {
+    "entity": "frontend",
+    "signal": "msg_timeout",
+    "ev": "166 error spans whose message matches 'timeout'"
+   },
+   {
+    "entity": "frontend",
+    "signal": "msg_redis",
+    "ev": "190 error spans whose message matches 'redis'"
+   },
+   {
+    "entity": "frontend",
+    "signal": "redis_err",
+    "ev": "380 failing redis spans"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "http5xx",
+    "ev": "186 error spans with HTTP 5xx {'500': 158, '404': 1, '504': 28}"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "error_spans",
+    "ev": "187 error spans of 28579 in the window"
+   },
+   {
+    "entity": "inventory",
+    "signal": "svc_thread_rise",
+    "ev": "arms_thread_pool_current_thread_count: baseline median=1.76, window max=2.35 (robust shift 6.2) (calibrated p=0.046 against 260 pseudo-window scores)"
+   },
+   {
+    "entity": "shipping",
+    "signal": "svc_mem_rise",
+    "ev": "mem: baseline median=4009984, window max=5592405 (robust shift 4.4) (calibrated p=0.0385 against 51 pseudo-window scores)"
+   },
+   {
+    "entity": "cart",
+    "signal": "trace_err_origin",
+    "ev": "errors start here in 191 of 220 failing traces"
+   },
+   {
+    "entity": "cart",
+    "signal": "omsg_timeout",
+    "ev": "166 of 191 origin spans / linked log lines mention 'timeout'"
+   },
+   {
+    "entity": "cart",
+    "signal": "omsg_redis",
+    "ev": "190 of 191 origin spans / linked log lines mention 'redis'"
+   },
+   {
+    "entity": "cart",
+    "signal": "alert",
+    "ev": "the alert fired on this service"
+   }
+  ],
+  "pi": 0.33332788393956153,
+  "onsets": {
+   "cart": 1776887467.0,
+   "inventory": 1776887497.0,
+   "shipping": 1776887527.0
+  },
+  "trace_structure": {
+   "n_traces": 18744,
+   "n_err_traces": 220,
+   "n_slow": 1878,
+   "err_origin": {
+    "cart": 191,
+    "frontend-proxy": 29
+   },
+   "slow_origin": {
+    "cart": 274,
+    "checkout": 290,
+    "frontend": 973,
+    "frontend-proxy": 7,
+    "inventory": 6,
+    "accounting": 307,
+    "currency": 4,
+    "product-catalog": 14,
+    "fraud-detection": 3
+   },
+   "relayed_to_callee": {},
+   "origin_messages": {
+    "cart:omsg_timeout": "166 of 191 origin spans / linked log lines mention 'timeout'",
+    "cart:omsg_redis": "190 of 191 origin spans / linked log lines mention 'redis'"
+   }
+  },
+  "top_hypotheses": [
+   {
+    "entity": "cart",
+    "type": "F029-redisUnavailable",
+    "p": 0.9851
+   },
+   {
+    "entity": "cart",
+    "type": "F009-cacheBreakdown",
+    "p": 0.0051
+   },
+   {
+    "entity": "cart",
+    "type": "F002-threadExhaustion",
+    "p": 0.0047
+   },
+   {
+    "entity": "cart",
+    "type": "F056-networkPolicyIsolation",
+    "p": 0.0039
+   },
+   {
+    "entity": "cart",
+    "type": "ANOMALY",
+    "p": 0.0008
+   }
+  ],
+  "type_rank": [
+   [
+    "F029-redisUnavailable",
+    0.9854
+   ],
+   [
+    "F009-cacheBreakdown",
+    0.0051
+   ],
+   [
+    "F002-threadExhaustion",
+    0.0047
+   ],
+   [
+    "F056-networkPolicyIsolation",
+    0.0039
+   ],
+   [
+    "F006-trafficSurge",
+    0.0001
+   ],
+   [
+    "F011-codeDefect",
+    0.0001
+   ],
+   [
+    "F016-rateLimiting",
+    0.0
+   ],
+   [
+    "F057-dnsResolutionFailure",
+    0.0
+   ]
+  ],
+  "decided": {
+   "entity": "cart",
+   "level": "service",
+   "type": "F029-redisUnavailable",
+   "p_entity": 0.9997525766625703,
+   "p_type": 0.9853505055944102
+  },
+  "evidence_by_bayes_factor": [
+   {
+    "entity": "cart",
+    "signal": "alert",
+    "holds": true,
+    "log_bf": 4.09,
+    "ev": "the alert fired on this service"
+   },
+   {
+    "entity": "cart",
+    "signal": "trace_err_origin",
+    "holds": true,
+    "log_bf": 2.3,
+    "ev": "errors start here in 191 of 220 failing traces"
+   },
+   {
+    "entity": "cart",
+    "signal": "omsg_timeout",
+    "holds": true,
+    "log_bf": 2.3,
+    "ev": "166 of 191 origin spans / linked log lines mention 'timeout'"
+   },
+   {
+    "entity": "cart",
+    "signal": "omsg_redis",
+    "holds": true,
+    "log_bf": 2.3,
+    "ev": "190 of 191 origin spans / linked log lines mention 'redis'"
+   },
+   {
+    "entity": "cart",
+    "signal": "msg_timeout",
+    "holds": true,
+    "log_bf": 1.46,
+    "ev": "167 error spans whose message matches 'timeout'"
+   },
+   {
+    "entity": "checkout",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.46,
+    "ev": "84 error spans with HTTP 5xx {'500': 84}"
+   },
+   {
+    "entity": "frontend",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.46,
+    "ev": "549 error spans with HTTP 5xx {'500': 549}"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.46,
+    "ev": "186 error spans with HTTP 5xx {'500': 158, '404': 1, '504': 28}"
+   },
+   {
+    "entity": "cart",
+    "signal": "msg_redis",
+    "holds": true,
+    "log_bf": 1.37,
+    "ev": "190 error spans whose message matches 'redis'"
+   },
+   {
+    "entity": "cart",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.2,
+    "ev": "193 error spans of 18431 in the window"
+   },
+   {
+    "entity": "checkout",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.2,
+    "ev": "168 error spans of 24995 in the window"
+   },
+   {
+    "entity": "frontend",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.2,
+    "ev": "656 error spans of 60062 in the window"
+   }
+  ],
+  "text_probes": [],
+  "sensor_calls": [],
+  "log_preprocessing": {
+   "logpre_lines": 500000,
+   "logpre_templates": 141,
+   "logpre_baseline_min": 15.02,
+   "logpre_significant": 82,
+   "logpre_entities": 9
+  },
+  "typing": {
+   "llm_type": "F029-redisUnavailable",
+   "accepted": true,
+   "changed": false,
+   "n_lines": 18,
+   "prompt_chars": 5604,
+   "quote_ok": true,
+   "candidates": [
+    "F029-redisUnavailable",
+    "F009-cacheBreakdown",
+    "F002-threadExhaustion",
+    "F056-networkPolicyIsolation",
+    "F006-trafficSurge"
+   ],
+   "evidence_line": "[traces] cart redis_err: 190 failing redis spans",
+   "quote_supports": true
+  },
+  "call_path": [
+   "cart"
+  ],
+  "chain": [
+   "cause: cart F029-redisUnavailable trace_err_origin (errors start here in 191 of 220 failing traces) | latency=181.639; error=1.0",
+   "impact: cart::POST /oteldemo.CartService/GetCart | avg_request_latency_seconds=201.762; error_rate=0.000288392; error_count=86.0; request_count=37392.0"
+  ],
+  "grounding": {
+   "grounded": 0.5,
+   "numbers": 6
+  }
+ },
+ "outcome_for_analysis_only": {
+  "predicted_entity_ids": [
+   "469f8e313055adba13ca3f4e76c65505"
+  ],
+  "predicted_fault_type": "F029-redisUnavailable",
+  "reasoning_chain": [
+   "cause: cart F029-redisUnavailable trace_err_origin (errors start here in 191 of 220 failing traces) | latency=181.639; error=1.0",
+   "impact: cart::POST /oteldemo.CartService/GetCart | avg_request_latency_seconds=201.762; error_rate=0.000288392; error_count=86.0; request_count=37392.0"
+  ],
+  "gt_fault_type": "F029-redisUnavailable",
+  "gt_target_entity_ids": "469f8e313055adba13ca3f4e76c65505",
+  "entity_localization": 1.0,
+  "fault_identification_exact": 1.0,
+  "reasoning_process_nodes": 0.6667,
+  "final_score_nodes": 0.9
+ }
+}

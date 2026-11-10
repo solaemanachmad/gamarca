@@ -1,0 +1,3 @@
+case_id,entity_loc,fault_type,fault_group,reasoning,final_score,pred_entity,gt_entity,pred_type,gt_type,duration_s,system
+t001,1.0,0.0,1.0,1.0,0.7,06e538f4a2950039a09fd3bba1d3b7b2,06e538f4a2950039a09fd3bba1d3b7b2,F011-codeDefect,F014-httpError5xx,90.2,gama
+t002,1.0,1.0,1.0,0.6667,0.9,469f8e313055adba13ca3f4e76c65505,469f8e313055adba13ca3f4e76c65505,F029-redisUnavailable,F029-redisUnavailable,51.3,gama

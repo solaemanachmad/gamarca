@@ -1,0 +1,369 @@
+{
+ "case_id": "t001",
+ "system": "gama",
+ "trail": {
+  "alert_text": "checkout 错误次数告警",
+  "alert_service": "checkout",
+  "alert_operation": "checkout::/oteldemo.CheckoutService/PlaceOrder",
+  "parts": [
+   "avail",
+   "conseq",
+   "em",
+   "errclass",
+   "events",
+   "fp",
+   "hostcpu",
+   "keepchain",
+   "llmtype",
+   "loadx2",
+   "mm",
+   "msgtarget",
+   "omsg",
+   "onset",
+   "open",
+   "peer",
+   "prop",
+   "redchain",
+   "retry",
+   "score",
+   "selfnorm",
+   "sigorder2",
+   "textx2",
+   "tiebreak",
+   "torigin3",
+   "twostage",
+   "typecheck",
+   "xcard"
+  ],
+  "n_observations": 839,
+  "n_hypotheses": 381,
+  "holding_observations": [
+   {
+    "entity": "ad",
+    "signal": "svc_cpu_rise",
+    "ev": "cpu: baseline median=0.000698, window max=0.00154 (robust shift 5) (calibrated p=0.0286 against 34 pseudo-window scores)"
+   },
+   {
+    "entity": "ad",
+    "signal": "svc_request_rise",
+    "ev": "request_count: baseline median=106, window max=508 (robust shift 67) (calibrated p=0.0323 against 30 pseudo-window scores)"
+   },
+   {
+    "entity": "ad",
+    "signal": "op_request_rise",
+    "ev": "request_count: baseline median=106, window max=508 (robust shift 67) (calibrated p=0.0323 against 30 pseudo-window scores)"
+   },
+   {
+    "entity": "checkout",
+    "signal": "http5xx",
+    "ev": "2536 error spans with HTTP 5xx {'500': 2536}"
+   },
+   {
+    "entity": "checkout",
+    "signal": "error_spans",
+    "ev": "2536 error spans of 23545 in the window"
+   },
+   {
+    "entity": "frontend",
+    "signal": "op_request_rise",
+    "ev": "request_count: baseline median=106, window max=507 (robust shift 67) (calibrated p=0.0323 against 30 pseudo-window scores)"
+   },
+   {
+    "entity": "frontend",
+    "signal": "http5xx",
+    "ev": "5789 error spans with HTTP 5xx {'500': 5789}"
+   },
+   {
+    "entity": "frontend",
+    "signal": "error_spans",
+    "ev": "5789 error spans of 59671 in the window"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "http5xx",
+    "ev": "2893 error spans with HTTP 5xx {'500': 2893}"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "error_spans",
+    "ev": "2893 error spans of 27038 in the window"
+   },
+   {
+    "entity": "payment",
+    "signal": "error_spans",
+    "ev": "1329 error spans of 6112 in the window"
+   },
+   {
+    "entity": "payment",
+    "signal": "trace_err_origin",
+    "ev": "errors start here in 1329 of 1500 failing traces"
+   },
+   {
+    "entity": "checkout",
+    "signal": "alert",
+    "ev": "the alert fired on this service"
+   }
+  ],
+  "pi": 0.3242364702918134,
+  "onsets": {},
+  "trace_structure": {
+   "n_traces": 15950,
+   "n_err_traces": 1500,
+   "n_slow": 1594,
+   "err_origin": {
+    "payment": 1329,
+    "frontend": 191,
+    "checkout": 12,
+    "frontend-proxy": 48
+   },
+   "slow_origin": {
+    "frontend": 771,
+    "checkout": 196,
+    "frontend-proxy": 376,
+    "email": 6,
+    "cart": 57,
+    "shipping": 15,
+    "quote": 7,
+    "accounting": 164,
+    "currency": 2
+   },
+   "relayed_to_callee": {},
+   "origin_messages": {}
+  },
+  "top_hypotheses": [
+   {
+    "entity": "payment",
+    "type": "ANOMALY",
+    "p": 0.3331
+   },
+   {
+    "entity": "payment",
+    "type": "F011-codeDefect",
+    "p": 0.1447
+   },
+   {
+    "entity": "checkout",
+    "type": "F014-httpError5xx",
+    "p": 0.0637
+   },
+   {
+    "entity": null,
+    "type": null,
+    "p": 0.0454
+   },
+   {
+    "entity": "checkout",
+    "type": "ANOMALY",
+    "p": 0.0356
+   }
+  ],
+  "type_rank": [
+   [
+    "F011-codeDefect",
+    0.248
+   ],
+   [
+    "F014-httpError5xx",
+    0.0435
+   ],
+   [
+    "F016-rateLimiting",
+    0.0167
+   ],
+   [
+    "F057-dnsResolutionFailure",
+    0.0152
+   ],
+   [
+    "F005-messageQueueBacklog",
+    0.0152
+   ],
+   [
+    "F004-trafficHotspot",
+    0.0082
+   ],
+   [
+    "F034-cpuFullLoad",
+    0.0082
+   ],
+   [
+    "F012-cpuDeadLoop",
+    0.0082
+   ]
+  ],
+  "decided": {
+   "entity": "payment",
+   "level": "service",
+   "type": "F011-codeDefect",
+   "p_entity": 0.5835748912151006,
+   "p_type": 0.24796055265661063
+  },
+  "evidence_by_bayes_factor": [
+   {
+    "entity": "checkout",
+    "signal": "alert",
+    "holds": true,
+    "log_bf": 4.09,
+    "ev": "the alert fired on this service"
+   },
+   {
+    "entity": "payment",
+    "signal": "trace_err_origin",
+    "holds": true,
+    "log_bf": 2.26,
+    "ev": "errors start here in 1329 of 1500 failing traces"
+   },
+   {
+    "entity": "payment",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.45,
+    "ev": "1329 error spans of 6112 in the window"
+   },
+   {
+    "entity": "checkout",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.41,
+    "ev": "2536 error spans with HTTP 5xx {'500': 2536}"
+   },
+   {
+    "entity": "frontend",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.41,
+    "ev": "5789 error spans with HTTP 5xx {'500': 5789}"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "http5xx",
+    "holds": true,
+    "log_bf": 1.41,
+    "ev": "2893 error spans with HTTP 5xx {'500': 2893}"
+   },
+   {
+    "entity": "checkout",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.16,
+    "ev": "2536 error spans of 23545 in the window"
+   },
+   {
+    "entity": "frontend",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.16,
+    "ev": "5789 error spans of 59671 in the window"
+   },
+   {
+    "entity": "frontend-proxy",
+    "signal": "error_spans",
+    "holds": true,
+    "log_bf": 1.16,
+    "ev": "2893 error spans of 27038 in the window"
+   },
+   {
+    "entity": "payment",
+    "signal": "svc_latency_rise",
+    "holds": false,
+    "log_bf": -0.86,
+    "ev": "avg_request_latency_seconds: baseline median=0.000342, window max=0.000393 (robust shift 2.4) (calibrated p=0.207 against 28 pseudo-window scores)"
+   },
+   {
+    "entity": "payment",
+    "signal": "svc_error_rise",
+    "holds": false,
+    "log_bf": -0.86,
+    "ev": "rank-test score=0.679 over 5 series (calibrated p=0.952 against 20 pseudo-window scores)"
+   }
+  ],
+  "text_probes": [
+   {
+    "probe": "payment",
+    "eig_bits": 0.516,
+    "category": "none",
+    "max_belief_before": 0.25,
+    "max_belief_after": 0.333
+   },
+   {
+    "probe": "checkout",
+    "eig_bits": 0.14,
+    "category": "none",
+    "max_belief_before": 0.333,
+    "max_belief_after": 0.333
+   }
+  ],
+  "sensor_calls": [
+   {
+    "entity": "payment",
+    "answer": "none",
+    "quote_ok": true,
+    "accepted": "none",
+    "n_lines": 2,
+    "prompt_chars": 1787
+   },
+   {
+    "entity": "checkout",
+    "answer": "none",
+    "quote_ok": true,
+    "accepted": "none",
+    "n_lines": 2,
+    "prompt_chars": 1625
+   }
+  ],
+  "log_preprocessing": {
+   "logpre_lines": 520410,
+   "logpre_templates": 67,
+   "logpre_baseline_min": 15.03,
+   "logpre_significant": 12,
+   "logpre_entities": 4
+  },
+  "typing": {
+   "llm_type": "F011-codeDefect",
+   "accepted": true,
+   "changed": false,
+   "n_lines": 3,
+   "prompt_chars": 3178,
+   "quote_ok": true,
+   "candidates": [
+    "F011-codeDefect",
+    "F014-httpError5xx",
+    "F016-rateLimiting",
+    "F057-dnsResolutionFailure",
+    "F005-messageQueueBacklog"
+   ],
+   "evidence_line": "[traces] payment error_spans: 1329 error spans of 6112 in the window",
+   "quote_supports": true
+  },
+  "call_path": [
+   "payment",
+   "checkout"
+  ],
+  "chain": [
+   "cause: payment F011-codeDefect trace_err_origin (errors start here in 1329 of 1500 failing traces) | error=8899.0; latency=0.000372973",
+   "propagation: checkout http5xx (2536 error spans with HTTP 5xx {'500': 2536}) | latency=10.7538; error=8891.0",
+   "impact: checkout::/oteldemo.CheckoutService/PlaceOrder | avg_request_latency_seconds=10.7538; request_count=13783.0"
+  ],
+  "grounding": {
+   "grounded": 0.833,
+   "numbers": 6
+  }
+ },
+ "outcome_for_analysis_only": {
+  "predicted_entity_ids": [
+   "06e538f4a2950039a09fd3bba1d3b7b2"
+  ],
+  "predicted_fault_type": "F011-codeDefect",
+  "reasoning_chain": [
+   "cause: payment F011-codeDefect trace_err_origin (errors start here in 1329 of 1500 failing traces) | error=8899.0; latency=0.000372973",
+   "propagation: checkout http5xx (2536 error spans with HTTP 5xx {'500': 2536}) | latency=10.7538; error=8891.0",
+   "impact: checkout::/oteldemo.CheckoutService/PlaceOrder | avg_request_latency_seconds=10.7538; request_count=13783.0"
+  ],
+  "gt_fault_type": "F014-httpError5xx",
+  "gt_target_entity_ids": "06e538f4a2950039a09fd3bba1d3b7b2",
+  "entity_localization": 1.0,
+  "fault_identification_exact": 0.0,
+  "reasoning_process_nodes": 1.0,
+  "final_score_nodes": 0.7
+ }
+}

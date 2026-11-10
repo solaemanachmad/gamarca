@@ -1,0 +1,33 @@
+{
+ "commit": "37f5983",
+ "arm": "GAMA_HYBRID",
+ "system": "gama",
+ "modules": "hybrid",
+ "v4_parts": null,
+ "model": "gptoss120b_cerebras",
+ "model_env": {
+  "LLM_BACKEND": "api",
+  "API_BASE_URL": "https://api.cerebras.ai/v1",
+  "API_MODEL": "gpt-oss-120b",
+  "API_KEY_SECRET": "CEREBRAS_API_KEY",
+  "API_REASONING_EFFORT": "medium",
+  "LLM_MAX_TOKENS": "8192",
+  "API_MIN_INTERVAL_S": "13"
+ },
+ "cases": [
+  "t001",
+  "t002"
+ ],
+ "shard": null,
+ "python": "3.12.13",
+ "started": "2026-11-10T01:07:48+0700",
+ "cpu": "arm",
+ "cpu_count": 10,
+ "torch": "2.15.0",
+ "transformers": "5.22.2",
+ "gpu": null,
+ "gpu_count": 0,
+ "rc": 0,
+ "finished": "2026-11-10T01:10:56+0700",
+ "wall_s": 186.3
+}
