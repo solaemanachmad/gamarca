@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""analyze_v5.py -- the pre-registered analysis of PREREGISTRATION_V5.md ("Analysis plan v5", fixed 2026-11-03 before the
-evaluation runs). Reads the run outputs as they come from Kaggle (the *_all.zip files, or CSVs / folders), scores are already in
+"""analyze.py -- statistical analysis of benchmark runs (PREREGISTRATION_V5.md).
+Reads run outputs (the *_all.zip files, CSVs, or results folders); scores are already in
 them (evaluation/scoring.py); nothing is re-run.
 
-    python scripts/analyze_v5.py --arm A=A_odd.csv,A_even.csv --arm GAMA_CORE="GAMA_CORE_7B_shard*_all.zip" \
+    python scripts/analyze.py --arm A=A_odd.csv,A_even.csv --arm GAMA_CORE="GAMA_CORE_7B_shard*_all.zip" \
         --arm GAMA_CORE_NO_TRACE="GAMA_CORE_NO_TRACE_7B_shard*_all.zip" ... --out report.md --json report.json
 
 Arm labels follow the arm names (A, GAMA_CORE, GAMA_LLM, GAMA_CORE_NO_<M>, EVIDENCE_LLM_FINAL, BELIEF_LLM, DIRECT_LLM); a backbone is appended
