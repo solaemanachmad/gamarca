@@ -19,7 +19,9 @@ answer_key/
 .env
 .env.*
 !.env.example
+.venv
 .venv/
+venv
 venv/
 env/
 ENV/
