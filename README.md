@@ -81,20 +81,24 @@ Evaluated under strict pre-registration across all 103 microservice incidents in
 
 ```
 gamarca/
-├── gama/                      # Core package: Bayesian abduction, explain-away, decision engine
+├── gama/                      # Proposed framework: Bayesian abduction, explain-away, decision engine
 │   ├── belief.py              # Bayesian hypothesis scoring & propagation EM
 │   ├── evidence.py            # Multimodal evidence calibration
-│   ├── decide.py              # Two-stage decision engine & v6 gating
+│   ├── decide.py              # Two-stage decision engine & entropy gating
 │   ├── chain.py               # Deterministic evidence-cited causal chain
 │   ├── llm.py                 # Bounded LLM sensor & shortlist selector
 │   └── run.py                 # Single-case pipeline coordinator
 │
-├── pipeline/                  # Feature extractors, log preprocessors, and baselines
-│   ├── fault_calibrated.py    # Non-parametric pseudo-window calibration
+├── baselines/                 # Comparative benchmark baselines (Table 4 in paper)
+│   ├── direct_llm.py          # Direct LLM baseline (Alert only)
+│   └── evidence_llm.py        # Evidence -> LLM baseline (Calibrated telemetry without GAMA)
+│
+├── pipeline/                  # Foundation library: telemetry extractors & statistical calibration
 │   ├── fault_fingerprint.py   # Signal taxonomy & fingerprint definitions
-│   ├── log_preprocess.py      # Drain3 log template & burst detector
+│   ├── fault_calibrated.py    # Non-parametric pseudo-window calibration & MWU test
+│   ├── log_preprocess.py      # Drain3 log template & Poisson burst detector
 │   ├── trace_structure.py     # Distributed trace-origin analysis
-│   └── evidence_llm.py        # Evidence->LLM baseline implementation
+│   └── propagation_evidence.py# Call-graph traversal & window slicing
 │
 ├── adapters/                  # Dataset ingestion (RCA100, AIOps2025)
 ├── agents/                    # Local (Transformers) and API LLM connectors
