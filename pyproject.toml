@@ -51,7 +51,7 @@ wandb = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["gama*", "adapters*", "agents*", "pipeline*", "data*", "evaluation*", "config*", "scripts*"]
+include = ["gama*", "baselines*", "adapters*", "agents*", "pipeline*", "data*", "evaluation*", "config*", "scripts*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

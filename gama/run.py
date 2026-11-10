@@ -30,7 +30,7 @@ def _safe(fn, *a):
 
 def second_opinion(case, db, callees, res, texts, llm, alert, op_name) -> dict:
     """Entropy gate: one Evidence->LLM call, WITHOUT the belief (independent opinion), on holding evidence."""
-    from pipeline.evidence_llm import build_prompt, EVIDENCE_SYSTEM
+    from baselines.evidence_llm import build_prompt, EVIDENCE_SYSTEM
     ev = {}
     for o in res["holding"]:
         if o["signal"] != "alert":
