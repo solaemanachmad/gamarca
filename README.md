@@ -2,7 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Pre-registration: v6](https://img.shields.io/badge/Pre--registration-v6%20Frozen-success.svg)](PREREGISTRATION_V6.md)
+[![Pre-registration](https://img.shields.io/badge/Pre--registration-Frozen-success.svg)](PREREGISTRATION_V6.md)
 [![Tests](https://img.shields.io/badge/Tests-7%2F7%20Passing-brightgreen.svg)](tests/)
 
 Official research code and reproducibility package for:
@@ -66,12 +66,12 @@ Evaluated under strict pre-registration across all 103 microservice incidents in
 
 | Method / Arm | Compute | Entity Loc. (EL) | Fault Type (FI) | Reasoning Path (RP) | Final Score |
 |:---|:---:|:---:|:---:|:---:|:---:|
-| Evidence $\rightarrow$ LLM (7B) | GPU / API | 61.2 | 20.4 | 39.8 | 42.7 |
-| Belief $\rightarrow$ LLM (7B) | GPU / API | 70.9 | 43.7 | 45.1 | 55.0 |
-| **GAMA Core (Statistical)** | **CPU only** | **78.6** | **43.7** | **61.4** | **62.9** [57.4, 68.5] |
-| GAMA v5 Full (+ bounded 7B) | CPU + GPU | 76.7 | 39.8 | 61.0 | 59.2 |
-| GAMA v5 Full (+ gpt-oss-120b) | CPU + API | 77.7 | 40.8 | 60.3 | 59.4 |
-| **GAMA v6 (+ gate + defer)** | **CPU + API** | *In progress* | *In progress* | *In progress* | *Confirmatory* |
+| Evidence $\rightarrow$ LLM (7B) | GPU / API | 71.8 | 20.4 | 26.2 | 42.7 |
+| Belief $\rightarrow$ LLM (7B) | GPU / API | 67.9 | 43.7 | 25.8 | 48.0 |
+| **GAMA Core (Statistical)** | **CPU only** | **68.9** | **43.7** | **74.1** | **62.9** [57.4, 68.5] |
+| GAMA Full (+ bounded 7B) | CPU + GPU | 66.5 | 35.0 | 73.7 | 59.2 |
+| GAMA Full (+ gpt-oss-120b) | CPU + API | 65.7 | 36.9 | 73.7 | 59.4 |
+| **GAMA Hybrid (+ gate + defer + calsensor)** | **CPU + API** | *In progress* | *In progress* | *In progress* | *Confirmatory* |
 
 *Note: GAMA Core on CPU outperforms unguided LLM reasoning by **+20.2 points Final** ($p = 2.8 \times 10^{-10}$), while the bounded LLM significantly enhances explanation quality (narrator checkpoint rate $0.107 \rightarrow 0.284$).*
 
@@ -104,7 +104,7 @@ gamarca/
 ├── agents/                    # Local (Transformers) and API LLM connectors
 ├── data/                      # Profiles, taxonomies, and development fingerprints
 ├── evaluation/                # Official scoring protocols (EL, FI, RP, Final)
-├── scripts/                   # Experiment runners (Kaggle jobs, AIOps2025, analyze_v5)
+├── scripts/                   # Experiment runners (Kaggle jobs, AIOps2025, analyze)
 ├── tests/                     # Unit tests & deterministic golden snapshots
 └── paper/                     # LaTeX manuscript source, figures, tables, and preprint PDF
 ```
@@ -176,8 +176,8 @@ cd paper && python make_figs.py
 ## 🛡️ Pre-registration & Scientific Integrity
 
 To maintain strict scientific integrity, all experimental configurations, hypotheses, and analysis scripts were pre-registered before running test sets:
-- [`PREREGISTRATION_V5.md`](PREREGISTRATION_V5.md): Final v5 evaluation protocol on RCA100.
-- [`PREREGISTRATION_V6.md`](PREREGISTRATION_V6.md): v6 selective LLM rules (`gate`, `defer`, `calsensor`).
+- [`PREREGISTRATION_V5.md`](PREREGISTRATION_V5.md): Final evaluation protocol on RCA100.
+- [`PREREGISTRATION_V6.md`](PREREGISTRATION_V6.md): Selective LLM rules of the hybrid configuration (`gate`, `defer`, `calsensor`).
 - [`PREREGISTRATION_AIOPS2025.md`](PREREGISTRATION_AIOPS2025.md): Zero-shot generalization protocol on AIOps2025.
 
 ---

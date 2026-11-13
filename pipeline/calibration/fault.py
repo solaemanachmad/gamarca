@@ -1,9 +1,9 @@
-"""v4 evidence layer (design: claude/RCA_v4_design.md in the project). Replaces only the SCORE of v3's continuous signals; the empirical
+"""Evidence layer: scores the SIZE of the shift of every continuous signal (replaces only the rank-test score); the empirical
 calibration, the categorical observations and the signal names are those of pipeline/fault_calibrated.py.
 
-Why: v3 scored a family by the minimum one-sided Mann-Whitney p over its series. A rank test saturates: any window whose values all
+Why: the earlier score of a family was the minimum one-sided Mann-Whitney p over its series. A rank test saturates: any window whose values all
 exceed the history gets the minimum p, whether the shift is a small drift or a 5x spike, and the pseudo-window null (cut from the case's
-own baseline) contains drifts at that floor. After calibration a strong fault then looks like noise. v4 scores the SIZE of the shift:
+own baseline) contains drifts at that floor. After calibration a strong fault then looks like noise. This layer scores the SIZE of the shift:
 
   robust shift  z = (median(window) - median(history)) / scale,  scale = max(1.4826 * MAD(history), REL_FLOOR * |median(history)|, ABS_FLOOR)
   direction     'up' uses z, 'down' uses -z; the family score of an entity is the largest directional z over its TESTABLE series.
@@ -16,7 +16,7 @@ calibrated p = (1 + #{null >= z}) / (N + 1) (Efron 2004; conformal calibration).
 1/(N+1) above alpha) is replaced by the pool of all signals of that entity kind; robust z is scale-free, so the pooled null is comparable. REL_FLOOR (5% of the baseline level) and ABS_FLOOR are
 fixed a priori: a scale floor keeps a perfectly flat history (replicas, restarts) from producing an infinite z for a tiny change.
 
-New signals (v4): svc_request_drop (request count falls: starvation, a silent or unreachable service), svc_avail_drop (deployment
+Additional signals: svc_request_drop (request count falls: starvation, a silent or unreachable service), svc_avail_drop (deployment
 availability / available replicas fall). Uses only the case's telemetry; never reads answer_key/."""
 from __future__ import annotations
 
@@ -34,12 +34,12 @@ COUNT_FLOOR = 1.0                  # zero-filled event counts: one event per bin
 from data.dataset_profile import EXCLUDED_WORKLOADS as EXCLUDE_NAME, CONSTANT_METRICS as CONSTANT_METRIC   # dataset-specific
 COUNT_FAMILIES = {"error"}
 MIN_POOL = 20                      # smallest null pool whose resolution 1/(N+1) is below alpha = 0.05
-V4_SVC_SIGNALS = SVC_SIGNALS + [("svc_request_drop", ("request",), "down"), ("svc_avail_drop", ("avail",), "down")]
-OP_SIGNALS = [("op_error_rise", ("error",), "up"), ("op_latency_rise", ("latency",), "up")]   # v4.2: the most affected operation
+SVC_SIGNALS_ALL = SVC_SIGNALS + [("svc_request_drop", ("request",), "down"), ("svc_avail_drop", ("avail",), "down")]
+OP_SIGNALS = [("op_error_rise", ("error",), "up"), ("op_latency_rise", ("latency",), "up")]   # the most affected operation
 Z_ON = 3.0               # onset: first sample (from one window before w0) whose robust shift reaches 3 robust SDs, for 2 samples in a row
 
 
-def family_v4(metric: str) -> Optional[str]:
+def signal_family(metric: str) -> Optional[str]:
     m = (metric or "").lower()
     if CONSTANT_METRIC.search(m):
         return None
@@ -101,7 +101,7 @@ def _family_z(series_map, fams, direction, windows, span, key_name, key_metric):
     for key, pts in series_map.items():
         if not _series_ok(key_name(key)):
             continue
-        f = family_v4(key_metric(key))
+        f = signal_family(key_metric(key))
         if f in fams:
             sel.append((key, sorted((t.timestamp(), v) for t, v in pts), f))
     out, desc, onset = [], None, None
@@ -113,7 +113,7 @@ def _family_z(series_map, fams, direction, windows, span, key_name, key_metric):
         if i == 0 and zs:
             z, key, pts = max(zs, key=lambda x: x[0])
             a_, b_ = a.timestamp(), b.timestamp()
-            fam = family_v4(key_metric(key))
+            fam = signal_family(key_metric(key))
             onset = onset_time(pts, a_, b_, span, direction, counts=fam in COUNT_FAMILIES)
             base = sorted(v for t, v in pts if a_ - span <= t < a_)
             win = [v for t, v in pts if a_ <= t <= b_]
@@ -128,7 +128,7 @@ RATIO_SIGNALS = ("svc_cpu_per_req_rise", "svc_err_rate_rise", "svc_req_share_ris
 
 def _pick(series_map, fam):
     """The series of a family used for a ratio: APM series first (one consistent source), then the one with most samples."""
-    c = [(k, v) for k, v in series_map.items() if _series_ok(k) and family_v4(k.split(":")[-1]) == fam]
+    c = [(k, v) for k, v in series_map.items() if _series_ok(k) and signal_family(k.split(":")[-1]) == fam]
     if not c:
         return None
     k, v = max(c, key=lambda kv: (kv[0].startswith("apm."), len(kv[1])))
@@ -146,7 +146,7 @@ def _ratio_series(num, den, add=1.0, num_default=None):
 
 
 def ratio_signals(db, raw, wins, span, callees=None) -> None:
-    """v5 'ratio' (PREREGISTRATION_V5.md amendment 3): relational signals that separate mechanisms the raw rises cannot.
+    """'ratio' (PREREGISTRATION_V5.md amendment 3): relational signals that separate mechanisms the raw rises cannot.
       svc_cpu_per_req_rise  CPU / requests rises: the service burns more CPU per request (a CPU fault, not more load);
       svc_err_rate_rise     errors / requests rises: more failing requests, not just more requests;
       svc_req_share_rise    requests / callers' requests rises: the service gets more load than its callers send (a surge or hotspot
@@ -194,9 +194,9 @@ def ratio_signals(db, raw, wins, span, callees=None) -> None:
                 score(ent, "svc_req_share_rise", [], "svc_request_rise")
 
 
-def calibrate_v4(db, peer: bool = False, robust_null: bool = False, ops_level: bool = False, selfnorm: bool = False,
+def calibrate(db, peer: bool = False, robust_null: bool = False, ops_level: bool = False, selfnorm: bool = False,
                  ratio: bool = False, callees=None) -> Dict:
-    """Fills db["_cal"] in the format of fault_calibrated._calibrate (so entity_signals() and the v3 belief code read it unchanged)."""
+    """Fills db["_cal"] in the format of fault_calibrated._calibrate (so entity_signals() and the belief code read it unchanged)."""
     w0, w1 = db["w0"], db["w1"]
     L = w1 - w0
     span = (B_SPAN * L).total_seconds()
@@ -204,20 +204,20 @@ def calibrate_v4(db, peer: bool = False, robust_null: bool = False, ops_level: b
     raw = defaultdict(dict)
     svc_key = (lambda k: k.split(":")[1] if k.count(":") >= 2 else k, lambda k: k.split(":")[-1])
     node_key = (lambda k: "", lambda k: k)
-    for kind, group, sigs, (kn, km) in (("node", "nodes", NODE_SIGNALS, node_key), ("service", "services", V4_SVC_SIGNALS, svc_key)):
+    for kind, group, sigs, (kn, km) in (("node", "nodes", NODE_SIGNALS, node_key), ("service", "services", SVC_SIGNALS_ALL, svc_key)):
         for ent, pr in db[group].items():
             for name, fams, d in sigs:
                 sc, m, desc, on = _family_z(pr["series"], fams, d, wins, span, kn, km)
                 if m and sc[0] is not None:
                     raw[ent][name] = {"kind_pool": (kind, name), "zs": list(sc), "n_series": m, "ev": desc, "onset": on}
     op_sigs = [("op_request_rise", ("request",), "up")] + (OP_SIGNALS if ops_level else [])
-    for ent, pr in db["services"].items():                 # operation level: hot operation (trafficHotspot); v4.2: failing operation
+    for ent, pr in db["services"].items():                 # operation level: hot operation (trafficHotspot); failing operation
         ops = {(k, m): v for (k, m), v in pr["ops"].items()}
         for name, fams, d in op_sigs:
             sc, m, desc, on = _family_z(ops, fams, d, wins, span, lambda k: k[0], lambda k: k[1])
             if m and sc[0] is not None:
                 raw[ent][name] = {"kind_pool": ("op", name), "zs": list(sc), "n_series": m, "ev": desc, "onset": on}
-    nw = db["win_bins"]                                     # log-keyword counts per 30 s bin (zero-filled), as in v3 but scored by size
+    nw = db["win_bins"]                                     # log-keyword counts per 30 s bin (zero-filled), scored by size
     for ent, pr in db["services"].items():
         for f, _ in _TEXT_FAMILIES:
             bins = pr["log_bins"].get(f)
@@ -258,7 +258,7 @@ def calibrate_v4(db, peer: bool = False, robust_null: bool = False, ops_level: b
                 nl = kind_all[r["kind_pool"][0]]            # cannot reach alpha; robust z is scale-free, so pool over the entity kind
                 r["pool"] = "kind"
             r["n_null"] = len(nl)
-            r["raw"] = -r["z"]                              # v3 convention: smaller raw = more anomalous
+            r["raw"] = -r["z"]                              # convention: smaller raw = more anomalous
             if robust_null and len(nl) >= MIN_POOL:
                 # Efron's empirical null (central matching): the pseudo-window scores may contain earlier injected faults (their
                 # tail is contaminated), so the null is the normal fitted to their CENTRE (median, MAD), not their full distribution
@@ -270,12 +270,12 @@ def calibrate_v4(db, peer: bool = False, robust_null: bool = False, ops_level: b
                 r["p"] = (1 + sum(1 for x in nl if x >= r["z"])) / (len(nl) + 1)
             cal[ent][name] = r
     db["_cal"], db["_null"], db["_peer"] = cal, null, peer
-    db["_v4_peer"] = peer
+    db["_peer"] = peer
     return cal
 
 
 # ------------------------------------------------------------------------------------------------------------------------------
-# v4.1 (DEVLOG_V4.md, "Case timelines"): peer-relative scores, new-event rule, availability as a state
+# Peer-relative scores, new-event rule, availability as a state
 # ------------------------------------------------------------------------------------------------------------------------------
 PEER_FLOOR = 1.0          # robust scale floor of the cross-sectional z distribution (one robust SD of a single series)
 MIN_PEERS = 3
@@ -357,7 +357,7 @@ def new_events(case, db, horizon_s: float) -> None:
             if poisson_sf(inc, (c0 + 0.5) / age * span) > EVENT_ALPHA:
                 continue
         # else: first seen within the history horizon and never before the window -> new by definition (a single OOM kill counts;
-        # fix 2026-10-30: v4.1 tested it against a pseudo-rate of 0.5 / horizon, so one occurrence (p = 0.12) was always dropped)
+        # fix 2026-10-30: it was tested against a pseudo-rate of 0.5 / horizon, so one occurrence (p = 0.12) was always dropped)
         prof = nodes.get(name) if (kind == "Node" or name in nodes) else db["services"].get(_owner(name, services) or "")
         if prof is None:
             continue
@@ -366,7 +366,7 @@ def new_events(case, db, horizon_s: float) -> None:
             if rx.search(txt):
                 prof["events"][f][reason] += inc
                 kept += 1
-    db["_v4_new_events"] = kept
+    db["_new_events"] = kept
 
 
 def unavailability(db) -> Dict[str, bool]:
@@ -402,7 +402,7 @@ def unavailability(db) -> Dict[str, bool]:
         hist = [bad_at(t) for t in times if t < w0]
         chronic = bool(hist) and sum(hist) > 0.5 * len(hist)
         out[s] = win_bad and not chronic
-    db["_v4_unavail"] = out
+    db["_unavail"] = out
     return out
 
 
@@ -412,7 +412,7 @@ def _td(seconds):
 
 
 def onset_time(pts, a: float, b: float, span: float, direction: str, counts: bool = False) -> Optional[float]:
-    """v4.2: when the series' anomaly starts. History = [a - L - span, a - L) with L = b - a (it ends one window before the evidence
+    """When the series' anomaly starts. History = [a - L - span, a - L) with L = b - a (it ends one window before the evidence
     window, so an anomaly that starts shortly before the alert window is still measured against clean data); the onset is the first
     sample in [a - L, b] whose directional robust shift reaches Z_ON and stays there for the next sample. None if it never does."""
     L = b - a
@@ -445,7 +445,7 @@ SELF_FLOOR = 1.0
 
 
 def self_adjust(raw: Dict) -> None:
-    """v4.3 volatile-entity normalisation: each entity's z per signal is re-standardised against the same entity's own pseudo-window z
+    """Volatile-entity normalisation: each entity's z per signal is re-standardised against the same entity's own pseudo-window z
     (median, MAD, floor 1). An entity that is 'anomalous' in every window of its history (a noisy service) no longer outranks one that
     changed only now. Pseudo windows use leave-one-out statistics (the other pseudo windows), so real and pseudo scores are on the same
     footing for calibration. Needs >= 3 other pseudo scores; otherwise the score is left unchanged."""
@@ -466,5 +466,4 @@ def self_adjust(raw: Dict) -> None:
             r["zs"] = new
 
 
-calibrate = calibrate_v4
 

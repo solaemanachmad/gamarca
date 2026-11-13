@@ -1,4 +1,4 @@
-"""Semantic probes for v3: per-entity raw text from the alert window, and the LLM text sensor that maps it onto ONE category.
+"""Semantic probes: per-entity raw text from the alert window, and the LLM text sensor that maps it onto ONE category.
 
 The sensor is the only place where the LLM reads telemetry. Its answer is accepted only if it quotes an exact excerpt of the text
 (faithfulness check); otherwise the outcome is 'none'."""

@@ -31,7 +31,7 @@ def _ids(topo):
 def call_path(callees, hosts, alert, root, held=None):
     """Topology path root -> ... -> alerted service (services along callee edges, reversed). For a node root, the path starts at the
     node and continues from the hosted service closest to the alerted service. [] when unknown.
-    v5 'rpchain' (held = entities with a holding observation): among the shortest paths, the one whose intermediate services show the
+    'rpchain' (held = entities with a holding observation): among the shortest paths, the one whose intermediate services show the
     most symptoms (the propagation the evidence supports), instead of an arbitrary one."""
     import networkx as nx
     if not alert or not root:
@@ -69,7 +69,7 @@ _EV_READING = _re.compile(r"([A-Za-z_][\w.]*): baseline median=[-+0-9.eE]+, wind
 
 
 def chain_step_metrics(case, w0, w1, entities, op_name):
-    """v5 'redchain': for every entity on the chain (root, path services or node, alerted operation), up to STEP_METRICS of its own
+    """'redchain': for every entity on the chain (root, path services or node, alerted operation), up to STEP_METRICS of its own
     metrics of the golden-signal families (services / operations: request, error, latency; nodes: cpu, memory, disk), each as
     metric=value with the window extreme in the direction of its change from the baseline median, the largest changes first."""
     import math
@@ -120,7 +120,7 @@ def rule_chain(res, path, op_name, step_metrics=None):
             ev[e["entity"]] = f"{e['signal']} ({e['ev']})" if e.get("ev") else e["signal"]
     root = res["entity"]
     sm = dict(step_metrics or {})
-    if step_metrics is not None:                         # v5 'redchain' (amendment 21): the cause step also cites the readings behind
+    if step_metrics is not None:                         # 'redchain' (amendment 21): the cause step also cites the readings behind
         mech = []                                        # the root's holding evidence (the mechanism metrics: GC, threads, replicas,
         for e in res.get("evidence", []):                # node CPU / memory ...), as metric=window extreme
             if e["entity"] == root and e["holds"]:

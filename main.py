@@ -136,14 +136,14 @@ def run_all(n_cases: int = 10, start_case: int = 0, case_ids=None, systems=None,
             config={**get_effective_config(), "systems": systems, "n_cases_requested": len(case_ids)},
         )
 
-    # systems that make no LLM call (v2 rule-only) run without loading the model, e.g. on a CPU session
+    # systems that make no LLM call run without loading the model, e.g. on a CPU session
     _no_llm = set()
     if "gama" in systems:                                  # GAMA loads the model only with the LLM module (M7)
         from gama.config import Modules
         if not Modules.from_env().llm:
             _no_llm = _no_llm | {"gama"}
     llm = None if set(systems) <= _no_llm else get_llm_client()
-    # v5 traces (agents/trace.py): every LLM call (prompt as sent, output, tokens) and every case's decision trail, as JSON next to the CSV
+    # traces (agents/trace.py): every LLM call (prompt as sent, output, tokens) and every case's decision trail, as JSON next to the CSV
     from agents.trace import install_llm_trace, write_case_trace, log_to_wandb
     trace_dir = (str(save_path).rsplit(".", 1)[0] + "_trace") if os.environ.get("TRACE", "1") == "1" else None
     if trace_dir and llm is not None:

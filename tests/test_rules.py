@@ -1,10 +1,10 @@
-"""v6 rules (PREREGISTRATION_V6.md) on synthetic scenarios with scripted LLMs (no data, no model):
+"""Hybrid rules G1-G3 (PREREGISTRATION_V6.md) on synthetic scenarios with scripted LLMs (no data, no model):
 G1 gate: a second opinion is asked only when P(e*) < STOP_P, and its entity is typed by the model;
 G2 defer: a type change quoting a signal the computed type also expects is rejected;
 G3 calsensor: a probe re-weights the probed entity's types and leaves P(entity) unchanged.
-v5 configurations are unchanged (tests/test_gama.py golden file).
+The core and full configurations are unchanged (tests/test_gama.py golden file).
 
-    python tests/test_v6.py
+    python tests/test_rules.py
 """
 import os
 import re
@@ -71,11 +71,11 @@ def _state(sc, spec="full"):
 
 
 @test
-def spec_v6_adds_only_the_three_rules():
-    v6, full = Modules.parse("v6"), Modules.parse("full")
-    assert set(v6.on()) - set(full.on()) == {"gate", "defer", "calsensor"}
+def spec_hybrid_adds_only_the_three_rules():
+    hyb, full = Modules.parse("hybrid"), Modules.parse("full")
+    assert set(hyb.on()) - set(full.on()) == {"gate", "defer", "calsensor"}
     assert not (set(full.on()) & {"gate", "defer", "calsensor"}) and Modules.parse("core").on() == Modules.parse("core").on()
-    assert v6.legacy_parts() == full.legacy_parts()
+    assert hyb.legacy_parts() == full.legacy_parts()
 
 
 @test
@@ -129,7 +129,7 @@ def defer_rejects_a_type_change_that_quotes_a_shared_signal():
     t, sgn = shared
     a = llm_type(Scripted(fault_type=t, quote_signal=sgn), db, res, {}, model=model, xcard=False, typecheck=True)
     b = llm_type(Scripted(fault_type=t, quote_signal=sgn), db, res, {}, model=model, xcard=False, typecheck=True, discrim=True)
-    if a["accepted"]:                                     # v5 accepts the change; v6 must reject it
+    if a["accepted"]:                                     # full accepts the change; hybrid must reject it
         assert a["changed"] and not b["accepted"] and b["discriminating"] is False, (a, b)
     assert not b["accepted"], b
 

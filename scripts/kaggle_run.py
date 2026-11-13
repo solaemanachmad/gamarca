@@ -1,5 +1,4 @@
-# Run definitions read by scripts/kaggle_job.py (the notebook never changes: clone + one kaggle_job command). The old notebook cells
-# and the development arms are in archive/scripts/kaggle_run.py (git tag v5-frozen).
+# Run definitions read by scripts/kaggle_job.py (the notebook never changes: clone + one kaggle_job command).
 
 # %% Cell 3 -- definitions only (BASE, FLAGS, MODELS, ARMS, case lists); runs NO model
 import os
@@ -22,14 +21,13 @@ FIXED = {"STRICT_MODALITY_ROUTING": "1", "SPECIALIST_ENGLISH": "1"}   # strict r
 MODELS = {
     "qwen25_7b": {},                                                                                 # the main configuration so far (BASE)
     "qwen3_8b": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen3-8B"},
-    "qwen3_8b_local": {"KAGGLE_MODEL_LOCAL_PATH": "/kaggle/input/models/qwen-lm/qwen-3/transformers/8b/1"},   # v3 backbone (amendment 1); thinking OFF
+    "qwen3_8b_local": {"KAGGLE_MODEL_LOCAL_PATH": "/kaggle/input/models/qwen-lm/qwen-3/transformers/8b/1"},   # thinking OFF
     "qwen3_8b_think": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen3-8B", "ENABLE_THINKING": "1", "LLM_MAX_TOKENS": "4096"},
     "qwen25_14b_4bit": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen2.5-14B-Instruct", "KAGGLE_USE_4BIT": "1", "KAGGLE_DTYPE": "float16"},
     "qwen3_14b_4bit": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen3-14B", "KAGGLE_USE_4BIT": "1", "KAGGLE_DTYPE": "float16"},
     "qwen3_32b_4bit": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "Qwen/Qwen3-32B", "KAGGLE_USE_4BIT": "1", "KAGGLE_DTYPE": "float16"},
-    # v5 multi-backbone study (PREREGISTRATION_V5.md): same prompts, greedy decoding, bfloat16, thinking off. Attach each model via
+    # multi-backbone study (PREREGISTRATION_V5.md): same prompts, greedy decoding, bfloat16, thinking off. Attach each model via
     # Add Input > Models and put its mounted folder in KAGGLE_MODEL_LOCAL_PATH (Llama and Gemma are gated on Hugging Face).
-    "qwen25_7b_v5": {"KAGGLE_MODEL_LOCAL_PATH": "/kaggle/input/models/qwen-lm/qwen2.5/transformers/7b-instruct/1"},
     "llama31_8b": {"KAGGLE_MODEL_LOCAL_PATH": "", "KAGGLE_MODEL_HANDLE": "meta-llama/Llama-3.1-8B-Instruct"},
     # one large API model (F4 / H3 / H4): gpt-oss-120b, reasoning effort fixed at medium; the key comes from the Kaggle Secret named
     # in API_KEY_SECRET (scripts/kaggle_job.py); provider data controls: zero data retention. CPU session (no GPU needed).
@@ -49,19 +47,19 @@ FLAGS = (
     "USE_LOG_TEMPLATES", "LOG_TEMPLATE_ENGINE",
     "FP_SCORING", "FP_ALPHA", "FP_TOP_K", "ENABLE_THINKING", "LLM_MAX_TOKENS",
     "KAGGLE_MODEL_HANDLE", "KAGGLE_USE_4BIT", "KAGGLE_DTYPE",
-    "V3_LOG_MODE", "V4_PARTS", "GAMA_MODULES",
+    "EVIDENCE_PARTS", "GAMA_MODULES",
 )
 # Parts of the frozen configuration in the development code's names; the Evidence->LLM baseline reads them (trace origins, text).
-V5_FINAL_PARTS = ("score,open,twostage,fp,peer,prop,events,avail,onset,em,selfnorm,llmtype,conseq,retry,"
+FINAL_PARTS = ("score,open,twostage,fp,peer,prop,events,avail,onset,em,selfnorm,llmtype,conseq,retry,"
                   "mm,torigin3,omsg,hostcpu,errclass,tiebreak,sigorder2,loadx2,msgtarget,textx2,redchain")
 W = {"ALERT_T0_MODE": "window"}
 ARMS = {                                                          # name -> extra env, on BASE + model preset + FIXED
     "GAMA": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "core"},                    # CPU; kaggle_job --modules core,-trace ... overrides
     "GAMA_FULL": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "full"},               # GPU: + bounded local LLM (M7)
     "GAMA_HYBRID": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "hybrid"},           # GAMA + Bounded LLM
-    "BELIEF_LLM": {"_SYSTEM": "belief_llm", **W, "V3_LOG_MODE": "template"},     # GPU: GAMA's belief, the LLM decides freely
-    "EVIDENCE_LLM": {"_SYSTEM": "evidence_llm", **W, "V3_LOG_MODE": "template", "V4_PARTS": V5_FINAL_PARTS},   # GPU baseline
-    "EVIDENCE_LLM_FINAL": {"_SYSTEM": "evidence_llm", **W, "V3_LOG_MODE": "template", "V4_PARTS": V5_FINAL_PARTS},   # GPU baseline
+    "BELIEF_LLM": {"_SYSTEM": "belief_llm", **W},     # GPU: GAMA's belief, the LLM decides freely
+    "EVIDENCE_LLM": {"_SYSTEM": "evidence_llm", **W, "EVIDENCE_PARTS": FINAL_PARTS},   # GPU baseline
+    "EVIDENCE_LLM_FINAL": {"_SYSTEM": "evidence_llm", **W, "EVIDENCE_PARTS": FINAL_PARTS},   # GPU baseline
     "DIRECT_LLM": {"_SYSTEM": "direct_llm"},                                     # GPU baseline: alert only
     # names of the reported runs; identical outputs to the frozen development arms (PREREGISTRATION_V5.md, equivalence 206 / 206)
     "A": {"_SYSTEM": "gama", **W, "GAMA_MODULES": "base"},                       # configuration A (M0 only)

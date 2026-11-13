@@ -223,7 +223,7 @@ def breakdown(d, ids):
 
 
 def families(labels):
-    """Pre-registered comparison families (Analysis plan v5). Each item: (first, second, alternative)."""
+    """Pre-registered comparison families (analysis plan). Each item: (first, second, alternative)."""
     fam = defaultdict(list)
     for lab in labels:
         base, _, bb = lab.partition("@")
@@ -286,7 +286,7 @@ def main():
             for r, ph in zip(res, holm([r["p"] for r in res])):
                 r["p_holm"] = ph
             rep["families"][f"{name} [{s}]"] = res
-    lines = ["# GAMA-RCA analysis (PREREGISTRATION_V5.md, Analysis plan v5)", ""]
+    lines = ["# GAMA-RCA analysis (PREREGISTRATION_V5.md, analysis plan)", ""]
     for s in a.subsets.split(","):
         lines += [f"## Arms -- {s}", "", "| arm | n | Final [95% CI] | EL | FI | RP | Group | Final_step | RP_step | entity / type / joint "
                   "| s/case | calls | tokens (in / out) |", "|" + "---|" * 13]

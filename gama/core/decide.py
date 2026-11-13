@@ -74,7 +74,7 @@ def _probes(model, H, logp, texts, sensor, budget, top_m, neutral=False):
         c = bd.CATS.index(cat) if cat in bd.CATS else len(bd.CATS)
         before = float(post.max())
         lik = np.array([_probe_dist(h, e)[c] for h in H])
-        if neutral:                                       # v6 G3 'calsensor': re-weights the probed entity's types, P(entity) unchanged
+        if neutral:                                       # G3 'calsensor': re-weights the probed entity's types, P(entity) unchanged
             idx = np.array([i for i, h in enumerate(H) if h["entity"] == e])
             pe = post[idx]
             mean = float((pe * lik[idx]).sum() / pe.sum()) if pe.sum() > 0 else 1.0
@@ -99,13 +99,13 @@ def diagnose(db, callees, texts, m: Modules, sensor=None, budget=bd.PROBE_BUDGET
     if debug is not None:
         debug.update(model=model, obs=obs, bg=bg, expl=expl, H=H, logp=logp, pi=b["pi"])
     res = decide(model, obs, b, logp, log, db, m)
-    if keep_state:                                                                     # v6 G1: re-decide with another entity
+    if keep_state:                                                                     # G1: re-decide with another entity
         res["_state"] = (model, obs, b, logp, log)
     return res
 
 
 def decide(model, obs, b, logp, log, db, m: Modules, force_entity=None) -> Dict:
-    """Stage 3 on a computed posterior. force_entity (v6 G1 'gate'): the root entity is given (the second opinion); the type, the
+    """Stage 3 on a computed posterior. force_entity (G1 'gate'): the root entity is given (the second opinion); the type, the
     evidence list and everything else are computed as for the model's own choice."""
     H, bg, expl = b["H"], b["bg"], b["expl"]
     post = bd.posterior(logp)

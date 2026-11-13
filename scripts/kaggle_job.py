@@ -119,7 +119,7 @@ def main():
         cmd += ["--wandb", "--wandb_project", "gama-rca", "--wandb_group", f"{a.arm}_{a.model}"]
 
     print(f"commit {commit} | arm {a.arm} ({system}) | model {a.model} | {len(cases)} cases | output {name}")
-    print("V4_PARTS:", env.get("V4_PARTS", "-"), "| GAMA_MODULES:", env.get("GAMA_MODULES", "-"))
+    print("EVIDENCE_PARTS:", env.get("EVIDENCE_PARTS", "-"), "| GAMA_MODULES:", env.get("GAMA_MODULES", "-"))
     print("cases:", " ".join(cases))
     if a.dry:
         return
@@ -140,7 +140,7 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     open(f"{a.out}/{name}.commit.txt", "w").write(commit + "\n")
     manifest = {"commit": commit, "arm": a.arm, "system": system, "modules": env.get("GAMA_MODULES"),
-                "v4_parts": env.get("V4_PARTS"), "model": a.model, "model_env": D["MODELS"][a.model], "cases": cases,
+                "evidence_parts": env.get("EVIDENCE_PARTS"), "model": a.model, "model_env": D["MODELS"][a.model], "cases": cases,
                 "shard": a.shard, "python": sys.version.split()[0], "started": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
     try:                                                      # hardware and library versions (efficiency table of the paper)
         import platform

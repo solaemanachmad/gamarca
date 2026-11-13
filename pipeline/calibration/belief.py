@@ -1,4 +1,4 @@
-"""v3: evidence-seeking diagnosis with computed belief states (design: claude/RCA_v3_design_belief_eig.md in the project).
+"""Evidence-seeking diagnosis with computed belief states.
 
 The belief is a probability distribution over hypotheses h = (entity, fault type) plus h0 ("none of the modelled hypotheses"), updated
 by Bayes' rule from observations. The LLM never writes the belief: it is used as a TEXT SENSOR (semantic probes: map an entity's error

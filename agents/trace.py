@@ -1,4 +1,4 @@
-"""Run traces (v5): every LLM call and every case's decision, as JSON, for audit and W&B.
+"""Run traces: every LLM call and every case's decision, as JSON, for audit and W&B.
 
 Files, next to the results CSV (<name>.csv -> <name>_trace/):
   llm_calls.jsonl     one line per LLM call: case, system, stage (sensor / typing / narrator / evidence_llm / ...), the system

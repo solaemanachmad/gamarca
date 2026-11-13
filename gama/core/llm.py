@@ -24,7 +24,7 @@ def texts_and_sensor(case, db, llm, sensor_log):
 
 
 def type_root(llm, db, res, texts, case, model, discrim=False):
-    """Shortlist typing of the decided root with signature cards and the fingerprint check of the quoted line (v6 G2: discrim)."""
+    """Shortlist typing of the decided root with signature cards and the fingerprint check of the quoted line (G2: discrim)."""
     from pipeline.calibration.typing import llm_type
     if not texts:
         from pipeline.log.preprocess import preprocess_texts

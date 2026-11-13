@@ -177,7 +177,7 @@ class Stub:
 
 def llm_arms(rel, specs, wins) -> int:
     """PREREGISTRATION_V6.md AIOps2025 arms on the synthetic release: the LLM prompts carry the AIOps2025 taxonomy (not RCA100's), the
-    Evidence->LLM arm maps its answer to a topology entity, and v6 runs end to end with the gate forced (STOP_P = 1.01)."""
+    Evidence->LLM arm maps its answer to a topology entity, and the hybrid spec runs end to end with the gate forced (STOP_P = 1.01)."""
     import gama.run as gr
     from adapters.aiops2025 import AIOpsCase
     from baselines.belief_llm import run_belief_llm
@@ -195,7 +195,7 @@ def llm_arms(rel, specs, wins) -> int:
     stop, gr.STOP_P = gr.STOP_P, 1.01
     try:
         st2 = Stub("frontend")
-        r2 = gr.run_case(case, st2, Modules.parse("v6"))
+        r2 = gr.run_case(case, st2, Modules.parse("hybrid"))
     finally:
         gr.STOP_P = stop
     s2 = r2.retrieval_stats

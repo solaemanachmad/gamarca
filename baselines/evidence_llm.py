@@ -1,6 +1,6 @@
-"""Baseline EVIDENCE_LLM (v5 protocol, PREREGISTRATION_V5.md): the LLM DECIDES from the SAME calibrated evidence that GAMA-RCA's
+"""Baseline EVIDENCE_LLM (PREREGISTRATION_V5.md): the LLM DECIDES from the SAME calibrated evidence that GAMA-RCA's
 Bayesian model receives, without the model. It isolates the contribution of the Bayesian decision layer (fingerprints, topology
-explain-away, EM propagation, onset, two-stage choice): GAMA-RCA (V4) vs EVIDENCE_LLM differ only in who decides.
+explain-away, EM propagation, onset, two-stage choice): GAMA-RCA vs EVIDENCE_LLM differ only in who decides.
 
 Input to the LLM (one call): the alert, the alerted service and operation, the call graph and the hosting nodes, every observation that
 HOLDS per entity (calibrated continuous signals with their values, new Kubernetes events, status codes, failing dependency spans,
@@ -15,7 +15,7 @@ from data.loader import Case, find_service_ancestor
 from data.taxonomy import taxonomy_prompt_block
 from pipeline.calibration import belief as bd
 from pipeline.calibration.calibrated import compute_signal_db
-from pipeline.calibration.fault import calibrate as calibrate_v4, new_events, unavailability, B_SPAN
+from pipeline.calibration.fault import calibrate, new_events, unavailability, B_SPAN
 from pipeline.metric.propagation import _node_name
 from schema import RCAResult
 
@@ -68,18 +68,18 @@ def evidence_llm(case_id: str, llm, cases_dir=None) -> RCAResult:
     db = compute_signal_db(case, at)
     if "services" not in db:
         raise RuntimeError(f"signal database failed: {db.get('error')}")
-    # identical evidence preparation to belief_v4 with its default parts (events, score, peer, selfnorm, avail)
+    # identical evidence preparation to GAMA's default parts (events, score, peer, selfnorm, avail)
     new_events(case, db, B_SPAN * (db["w1"] - db["w0"]).total_seconds())
-    calibrate_v4(db, peer=True, robust_null=False, ops_level=False, selfnorm=True)
+    calibrate(db, peer=True, robust_null=False, ops_level=False, selfnorm=True)
     obs = bd.observations(db)
     for s_, bad in unavailability(db).items():
         obs.append({"entity": s_, "signal": "svc_unavailable", "holds": bad, "kind": "cat",
                     "ev": "deployment available replicas below desired / availability below full in the window" if bad else ""})
     import os                                                     # same evidence as GAMA-RCA: trace origins when 'torigin' is on
-    _pe = {x.strip() for x in os.environ.get("V4_PARTS", "").split(",") if x.strip()}   # (arm EVIDENCE_LLM_FINAL: the V5_FINAL parts)
+    _pe = {x.strip() for x in os.environ.get("EVIDENCE_PARTS", "").split(",") if x.strip()}   # (arm EVIDENCE_LLM: the final parts)
     if {"torigin", "torigin2", "torigin3"} & set(_pe):
         from pipeline.trace.structure import trace_observations
-        obs += trace_observations(case, db, v2=bool({"torigin2", "torigin3"} & set(_pe)), omsg="omsg" in _pe, v3="torigin3" in _pe,
+        obs += trace_observations(case, db, min_counts=bool({"torigin2", "torigin3"} & set(_pe)), omsg="omsg" in _pe, relay="torigin3" in _pe,
                                   msgtarget="msgtarget" in _pe)
     ev = {}
     for o in obs:

@@ -1,4 +1,4 @@
-"""Dataset profile: the ONLY dataset-specific knowledge of the statistical core (v5, PREREGISTRATION_V5.md amendment 4).
+"""Dataset profile: the ONLY dataset-specific knowledge of the statistical core (PREREGISTRATION_V5.md amendment 4).
 
 GAMA-RCA's inference (calibrated evidence, Bayesian model, EM propagation, onset, trace structure, LLM sensor) is dataset-agnostic. To
 run it on another benchmark, adapt the items below and the data loader (data/loader.py: file names and column names of metrics, logs,

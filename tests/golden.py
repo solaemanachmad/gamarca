@@ -1,5 +1,5 @@
 """Golden outputs of gama/ (tests/test_gama.py). The golden file was generated at commit fc4759d, when gama/ was proven identical to
-the frozen development code (tag v5-frozen) on these synthetic scenarios and on all 103 RCA100 cases (PREREGISTRATION_V5.md).
+the frozen development code on these synthetic scenarios and on all 103 RCA100 cases (PREREGISTRATION_V5.md).
 StubLLM / snapshot / diff come from scripts/equivalence.py (archived with the development code)."""
 from __future__ import annotations
 

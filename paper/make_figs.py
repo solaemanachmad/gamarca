@@ -1,5 +1,5 @@
 """Figures of the GAMA-RCA paper (vector PDF, print / light mode). Data: build/per_case.csv and build/report.json, exported by
-scripts/analyze_v5.py from the run zips; nothing here re-runs a model.
+scripts/analyze.py from the run zips; nothing here re-runs a model.
 
 Palette: validated categorical slots 1-3 (blue / orange / aqua; dataviz skill reference palette, light mode): GAMA statistical core,
 GAMA + LLM (Qwen2.5-7B), GAMA + LLM (gpt-oss-120b). Baselines in neutral gray. Direct labels on every series (aqua < 3:1 contrast:
@@ -146,7 +146,7 @@ def fig_main():
         name = "Final" if col == "F" else "Final_step"
         ref = rep["arms"]["GAMA_CORE"]["all"][name]
         for y, (k, lab, c) in zip(ys, ARMS):
-            a = rep["arms"][REPKEY[k]]["all"]                 # the numbers of scripts/analyze_v5.py (bootstrap 5,000, seed 0)
+            a = rep["arms"][REPKEY[k]]["all"]                 # the numbers of scripts/analyze.py (bootstrap 5,000, seed 0)
             m, (lo, hi) = a[name], a[name + "_ci"]
             ax.plot([lo, hi], [y, y], color=c, lw=2, solid_capstyle="round")
             ax.plot([m], [y], "o", ms=6, color=c, mec=SURF, mew=1.2, zorder=3)

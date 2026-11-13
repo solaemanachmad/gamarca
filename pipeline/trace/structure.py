@@ -1,4 +1,4 @@
-"""v5 trace-structure evidence (part 'torigin', PREREGISTRATION_V5.md amendment 4). Label-free, dataset-agnostic: it uses only the
+"""Trace-structure evidence (part 'torigin', PREREGISTRATION_V5.md amendment 4). Label-free, dataset-agnostic: it uses only the
 OpenTelemetry span fields traceId, spanId, parentSpanId, serviceName, duration and status (ERROR = statusCode 2).
 
 Per-service counts summarise WHERE problems start inside the call trees, which per-service counts of error spans or latency cannot
@@ -23,10 +23,10 @@ from typing import Dict, List
 
 MIN_TRACES, ORIGIN_SHARE = 3, 0.3
 SLOW_Q, MIN_GROUP, SLOW_CONTRAST = 0.9, 10, 0.2
-# v2 ('torigin2', amendment 5): an origin share is unstable on a handful of traces -> absolute minimum counts; a NODE is supported by
+# Minimum counts ('torigin2', amendment 5): an origin share is unstable on a handful of traces -> absolute minimum counts; a NODE is supported by
 # trace origins only when >= NODE_MIN_SERVICES of the services it hosts are origins (a node fault hits its co-located services together;
 # one failing service on a node is that service's fault)
-MIN_ERR_TRACES_V2, MIN_SLOW_TRACES_V2, NODE_MIN_SERVICES = 10, 5, 2
+MIN_ERR_COUNT, MIN_SLOW_COUNT, NODE_MIN_SERVICES = 10, 5, 2
 SIGNALS = ("trace_err_origin", "trace_slow_origin")
 
 
@@ -53,7 +53,7 @@ def _norm(x: str) -> str:
 
 
 def callee_of(span: Dict, services: List[str]) -> str:
-    """v3 ('torigin3'): the service a CLIENT span calls, read from its name and attributes (gRPC 'pkg.ShippingService/GetQuote',
+    """Relay ('torigin3'): the service a CLIENT span calls, read from its name and attributes (gRPC 'pkg.ShippingService/GetQuote',
     server.address / peer.service / url.full ...): the longest known service name (normalised, 'service' suffix dropped) that occurs,
     other than the span's own service. '' if none."""
     text = _norm(span.get("name")) + " " + _norm(span.get("attrs"))
@@ -66,7 +66,7 @@ def callee_of(span: Dict, services: List[str]) -> str:
 
 
 def named_target(msg: str, services: List[str], own: str) -> str:
-    """v5 'msgtarget' (amendment 16): the service a failure message names as the endpoint that could not be reached -- the host of a
+    """'msgtarget' (amendment 16): the service a failure message names as the endpoint that could not be reached -- the host of a
     URL ('http://quote:8080/getquote'), of 'dial tcp <host>:' or of a DNS lookup -- when that host is a known service other than the
     span's own (first DNS label; 'quote.default.svc.cluster.local' -> quote). '' if none (IP addresses name no service)."""
     import re
@@ -104,7 +104,7 @@ def analyse(spans: List[Dict], min_err: int = MIN_TRACES, min_slow: int = MIN_TR
     err_traces, err_origin = 0, Counter()
     origin_spans = defaultdict(list)                    # service -> origin (deepest failing) spans, for 'omsg'
     origin_traces = defaultdict(set)                    # service -> traceIds where it is an origin
-    relayed = Counter()                                  # v3: origins moved from a caller to the callee it could not reach
+    relayed = Counter()                                  # relay: origins moved from a caller to the callee it could not reach
     groups = defaultdict(list)                          # root operation -> [(trace duration, top self-time service)]
     for tid, ss in by_trace.items():
         ids = {s["spanId"]: s for s in ss}
@@ -119,10 +119,10 @@ def analyse(spans: List[Dict], min_err: int = MIN_TRACES, min_slow: int = MIN_TR
             owners = []
             for s in deepest:
                 own = s["service"]
-                if services is not None:                  # v3: a caller that could not reach / waited out its callee is not the origin
+                if services is not None:                  # relay: a caller that could not reach / waited out its callee is not the origin
                     kind, ch = unreachable_kind(s), kids.get(s["spanId"], [])
                     named = named_target(s.get("msg"), services, s["service"]) if msgtarget and kind else ""
-                    if named:                             # v5 'msgtarget': the message names the endpoint that failed
+                    if named:                             # 'msgtarget': the message names the endpoint that failed
                         own = named
                     elif kind == "unreachable" and not ch:
                         own = callee_of(s, services) or own
@@ -183,7 +183,7 @@ _HEX32 = None
 
 
 def origin_messages(res: Dict, logs=None) -> Dict:
-    """v5 'omsg' (amendment 6): WHAT fails, read only where the failure starts. For every service that is an error origin, the status
+    """'omsg' (amendment 6): WHAT fails, read only where the failure starts. For every service that is an error origin, the status
     message and HTTP status code of its ORIGIN spans (deepest failing spans) and, when log lines carry the trace id of one of its origin
     traces, those log lines. Messages of callers that merely relay a callee's failure ('upstream failed: rate limit') are not counted
     at the caller. Returns {(service, signal): evidence} for omsg_<category> and ohttp<code> (429, 403, 503, 5xx)."""
@@ -227,7 +227,7 @@ def origin_messages(res: Dict, logs=None) -> Dict:
 
 
 def origin_nodes(obs: List[Dict], hosts: Dict) -> set:
-    """v2: nodes that host >= NODE_MIN_SERVICES services holding a trace origin."""
+    """Nodes that host >= NODE_MIN_SERVICES services holding a trace origin."""
     from collections import Counter as _C
     origin_svcs = {o["entity"] for o in obs if o["signal"] in SIGNALS and o["holds"]}
     cnt = _C(n for s_ in origin_svcs for n in set(hosts.get(s_, ())))
@@ -238,7 +238,7 @@ OMSG_SIGNALS = tuple([f"omsg_{f}" for f in ("npe", "ratelimit", "oom", "gc", "th
                                                 "queue", "cache", "lb", "netpol")] + ["ohttp429", "ohttp403", "ohttp503", "ohttp5xx"])
 
 
-def trace_observations(case, db, v2: bool = False, omsg: bool = False, v3: bool = False, msgtarget: bool = False) -> List[Dict]:
+def trace_observations(case, db, min_counts: bool = False, omsg: bool = False, relay: bool = False, msgtarget: bool = False) -> List[Dict]:
     """Window spans of the case -> observations for the services of db (holds True / False for every service with spans)."""
     from pipeline.calibration.fingerprint import _owner, _naive
     from data.dataset_profile import TRACE_ERROR_STATUS
@@ -261,10 +261,10 @@ def trace_observations(case, db, v2: bool = False, omsg: bool = False, v3: bool 
                       "name": p.get("spanName"), "start": ts.timestamp(), "duration": du, "error": str(p.get("statusCode")) == TRACE_ERROR_STATUS,
                       "msg": str(p.get("statusMessage") or ""), "attrs": p.get("attributes") if isinstance(p.get("attributes"), str) else ""})
         seen.add(svc)
-    if v3:
-        res = analyse(spans, MIN_ERR_TRACES_V2, MIN_SLOW_TRACES_V2, services=services, msgtarget=msgtarget)
-    elif v2:
-        res = analyse(spans, MIN_ERR_TRACES_V2, MIN_SLOW_TRACES_V2)
+    if relay:
+        res = analyse(spans, MIN_ERR_COUNT, MIN_SLOW_COUNT, services=services, msgtarget=msgtarget)
+    elif min_counts:
+        res = analyse(spans, MIN_ERR_COUNT, MIN_SLOW_COUNT)
     else:
         res = analyse(spans)
     om = {}

@@ -70,3 +70,20 @@ Holm correction over V1-V2. Reported whatever the outcome; v6 is not modified af
 Cerebras free trial (USD 5, 1M tokens per day, 5 requests per minute): ~10-11K tokens per v6 case and ~5K per Evidence->LLM case
 -> ~6.5M tokens for the 400-case AIOps2025 arms (~USD 2.5-3) over ~7 days, plus ~1.1M tokens for RCA100 v6. If credits or days
 run out, the AIOps2025 arms are completed with the same model on a paid tier, never with a different model.
+
+## Amendments after registration (the text above is unchanged)
+
+2026-11-13
+- N1 Naming. Version tags were removed from the code. The spec registered above as `v6` is named `hybrid` (arm `GAMA_HYBRID`,
+  `--modules hybrid`); the rules G1-G3, their constants and the arms are unchanged. Paths moved in the refactor of 2026-11-09/10:
+  gama/core/ (belief, decide, evidence, chain, llm), pipeline/calibration|log|metric|trace/, baselines/ (evidence_llm, belief_llm),
+  data/aiops2025/taxonomy.py. The environment variable of the Evidence->LLM baseline is `EVIDENCE_PARTS` (was `V4_PARTS`).
+- N2 Regression found and fixed. The refactor commit db4dbfc (2026-11-09) made the belief read the base list of continuous service
+  signals instead of the full list, dropping `svc_request_drop` and `svc_avail_drop` from the continuous signals of the belief, and
+  regenerated the golden file in the same commit. The import is restored (`SVC_SIGNALS_ALL`); with it all 66 synthetic golden
+  scenarios again equal the registered code (gama-rca commit 828a9c0) in entity, type, confidence, chain, evidence and LLM prompts.
+  Outputs produced between db4dbfc and this fix do not come from the registered method and are discarded and re-run: AIOps2025 GAMA
+  core (249 cases) and RCA100 GAMA_HYBRID (t001, t002), kept for the record under results/invalid_before_fix/. If any of them was
+  scored against ground truth before the fix, the paper states it.
+- N3 Robustness guard (commit d66067e, 2026-11-10): empty history / window bins in pipeline/calibration/fault.py return "no
+  observation" instead of raising. It changes no synthetic golden output; cases that previously raised now yield a diagnosis.

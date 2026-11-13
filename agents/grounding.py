@@ -1,5 +1,5 @@
 """Number grounding of an LLM-written chain: the share of quoted values (signal=value) that occur in the evidence text. Used by the
-GAMA narrator (gama/run.py; statistics v3_grounded / v3_numbers). Moved unchanged from agents/multi_agent.py (archived)."""
+GAMA narrator (gama/run.py; statistics grounded / numbers). Moved unchanged from agents/multi_agent.py (archived)."""
 import re
 
 _QUOTED_NUM = re.compile(r"=\s*[-+]?(\d+(?:\.\d+)?(?:e[-+]?\d+)?)", re.I)

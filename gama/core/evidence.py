@@ -15,7 +15,7 @@ from typing import List
 
 from pipeline.calibration import belief as bd
 from pipeline.calibration.calibrated import compute_signal_db
-from pipeline.calibration.fault import calibrate as calibrate_v4, new_events, unavailability, B_SPAN
+from pipeline.calibration.fault import calibrate, new_events, unavailability, B_SPAN
 from gama.config import Modules
 
 
@@ -26,13 +26,13 @@ def signal_db(case, alert_ts, m: Modules):
 def observations(db, callees, case, m: Modules, model) -> List[dict]:
     if case is not None:
         new_events(case, db, B_SPAN * (db["w1"] - db["w0"]).total_seconds())
-    calibrate_v4(db, peer=True, robust_null=False, ops_level=False, selfnorm=True, ratio=False, callees=callees)
+    calibrate(db, peer=True, robust_null=False, ops_level=False, selfnorm=True, ratio=False, callees=callees)
     obs = bd.observations(db)
     for s_, bad in unavailability(db).items():
         obs.append({"entity": s_, "signal": "svc_unavailable", "holds": bad, "kind": "cat",
                     "ev": "deployment available replicas below desired / availability below full in the window" if bad else ""})
     if m.trace and case is not None:
         from pipeline.trace.structure import trace_observations, origin_nodes
-        obs += trace_observations(case, db, v2=True, omsg=True, v3=True, msgtarget=True)
+        obs += trace_observations(case, db, min_counts=True, omsg=True, relay=True, msgtarget=True)
         model.origin_nodes = origin_nodes(obs, db.get("hosts", {}))
     return obs

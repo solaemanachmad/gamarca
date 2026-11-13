@@ -1,4 +1,4 @@
-"""tests/test_logpre.py -- synthetic checks of the v3 log preprocessing (pipeline/log_preprocess.py, Amendment 2). No data, no model.
+"""tests/test_logpre.py -- synthetic checks of the log preprocessing (pipeline/log/preprocess.py). No data, no model.
 
     python tests/test_logpre.py"""
 import datetime as dt

@@ -6,12 +6,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.7694217543427356",
+  "confidence": "0.7805253132044845",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "f836c9e3a2bb9814d6514cea883ed072231f43cc24e5d32acdae0b38a6e90eba",
+  "sha256": "7250b39bf26e7a2a82d4fa567a09702e1902d7363cab8bc9cbd605f7577007c7",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core": {
@@ -21,12 +21,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "24dcaf742e5f24d9780a3c4b68f0ceb6c30d85cf95a8befad837b28b7519419e",
+  "sha256": "ae8b87cd7d1c52065f466eaa782e12c71cd377f48af0d292e6868c07c432dbc4",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-chain": {
@@ -36,12 +36,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "321445d9851166bb96ea96a42c1917811fb0d19bfaaf39e0c69a25be196dba2f",
+  "sha256": "0d1278d905cf2737e214234ef43899a15887026070aaecba1976115e566e46b1",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-load": {
@@ -51,12 +51,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.7694217543427356",
+  "confidence": "0.7805253132044845",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "b2382efb0da50954e930d37d00f6d15ef01fcc57647fefa9246f51b7395a4b6d",
+  "sha256": "9136b7c79cf5b42ee422dd48c6b0aa6d31391c3aa0457f28ff6df74aa154c483",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-mm": {
@@ -66,12 +66,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "4561ebc2cab9a9eaae534dd627b6b12f0891b17b24843a899a5dc365e2a6bb9c",
+  "sha256": "28d7de21484173b7d8da88a9bcd76ebb15dac50ddd4ece07e081fe40a43368e3",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-text": {
@@ -81,12 +81,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "c529cbe77252d6204e8c2110be0e3430328df70b4129a170e9337cf0aa54222f",
+  "sha256": "7be0fdb532a00adf92e5de7b821a2ed991a9cd71a1ab2a6db0d741db3b087179",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-trace": {
@@ -96,12 +96,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "0b936e248444618406a0b44bfe0c49bde36e9716a77b60fdda59275253b1422c",
+  "sha256": "7857ae4d5a44e0de3be9a87acef01c88c20f5c6f4dbf2f3416af295cca2ed891",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|core,-typing": {
@@ -111,43 +111,43 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "bd2b100791ca5da5636c745fd6a0933334f2c323bcb67de9b9391afe09b9bc35",
+  "sha256": "8be1e2458a9188e36682de464c3913685c4dfce4025476f7025c8bd19154e05b",
   "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|full": {
   "chain": [
-   "cause: cart F006-trafficSurge svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores)) | cpu=0.834",
    "propagation: checkout",
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "aff4d400c747cf3cfe4e7b2c7b10684decb8d73b19382a500cec58bb4f65d5c3",
-  "type": "F006-trafficSurge"
+  "sha256": "072ebcedfbc8e2e1fcbb1641c1832868beb5aab03b633226e412e6f02cb9e184",
+  "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|full,-chain": {
   "chain": [
-   "cause: cart F006-trafficSurge svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores))",
+   "cause: cart F034-cpuFullLoad svc_cpu_rise (cpu: baseline median=0.201, window max=0.834 (robust shift 61) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "propagation: checkout",
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "59bbc3c0fd16426d3726fcc81dcf35464045530c9a8bc096432054552b722ed4",
-  "type": "F006-trafficSurge"
+  "sha256": "a44eab7dce34080cddfcaa0c241e2e58ba9b01c05989f20b6ff577af78329d40",
+  "type": "F034-cpuFullLoad"
  },
  "sc_load_and_cpu|full,-typing": {
   "chain": [
@@ -156,12 +156,12 @@
    "propagation: frontend svc_request_rise (workload: baseline median=100, window max=312 (robust shift 39) (calibrated p=0.0179 against 55 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.8491721423216878",
+  "confidence": "0.8544467143898107",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "6936070f694f43980ec709e2e197fc7f726c3b43e80e64bd93690acaee45abf5",
+  "sha256": "f9531c9209cd7ceb5c8fed63388cc3f20ae8c0e0cd15bb88810d3877d4f6da21",
   "type": "F034-cpuFullLoad"
  },
  "sc_memory_gc_order|base": {
@@ -171,12 +171,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "5e9640f05937e80d2e62dfadfc0e1247ba4807145ab6fe17a1c13574782c3ae7",
+  "sha256": "e838e7a9aad0f1ce1fe2ceb05b056b9788f9ef07eeb9885d37831c6efca41a4f",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core": {
@@ -186,12 +186,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "e577cb84db623d9f31f8c5026f70de690b0b17e8701ea43f78e4893fa4eb0938",
+  "sha256": "a5e04dfc0fe85dfc9f83daf0b4e447169c32e887875f461b6b8ea9cd4f362bc4",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-chain": {
@@ -201,12 +201,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "a08895934e8166f651a806a8f345cc5c7e75243ffb7dcaf8bb8f76c59098a9ae",
+  "sha256": "977e49e036acfbb46c576f461f6484de0bff55ac4a0b003d5822b84f46d6c194",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-load": {
@@ -216,12 +216,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "0da76ff55516d59063bbd39cd8c09a6d474f1ac81e8f9413ab80bfd3879d0ede",
+  "sha256": "9c493aea8ddf6d827de0ff61d62f79b6af343261dac9b91761fc2f9d3039229a",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-mm": {
@@ -231,12 +231,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "55f8c86fcb95b8372f4b2da8295f5b673d29b7557a69b378f0e0b5baf24bfb82",
+  "sha256": "4a9410eb28f0bdd087c466c627d9dba3f272759087face802b85fead1b914c24",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-text": {
@@ -246,12 +246,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "9a477d5f7a30fa1326881a227d1addbbe012ad6fac92066d171303d099020a0e",
+  "sha256": "75988fbbe32d9875aba63f17eccb6c4a7f3ea386e363574516e3f84eadad71c0",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-trace": {
@@ -261,12 +261,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "3c50d81c35a249ccb0c17b71319c18ed9bd13a5cee834b1b2a55dfc6031b04a4",
+  "sha256": "16b6f90e2d75fd6f863736da5a5f7340608c990e6a21928082cecb41c3ed5fc9",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|core,-typing": {
@@ -276,12 +276,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "aee8eab0bff340a40badb85edf61672db1aa12e2c9b95f0d4d3461d52cba566b",
+  "sha256": "50359d926da5590d7c3d4597833823a0dabe0b93fdce222bae08e832f910a044",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|full": {
@@ -291,12 +291,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "324abbcf47d6f46ba92cc4b0532621b9a11df1c9ecdbfea725e56087999b1c2e",
+  "sha256": "42a00aa0c87bd58bafc69b312b982451edffd45fe40a30b6410ccc950ddf15d9",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|full,-chain": {
@@ -306,12 +306,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "4da520a4daa155385f216f4a40abd027db69a0a43624a3bf21755933ad634a30",
+  "sha256": "82c4f02f5d907117a6876523d406af5c393d02b3bd407316d96403d6e5a0d5eb",
   "type": "F007-memoryPressure"
  },
  "sc_memory_gc_order|full,-typing": {
@@ -321,12 +321,12 @@
    "propagation: frontend svc_latency_rise (rt: baseline median=0.1, window max=0.629 (robust shift 99) (calibrated p=0.0196 against 50 pseudo-window scores))",
    "impact: frontend"
   ],
-  "confidence": "0.9995349041060162",
+  "confidence": "0.9995348981223555",
   "entity": [
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "f54ec06ff73e2ae67f543b5670b0481bba6117de5c082fe75c2d82cd8d10a3c8",
+  "sha256": "b17f92bddf67684d92cf9e4bb47a817c498a7784f51a8b25ffdda8954257b110",
   "type": "F007-memoryPressure"
  },
  "sc_msgtarget_and_text|base": {
@@ -493,7 +493,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "808a43909650cd661c55856dbf0090b05c296ece9a85fe23fdc35b6879de3883",
+  "sha256": "3695fe4305ed8945c359df8805d29b0b2a27c79ccc1103ffc11cbb0b5ac2cd12",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core": {
@@ -508,7 +508,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "7f9241afb7a1bc5698e6a689e635f42ab5c0b3486f1f9fdcdfc4d184c5640ccc",
+  "sha256": "7e440bbbb13958eacf5729a2cd2e2cf3fe46b81ca8802cdf4d282ab0e6383545",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-chain": {
@@ -523,7 +523,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "a39ac16aaa9a840664972b926a33409f0df28f268e7a030a9953761e5bee7732",
+  "sha256": "0b7daf0320f72fa2d1444b007f40aaca6fb72ac526ac9a32ac60ac9cae76a3db",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-load": {
@@ -538,7 +538,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "115b772e927f365a9e52f0fe164fb6586ffa9e84781b95a909f93f8f350ef1d0",
+  "sha256": "ac6054c389a712ce1079c89226fd1f8d01df5478f2253fad0f6b7cbbce3a16e0",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-mm": {
@@ -553,7 +553,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "d857e3af7e0db288f9e56a12dadcbf4a59af1d5c87d9db5cb993235842c7070f",
+  "sha256": "ae0987ff6faaf669dd3bdf05ce0c653220377f7f7e6dc5e5b35d616959f8354b",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-text": {
@@ -568,7 +568,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "c866097dfa40bd0af31ba5739ab284fe6e0c2dfae5476ecbe362f4755d63bb01",
+  "sha256": "9d547ef82852148e4cdfee0af6baa2b65ee5425adfeccafc6347b0f8a8674355",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-trace": {
@@ -583,7 +583,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "01a5a95a8b958e6640003d0daa802cb4ed15eb17bacec067b687fdf5ff27e3a5",
+  "sha256": "d897bedb2e1197efc2b5637f064225cb489864bd1aac6453a4006dc1f45939dd",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|core,-typing": {
@@ -598,7 +598,7 @@
    "s3"
   ],
   "n_llm_calls": 0,
-  "sha256": "f739fe07a38bd8ea6527d26131536c3ebe0974123250620ac42c246e6e14caf5",
+  "sha256": "66a534a891187c64a16a2e6bc62da277e4c4d246b83cd69e8d63dcc08b19b3c2",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|full": {
@@ -613,7 +613,7 @@
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "cc519b20e6a935398a50e69ab3060dad0f63b63ad473f3295ba3f20dd5638a11",
+  "sha256": "94b5ac00d9784927faa8ccd6e9c293c9c4b92e05829587f46a01e32e7d9b122b",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|full,-chain": {
@@ -628,7 +628,7 @@
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "05c93e438ec2a130216d14d8ecff0e1623553fa7bf1071b67d6bdc7072284076",
+  "sha256": "9bb5ebe2ceb15de0918c353d384510c9d29e87eaeb569c0ea5be26d55cfe9417",
   "type": "F034-cpuFullLoad"
  },
  "sc_node|full,-typing": {
@@ -643,7 +643,7 @@
    "s3"
   ],
   "n_llm_calls": 2,
-  "sha256": "af6f2963b9bd4eb17690b73f1540247950ab476afc3bdb9a6a7eb995f64643e6",
+  "sha256": "b38f6b84a5ab68c1afad86080d99fbeaeba7cee81b7d3fc71c861bd97f4432d6",
   "type": "F034-cpuFullLoad"
  },
  "sc_ratelimit|base": {

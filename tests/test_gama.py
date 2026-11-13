@@ -1,6 +1,6 @@
 """tests/test_gama.py -- gama/ on synthetic scenarios (no data, no model): outputs equal the golden file for every module configuration
 (core, each leave-one-out, base, full with a deterministic stub LLM: prompts included). The golden file was generated when gama/ was
-proven identical to the frozen development code (tag v5-frozen; 206 / 206 on the 103 RCA100 cases). Regenerate ONLY for an intended,
+proven identical to the frozen development code (206 / 206 on the 103 RCA100 cases). Regenerate ONLY for an intended,
 recorded change:  python tests/test_gama.py --regen
 """
 import datetime as dt
@@ -118,7 +118,7 @@ GOLDEN = os.path.join(HERE, "snapshots", "gama_golden.json")
 CONFIGS = ["core"] + [f"core,-{x}" for x in CORE] + ["base", "full", "full,-chain", "full,-typing"]
 FROZEN_CORE_PARTS = ("score", "open", "twostage", "fp", "peer", "prop", "events", "avail", "onset", "em", "selfnorm", "llmtype",
                      "conseq", "retry", "mm", "torigin3", "omsg", "hostcpu", "errclass", "tiebreak", "sigorder2", "loadx2",
-                     "msgtarget", "textx2", "redchain")       # V4_DEFAULT + V5_FINAL of the frozen code
+                     "msgtarget", "textx2", "redchain")       # default + final parts of the frozen code
 
 
 def gama_snapshot(sc, spec):

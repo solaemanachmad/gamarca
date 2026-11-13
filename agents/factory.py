@@ -8,7 +8,7 @@ import config
 
 
 def get_llm_client():
-    if config.LLM_BACKEND == "api":                  # v5 cross-model study: one large API model (agents/api_client.py)
+    if config.LLM_BACKEND == "api":                  # cross-model study: one large API model (agents/api_client.py)
         from agents.api_client import ApiChatClient
         return ApiChatClient()
     from agents.kaggle_client import KaggleTransformersClient

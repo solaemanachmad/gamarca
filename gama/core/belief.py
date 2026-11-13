@@ -25,7 +25,7 @@ import numpy as np
 from pipeline.calibration import belief as bd
 from data.dataset_profile import PROFILE
 from pipeline.calibration.calibrated import FINGERPRINTS, LEVEL, RESIDUAL, NODE_SIGNALS, _atoms
-from pipeline.calibration.fault import SVC_SIGNALS as V4_SVC_SIGNALS
+from pipeline.calibration.fault import SVC_SIGNALS_ALL
 from pipeline.trace.structure import SIGNALS as TRACE_SIGNALS
 from gama.config import Modules
 
@@ -34,13 +34,13 @@ THETA_M, MM_B0, MM_W = 0.6, 0.1, 10          # M1: P(>=2 modalities corroborate 
 THETA_T, ONSET_TOL = 0.9, 60.0               # onset: P(an explained entity starts no earlier than the root - 60 s | h)
 PI_MIN, PI_MAX, EM_ITERS = 0.06, 0.95, 30
 ANOM = "ANOMALY"
-SVC_CONT = [s for s, _, _ in V4_SVC_SIGNALS] + ["op_request_rise"]
+SVC_CONT = [s for s, _, _ in SVC_SIGNALS_ALL] + ["op_request_rise"]
 NODE_CONT = [s for s, _, _ in NODE_SIGNALS]
 MECHANISM_SIGNALS = ("svc_cpu_rise", "svc_mem_rise", "svc_gc_rise", "svc_thread_rise")   # the resources a process consumes
 
 
 def fingerprints(m: Modules) -> Dict:
-    """Fingerprint table: the taxonomy fingerprints + additions fixed before any v4 run (M0) + origin-message roles (M2)."""
+    """Fingerprint table: the taxonomy fingerprints + additions fixed before any evaluation run (M0) + origin-message roles (M2)."""
     fp = copy.deepcopy(FINGERPRINTS)
     if PROFILE == "rca100":
         _rca100_additions(fp)
@@ -56,7 +56,7 @@ def fingerprints(m: Modules) -> Dict:
 
 
 def _rca100_additions(fp):
-    """M0 additions to the RCA100 taxonomy fingerprints, fixed before any v4 run."""
+    """M0 additions to the RCA100 taxonomy fingerprints, fixed before any evaluation run."""
     fp["F036-replicaScaleDown"]["key"].append("svc_avail_drop")
     fp["F036-replicaScaleDown"]["sup"].append("svc_request_drop")
     fp["F007-memoryPressure"]["sup"].append("svc_cpu_rise")

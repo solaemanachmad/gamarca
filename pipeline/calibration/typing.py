@@ -1,12 +1,13 @@
-"""v4 LLM typing stage (part 'llmtype' of pipeline/belief_v4.py). The entity has been chosen by the Bayesian localisation; the LLM
+"""LLM typing stage (part 'llmtype'). The entity has been chosen by the Bayesian localisation; the LLM
 chooses its fault type from a SHORTLIST: the K most probable types for that entity under the statistical model. It reads the entity's
 evidence summary (calibrated signals with their values and their ONSET relative to the window start, categorical observations, the
 hosting nodes' signals, preprocessed log / trace / event items). Its answer is accepted only if the type is in the shortlist and it copies
 one evidence line verbatim (grounding); otherwise the statistical type stands.
 
-v2 (2026-10-30, after dev run 4): v1 offered all types of the level and told the LLM to prefer direct mechanism evidence (events,
-messages). It then picked podRestartFlapping for CPU faults because of restart events that are consequences (12 of 37 changes; net -4
-types). v2 restricts the choice to the statistical shortlist, gives every signal its onset, and states explicitly that events, status
+Design note (2026-10-30): an earlier variant offered all types of the level and told the LLM to prefer direct mechanism evidence
+(events, messages). It then picked podRestartFlapping for CPU faults because of restart events that are consequences (12 of 37
+changes; net -4 types). The stage therefore restricts the choice to the statistical shortlist, gives every signal its onset, and
+states explicitly that events, status
 codes and error messages are often consequences, so the mechanism that changes FIRST is the candidate root."""
 from __future__ import annotations
 
@@ -45,7 +46,7 @@ def evidence_lines(db, entity: str, texts: Dict[str, List[str]]) -> List[str]:
 
 
 def quote_supports(line: str, roles: Dict[str, str], ok=("K", "U", "M")) -> bool:
-    """v5 'typecheck': does an evidence line name a signal that the type's fingerprint expects (key / support / consequence role)?
+    """'typecheck': does an evidence line name a signal that the type's fingerprint expects (key / support / consequence role)?
     A log message line supports the type when its text belongs to a text family the fingerprint names (msg_<f> / log_<f>_rise)."""
     import re
     from pipeline.calibration.fingerprint import _TEXT_FAMILIES
@@ -60,7 +61,7 @@ def quote_supports(line: str, roles: Dict[str, str], ok=("K", "U", "M")) -> bool
 
 
 def signature_card(fp: Dict, t: str) -> str:
-    """v5 'xcard': the expected cross-modal signature of a fault type, read from its fingerprint (each signal with its modality)."""
+    """'xcard': the expected cross-modal signature of a fault type, read from its fingerprint (each signal with its modality)."""
     from gama.core.belief import modality
     f = fp.get(t, {})
     tag = lambda exprs: ", ".join(f"{e} [{'+'.join(sorted({modality(a) for a in e.replace('|', '&').split('&')}))}]" for e in exprs) or "-"
@@ -77,7 +78,7 @@ def shortlist(res: Dict, k: int = SHORTLIST) -> List[str]:
 
 def llm_type(llm, db, res: Dict, texts: Dict[str, List[str]], model=None, xcard=None, typecheck=None, discrim=False) -> Dict:
     """model / xcard / typecheck: given by GAMA (gama/llm.py); None = derived from res['parts'] (development arms).
-    discrim (v6 G2 'defer'): a CHANGE of the computed type is accepted only if a quoted line names a signal that is not a key or
+    discrim (G2 'defer'): a CHANGE of the computed type is accepted only if a quoted line names a signal that is not a key or
     support signal of the computed type (evidence that discriminates between the two types)."""
     ent, level = res["entity"], res["level"]
     cands = shortlist(res)
@@ -91,7 +92,7 @@ def llm_type(llm, db, res: Dict, texts: Dict[str, List[str]], model=None, xcard=
     typecheck = "typecheck" in (res.get("parts") or []) if typecheck is None else typecheck
     if model is None and (xcard or typecheck):
         raise ValueError("llm_type needs the fingerprint model (gama/llm.py passes it)")
-    if xcard:                                             # v5: modality tags and expected cross-modal signatures
+    if xcard:                                             # modality tags and expected cross-modal signatures
         from gama.core.belief import modality
         fp = model.fp
         lines = [f"[{modality(l.split(' ')[1].rstrip(':'))}] {l}" if len(l.split(' ')) > 1 else l for l in lines]
@@ -122,7 +123,7 @@ def llm_type(llm, db, res: Dict, texts: Dict[str, List[str]], model=None, xcard=
     quoted = [l for l in lines if len(q) >= 10 and (q in l.lower() or l.lower() in q)]
     grounded = bool(quoted)
     out["quote_ok"] = grounded
-    if grounded and typecheck and t in cands:            # v5 'typecheck' (amendment 23): the quoted evidence must be a signal of the
+    if grounded and typecheck and t in cands:            # 'typecheck' (amendment 23): the quoted evidence must be a signal of the
         roles = model.roles.get(t, {})                   # chosen type's fingerprint
         out["quote_supports"] = any(quote_supports(l, roles) for l in quoted)
         grounded = out["quote_supports"]

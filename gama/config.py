@@ -1,4 +1,4 @@
-"""Frozen configuration of GAMA-RCA (PREREGISTRATION_V5.md "Final configuration", git tag v5-frozen).
+"""Frozen configuration of GAMA-RCA (PREREGISTRATION_V5.md "Final configuration").
 
 The method is a base model (M0) plus seven modules. Each module is ONE switch: it is the unit of the ablation table in the paper,
 so the code has no other switches. Constants (thresholds, priors) are fixed a priori and live next to the code that uses them
@@ -8,7 +8,7 @@ EM bounds); none is tuned per case.
 Module spec (env GAMA_MODULES, or Modules.parse): comma-separated tokens, applied left to right
     core   = mm, trace, typing, load, text, chain        (GAMA_CORE, CPU)
     full   = core + llm                                   (GAMA_LLM, GPU)
-    v6     = full + gate, defer, calsensor                (PREREGISTRATION_V6.md)
+    hybrid = full + gate, defer, calsensor                (PREREGISTRATION_V6.md; GAMA_HYBRID)
     base   = none (M0 only)
     <name> adds a module, -<name> removes it              e.g. "core,-trace" = leave-one-out without the trace module
 """
@@ -28,7 +28,7 @@ DESCRIPTION = {
     "chain":  "M6 evidence-cited chain: every step cites metric=value of its own target (reasoning process only)",
     "llm":    "M7 bounded LLM: EIG log sensor, shortlist typing with verbatim quote + fingerprint check, narrator scored "
               "separately (P3)",
-    # v6 (PREREGISTRATION_V6.md): off in core and full, so every v5 result is unchanged; each needs llm
+    # hybrid rules (PREREGISTRATION_V6.md): off in core and full, so their results are unchanged; each needs llm
     "gate":   "G1 second opinion when unsure: P(e*) < STOP_P -> one Evidence->LLM call; its entity, typed by the model",
     "defer":  "G2 the LLM changes the type only when it quotes a signal that is not a key / support of the computed type",
     "calsensor": "G3 the text sensor re-weights the probed entity's types; P(entity) is unchanged by a probe",
@@ -36,9 +36,8 @@ DESCRIPTION = {
 CORE = MODULES[:6]
 FULL = CORE + ("llm",)
 HYBRID = FULL + ("gate", "defer", "calsensor")
-V6 = HYBRID
 
-# Names of the same switches in the development code (pipeline/belief_v4.py V4_PARTS) -- logs and the equivalence test only.
+# Names of the same switches in the development code (part names) -- logs and the equivalence test only.
 BASE_PARTS = ("score", "open", "twostage", "fp", "peer", "prop", "events", "avail", "onset", "em", "selfnorm", "llmtype", "conseq",
               "retry")
 LEGACY_PARTS = {"mm": ("mm",), "trace": ("torigin3", "omsg", "msgtarget"), "typing": ("hostcpu", "errclass", "tiebreak", "sigorder2"),
@@ -65,8 +64,8 @@ class Modules:
         for tok in (t.strip() for t in (spec or "core").split(",")):
             if not tok:
                 continue
-            if tok in ("core", "full", "hybrid", "v6", "all", "base", "none"):
-                on |= {"core": set(CORE), "full": set(FULL), "hybrid": set(HYBRID), "v6": set(HYBRID), "all": set(MODULES)}.get(tok, set())
+            if tok in ("core", "full", "hybrid", "all", "base", "none"):
+                on |= {"core": set(CORE), "full": set(FULL), "hybrid": set(HYBRID), "all": set(MODULES)}.get(tok, set())
             elif (tok.startswith("no_") or tok.startswith("no-")) and tok[3:] in MODULES:
                 if not on:
                     on = set(CORE)
@@ -78,7 +77,7 @@ class Modules:
             elif tok in MODULES:
                 on.add(tok)
             else:
-                raise ValueError(f"unknown module '{tok}' (known: {', '.join(MODULES)}; core, full, base, no_<mod>)")
+                raise ValueError(f"unknown module '{tok}' (known: {', '.join(MODULES)}; core, full, hybrid, base, no_<mod>)")
         return cls(**{m: m in on for m in MODULES})
 
     @classmethod

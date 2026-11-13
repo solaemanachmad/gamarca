@@ -1,4 +1,4 @@
-"""v3 log preprocessing for the text sensor (Amendment 2 of PREREGISTRATION_V3.md). Deterministic, CPU only, no labels, no LLM.
+"""Log preprocessing for the text sensor. Deterministic, CPU only, no labels, no LLM.
 
 The raw sensor input (semantic_probes.collect_texts) keeps the first 20 distinct keyword-matching lines per entity in the alert window.
 That selection depends on vocabulary, ignores frequency and time order, and cannot tell chronic errors from new ones. Here every log

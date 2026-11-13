@@ -38,14 +38,14 @@ from pipeline.calibration.fingerprint import (_owner, _family, _naive, _fmt, _TE
 ALPHA = 0.05
 
 
-# v5 'textx' (PREREGISTRATION_V5.md amendment 17): text evidence the core did not read. Read from V4_PARTS because the signal database
+# 'textx' (PREREGISTRATION_V5.md amendment 17): text evidence the core did not read. Read from EVIDENCE_PARTS because the signal database
 # is built before the diagnosis; off unless the part is named, so earlier configurations are unchanged.
 def _text_mode(db=None):
     """(textx, textx2). GAMA (gama/evidence.py) passes the M5 switch to compute_signal_db, which stores it in db["_text"]; the
-    development arms read V4_PARTS (unchanged behaviour)."""
+    baseline arms read EVIDENCE_PARTS (unchanged behaviour)."""
     if db is not None and db.get("_text") is not None:
         return db["_text"]
-    parts = os.environ.get("V4_PARTS", "").split(",")
+    parts = os.environ.get("EVIDENCE_PARTS", "").split(",")
     return ("textx" in parts or "textx2" in parts, "textx2" in parts)
 
 
@@ -116,7 +116,7 @@ def mwu_greater(x: List[float], y: List[float]) -> Optional[float]:
 # Algorithm 1: evidence database (one pass per modality)
 # ------------------------------------------------------------------------------------------------------------------------------
 def compute_signal_db(case, alert_ts, text=None) -> Dict:
-    """text: M5 switch of GAMA (True / False); None = read V4_PARTS (development arms)."""
+    """text: M5 switch of GAMA (True / False); None = read EVIDENCE_PARTS (baseline arms)."""
     try:
         return _compute(case, alert_ts, None if text is None else (bool(text), bool(text)))
     except Exception as e:  # evidence must never break the pipeline
@@ -205,12 +205,12 @@ def _compute(case, alert_ts, text=None):
             pr["n_err"] += 1
             if m:
                 pr["http"][m.group(1)] += 1
-            elif textx:                                   # v5 textx: gRPC status of the failing span, mapped to its HTTP class
+            elif textx:                                   # textx: gRPC status of the failing span, mapped to its HTTP class
                 g = _GRPC_RE.search(attrs)
                 if g and g.group(1) in _GRPC_HTTP:
                     pr["http"][_GRPC_HTTP[g.group(1)]] += 1
             msg = str(p.get("statusMessage") or "")
-            if textx:                                     # v5 textx: the exception recorded on the span (OTel exception.*)
+            if textx:                                     # textx: the exception recorded on the span (OTel exception.*)
                 msg = (msg + " " + " ".join(_EXC_RE.findall(attrs))).strip()
             for f, rx in _TEXT_FAMILIES:
                 if msg and rx.search(msg):
@@ -269,7 +269,7 @@ LOG_B_SPAN, LOG_K = 1, 1  # logs have ~15 min of baseline (2.5 windows): 1 windo
 
 NODE_SIGNALS = [("node_cpu_rise", ("cpu",), "up"), ("node_mem_rise", ("mem",), "up"), ("node_disk_rise", ("disk",), "up"),
                 ("node_ready_drop", ("ready",), "down"), ("node_pods_drop", ("pods",), "down")]
-# v2 dev round 1: a drop of running pods on a node also follows a scale-down or rescheduling, so only the ready status (or a
+# A drop of running pods on a node also follows a scale-down or rescheduling, so only the ready status (or a
 # NotReady event) is a KEY signal of nodeDown; the pod count only supports it.
 SVC_SIGNALS = [("svc_cpu_rise", ("cpu",), "up"), ("svc_mem_rise", ("mem",), "up"), ("svc_gc_rise", ("gc",), "up"),
                ("svc_thread_rise", ("thread",), "up"), ("svc_disk_rise", ("disk",), "up"), ("svc_throttle_rise", ("throttle",), "up"),
@@ -384,11 +384,11 @@ def entity_signals(db: Dict, ent: str) -> Dict:
     for f in ("npe", "ratelimit", "dns", "refused", "timeout", "redis", "oom", "gc", "thread", "queue", "lb", "netpol", "sql", "cache"):
         if pr["msg"].get(f):
             sig[f"msg_{f}"] = {"kind": "cat", "p": None, "ev": f"{pr['msg'][f]} error spans whose message matches '{f}'"}
-    if _textx(db):                                        # v5 textx: a kind of log text that is NEW in the window (Poisson test vs
+    if _textx(db):                                        # textx: a kind of log text that is NEW in the window (Poisson test vs
         wb, hb = int(db.get("win_bins") or 0), int(db.get("log_base_bins") or 0)   # the same length of history, at ALPHA)
         L = min(wb, hb)
         fams = ("npe", "ratelimit", "dns", "refused", "timeout", "redis", "oom", "gc", "thread", "queue", "lb", "netpol", "sql", "cache")
-        if _textx2(db):                                   # v5 textx2: only text that NAMES a mechanism; 'timeout' / 'refused' say that a
+        if _textx2(db):                                   # textx2: only text that NAMES a mechanism; 'timeout' / 'refused' say that a
             fams = tuple(f for f in fams if f not in SYMPTOM_TEXT)   # call did not complete -- a symptom of almost any fault
         for f in fams:
             bins = pr["log_bins"].get(f)
@@ -408,7 +408,7 @@ def entity_signals(db: Dict, ent: str) -> Dict:
         if p is not None:
             sig[f"{k}_slow"] = {"kind": "cont", "p": p, "ev": f"{k} spans max={_fmt(max(d))}ms vs the service's other spans median="
                                                                 f"{_fmt(sorted(other)[len(other) // 2])}ms in the window (p={p:.3g})"}
-    if db.get("_dep_override") is not None:              # v5 'depbase': the history test replaces the window-only one everywhere
+    if db.get("_dep_override") is not None:              # 'depbase': the history test replaces the window-only one everywhere
         for k in ("db_slow", "redis_slow", "queue_slow"):
             sig.pop(k, None)
         sig.update(db["_dep_override"].get(ent, {}))

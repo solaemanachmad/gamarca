@@ -1,4 +1,4 @@
-"""OpenAI-compatible chat API client (v5 cross-model study: one large API model, PREREGISTRATION_V5.md F4).
+"""OpenAI-compatible chat API client (cross-model study: one large API model, PREREGISTRATION_V5.md F4).
 
 Same interface as agents/kaggle_client.KaggleTransformersClient (generate / generate_json / usage_stats / reset_usage), so every
 prompt, parser and stage is unchanged. Selected with LLM_BACKEND=api; provider and model from the environment:
