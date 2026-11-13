@@ -5,6 +5,7 @@ networkx
 drain3                     # log template mining (LOG_TEMPLATE_ENGINE=drain3)
 jieba                      # Chinese word segmentation for alert text (RCA100 alert titles are largely Chinese)
 numpy
+scipy                      # paired tests (scripts/analyze.py, scripts/aiops2025_score.py)
 tqdm
 # LLM (local Qwen2.5-7B-Instruct via transformers)
 torch

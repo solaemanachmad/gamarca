@@ -18,6 +18,7 @@ test:        ## Run unit and golden-snapshot tests (no GPU/API needed)
 	@$(PYTHON) tests/test_aiops2025.py | tail -1
 	@$(PYTHON) tests/test_api_client.py | tail -1
 	@$(PYTHON) tests/test_rules.py | tail -1
+	@$(PYTHON) tests/test_aiops2025_score.py | tail -1
 
 ablation:    ## Run leave-one-out ablation suite
 	@$(PYTHON) scripts/ablation.py

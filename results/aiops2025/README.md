@@ -8,9 +8,11 @@ This directory contains evaluation outputs, predictions, and empirical scorecard
 
 * **Zero-Shot Transfer**: Evaluates generalisation to an unseen microservice topology without retraining or tuning any statistical hyperparameters.
 * **Evaluation Metrics**:
-  * **Localization Accuracy (LA)**: Whether the predicted entity matches the ground truth failure root (Service, Pod, or Node).
-  * **Type Accuracy (TA)**: Whether the predicted fault type matches the ground truth failure injection mechanism.
-  * **Final Score**: Harmonic / weighted mean: $0.5 \times \text{LA} + 0.5 \times \text{TA}$.
+  * **Location Accuracy (LA)**: the predicted component string-matches the ground truth exactly (pod-level faults need the exact pod; network attacks accept source or destination).
+  * **Type Accuracy (TA)**: the first 20 words of the reason contain one of the ground-truth fault descriptions (keyword part only: a lower bound).
+  * **Explainability (Exp)**: share of the ground-truth evidence points found in the first 20 characters of the trace observations.
+  * **Efficiency (Eff)**: $\min(1, e^{-(APL-5)/5})$, APL = mean trace length over the LA-correct cases.
+  * **Final Score**: $(0.4\,\text{LA} + 0.4\,\text{TA} + 0.1\,\text{Exp} + 0.1\,\text{Eff}) \times 100$ (Cai et al. 2026, eq. 1-4; re-implemented in `scripts/aiops2025_score.py`, pre-registered in `PREREGISTRATION_AIOPS2025.md`).
 
 ---
 
@@ -23,7 +25,7 @@ results/aiops2025/
     ├── README.md                  # Output format specification
     ├── summary.csv                # 12-column per-case diagnosis summary
     ├── predictions.jsonl          # Submission JSONL format with step-anchored trace
-    └── score.csv                  # Empirical accuracy breakdown against groundtruth
+    └── (scores are written by scripts/aiops2025_score.py; *_scored.csv contains ground truth and is git-ignored)
 ```
 
 ---
@@ -36,8 +38,7 @@ Kaggle CPU notebooks provide 4 vCPUs. To utilize all 4 CPU cores simultaneously:
 python scripts/aiops2025_run.py \
   --data /kaggle/input/aiops2025 \
   --out results/aiops2025/core \
-  --workers 4 \
-  --gt /kaggle/input/aiops2025/groundtruth.jsonl
+  --workers 4
 ```
 
 ### 2. Parallel Sharding & Merging (Distributed / Multi-session)
@@ -52,11 +53,20 @@ for k in 0 1 2 3; do
 done
 wait
 
-# Merge all shards and compute final score
+# Merge all shards
 python scripts/aiops2025_merge.py \
   --inputs "/kaggle/working/shards/*.jsonl" \
-  --out results/aiops2025/core \
-  --gt /kaggle/input/aiops2025/groundtruth.jsonl
+  --out results/aiops2025/core
+```
+
+### 3. Scoring (once, after every arm has answered all 400 cases)
+The scorer is the only code that opens the ground truth; it refuses an unfinished run.
+```bash
+python scripts/aiops2025_score.py \
+  --pred core=results/aiops2025/core/AIOPS_GAMA_core.jsonl \
+  --pred hybrid=results/aiops2025/hybrid/AIOPS_GAMA_hybrid_gptoss120b_cerebras.jsonl \
+  --pred evidence=results/aiops2025/evidence/AIOPS_EVIDENCE_LLM_gptoss120b_cerebras.jsonl \
+  --gt /kaggle/input/aiops2025/groundtruth.jsonl --out results/aiops2025/scores
 ```
 
 ---

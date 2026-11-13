@@ -157,3 +157,22 @@ layout: a CPU fault in one pod is located at the pod, in every pod at the servic
 
 Run order: (1) `python scripts/aiops2025_run.py --data <release> --check --cases first:5` (adapter coverage, run time, testable / hold
 shares); (2) the full run in shards, once: `--shard k/4`; (3) the scorer (the only code that opens groundtruth.jsonl).
+
+## Amendments after registration (the text above is unchanged)
+
+2026-11-13
+- S1 Scorer. `scripts/aiops2025_score.py` now implements the registered protocol (A6; Cai et al. eq. 1-4): exact LA (pod-level
+  faults need the pod; network attacks accept source or destination), TA on the first 20 words of the reason against the
+  ground-truth fault descriptions (keyword part only, a lower bound), Explainability on the first 20 characters of the trace
+  observations, Efficiency from the trace length of the LA-correct cases, Final = 0.4 LA + 0.4 TA + 0.1 Exp + 0.1 Eff. The scorer
+  committed on 2026-11-10 (Final = 0.5 LA + 0.5 TA; a pod prediction credited when only its service matched; no Explainability /
+  Efficiency) did not follow this registration and is replaced; no number from it is reported. The readings the published text left
+  open are listed as R1-R7 in the scorer's docstring and were fixed before any run of the fixed code was scored: ground-truth field
+  names as in the published example (the names found are printed, without values), metric names matched as whole tokens,
+  Explainability as the mean of per-case ratios (pooled ratio reported next to it), per-case Final for paired tests, case bootstrap
+  of eq. (4) for the interval.
+- S2 Ground truth. The runner and the merge tool no longer take a ground-truth path (`--gt` removed); the scorer is the only code
+  that opens it and it refuses a run that does not answer all cases (`--partial` is for debugging and is a deviation to disclose).
+- S3 The first AIOps2025 outputs (GAMA core, 249 cases) were produced with the regression described in PREREGISTRATION_V6.md,
+  amendment N2, and are discarded (results/invalid_before_fix/); all arms are run again from scratch with the fixed code. If those
+  outputs were scored before the fix, the paper states it and which scorer was used.

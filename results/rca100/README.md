@@ -21,8 +21,8 @@ Evaluated under strict pre-registration across all 103 microservice incidents:
 
 ## 📁 Directory Structure
 
-* [`core/summary.csv`](core/summary.csv): Full 103-case diagnosis metrics (Entity Localization, Fault Identification, Reasoning Path, Final Score, Runtime).
-* [`ablation/ablation_summary.csv`](ablation/ablation_summary.csv): Quantitative impact of removing individual reasoning modules ($M_1$ through $M_6$).
+* [`core/summary.csv`](core/summary.csv): Full 103-case diagnosis metrics (Entity Localization, Fault Identification, Reasoning Path and Final with the headline and the step-anchored reasoning score, Runtime).
+* [`ablation/ablation_summary.csv`](ablation/ablation_summary.csv): Leave-one-out ablation. `rca100_final` is filled only for configurations that were run on the 103 cases (core, no_trace); the others are pending. `synthetic_posterior_p` is the mean posterior confidence on the three synthetic test scenarios (`make ablation`), not an accuracy.
 
 ---
 

@@ -35,7 +35,7 @@ Zero-shot transfer to an unseen Kubernetes cluster with TiDB, Redis, and Chaos M
 
 * [`rca100/`](rca100/):
   * [`core/summary.csv`](rca100/core/summary.csv): Full 103-case diagnosis metrics for GAMA Core.
-  * [`ablation/ablation_summary.csv`](rca100/ablation/ablation_summary.csv): Quantitative evaluation of $M_1$ through $M_6$ module contributions.
+  * [`ablation/ablation_summary.csv`](rca100/ablation/ablation_summary.csv): Leave-one-out ablation (RCA100 Final where run; pending otherwise).
 * [`aiops2025/`](aiops2025/):
   * [`core/`](aiops2025/core/): Clean 12-column per-case diagnosis summaries, predictions JSONL, and empirical scorecards.
 

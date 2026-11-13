@@ -12,6 +12,7 @@
 answer_key/
 *groundtruth*
 *ground_truth*
+*_scored.csv
 *.parquet
 *.tar.gz
 
