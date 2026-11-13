@@ -176,3 +176,11 @@ shares); (2) the full run in shards, once: `--shard k/4`; (3) the scorer (the on
 - S3 The first AIOps2025 outputs (GAMA core, 249 cases) were produced with the regression described in PREREGISTRATION_V6.md,
   amendment N2, and are discarded (results/invalid_before_fix/); all arms are run again from scratch with the fixed code. If those
   outputs were scored before the fix, the paper states it and which scorer was used.
+
+2026-11-13 (runner)
+- S4 Runner. `--workers n` now starts n independent shard processes (restarted when they die, merged at the end) instead of a
+  multiprocessing pool, which could hang forever if a worker was killed; `--shard k/n` is the k-th of n contiguous blocks of the
+  cases sorted by window start (it was every n-th case). Cases are independent (the A7 trace sample depends only on the trace id;
+  no history masking), so the order and the partition change no result; this is checked by a test (the answers with two workers
+  equal those of one process). The runner writes the csv after every case, writes no answer line for a case that errored (a rerun
+  retries it), and records the peak memory per case. Cases are counted as answered only with a row without error and an answer.

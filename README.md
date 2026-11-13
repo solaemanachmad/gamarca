@@ -3,7 +3,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Pre-registration](https://img.shields.io/badge/Pre--registration-Frozen-success.svg)](PREREGISTRATION_V6.md)
-[![Tests](https://img.shields.io/badge/Tests-8%2F8%20Passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-9%2F9%20Passing-brightgreen.svg)](tests/)
 
 Official research code and reproducibility package for:
 > **GAMA-RCA: Graph-aware, Multimodal, Abductive Root Cause Analysis for Microservices with a Computed Belief and a Bounded Language Model**  
@@ -146,7 +146,8 @@ Expected output:
 3/3 passed     (test_aiops2025.py)
 3/3 passed     (test_api_client.py)
 4/4 passed     (test_rules.py)
-6/6 passed     (test_aiops2025_score.py)
+7/7 passed     (test_aiops2025_score.py)
+4/4 passed     (test_aiops2025_run.py)
 ```
 
 ### 3. Run Leave-One-Out Ablation Study

@@ -32,8 +32,10 @@ Readings (fixed before any scored run):
   R5 Eff is a corpus-level quantity. No LA-correct case -> Eff = 0.
   R6 Per-case Final (for paired tests and bootstrap) = 0.4 la + 0.4 ta + 0.1 exp_case + 0.1 Eff of that arm; its mean equals eq. (4)
      except for cases without evidence points. The 95% interval is a case bootstrap (5,000 resamples, seed 0) of eq. (4).
-  R7 A run is scored only when it answers every ground-truth case (an errored case is an empty answer and scores 0). --partial
-     overrides this for debugging; a partial score is not a result and using it is a deviation to disclose.
+  R7 A run is scored only when it answers every ground-truth case (the runner writes no answer for a case that errored, and a rerun
+     retries it). If a case still has no answer after the retries, --missing-as-empty scores it as an empty answer (LA = TA = Exp = 0,
+     trace length 0) and the number of such cases is printed and stored; this is how an errored case counts and it must be reported.
+     --partial scores only the answered cases (debugging); a partial score is not a result and using it is a deviation to disclose.
 The per-case table contains ground truth: keep it private (it is git-ignored).
 """
 from __future__ import annotations
@@ -160,20 +162,25 @@ def bootstrap(d: pd.DataFrame, b: int = B, seed: int = SEED) -> tuple:
     return float(np.percentile(out, 2.5)), float(np.percentile(out, 97.5))
 
 
-def score(preds: list, gts: list, partial: bool = False) -> tuple:
-    """(per-case table, summary). Raises when the run does not answer every ground-truth case, unless partial (R7)."""
+def score(preds: list, gts: list, partial: bool = False, missing_as_empty: bool = False) -> tuple:
+    """(per-case table, summary). Raises when the run does not answer every ground-truth case, unless partial or missing_as_empty (R7)."""
     by = {}
-    for p in preds:
-        by.setdefault(str(p.get("uuid") or p.get("case_id") or ""), p)
+    for p in preds:                                                      # the last non-empty answer of a case counts
+        u = str(p.get("uuid") or p.get("case_id") or "")
+        if u not in by or p.get("component") or not by[u].get("component"):
+            by[u] = p
     missing = [g.get("uuid") for g in gts if str(g.get("uuid")) not in by]
-    if missing and not partial:
+    if missing and missing_as_empty:
+        for u in missing:
+            by[str(u)] = {"uuid": u, "component": "", "reason": "", "reasoning_trace": []}
+    if missing and not partial and not missing_as_empty:
         raise SystemExit(f"{len(missing)} of {len(gts)} ground-truth cases have no answer (first: {missing[:3]}). Finish the run "
                          "before scoring; --partial scores the answered cases only (debugging, not a result).")
     rows = [score_case(by[str(g.get("uuid"))], g) for g in gts if str(g.get("uuid")) in by]
     d = pd.DataFrame(rows)
     s = aggregate(d)
     s["Final_ci95"] = bootstrap(d)
-    s["partial"] = bool(missing)
+    s["partial"] = bool(missing) and not missing_as_empty
     s["n_missing"] = len(missing)
     d["final_case"] = 100.0 * (W_LA * d["la"] + W_TA * d["ta"] + W_EXP * d["exp"].fillna(0.0) + W_EFF * s["Eff"])   # R6
     s["by_category"] = {str(k): aggregate(g) for k, g in d.groupby("fault_category", dropna=False)}
@@ -210,6 +217,7 @@ def main():
     ap.add_argument("--gt", required=True, help="groundtruth.jsonl")
     ap.add_argument("--out", default=None, help="folder for <name>_scored.csv (contains ground truth: private) and scores.json")
     ap.add_argument("--partial", action="store_true", help="score an unfinished run (debugging only; not a result)")
+    ap.add_argument("--missing-as-empty", action="store_true", help="a case without an answer scores as an empty answer (R7); reported")
     a = ap.parse_args()
     gts = read_jsonl(a.gt)
     print(f"{len(gts)} ground-truth cases")
@@ -219,10 +227,12 @@ def main():
         name, _, path = item.rpartition("=")
         name = name or os.path.splitext(os.path.basename(path))[0]
         assert path.endswith(".jsonl"), "predictions must be the answer .jsonl (the csv has no reasoning trace)"
-        tables[name], summaries[name] = score(read_jsonl(path), gts, a.partial)
+        tables[name], summaries[name] = score(read_jsonl(path), gts, a.partial, a.missing_as_empty)
         s = summaries[name]
         print(f"\n== {name}" + ("  [PARTIAL: not a result]" if s["partial"] else ""))
         print(_fmt({**s}))
+        if s["n_missing"] and a.missing_as_empty:
+            print(f"  NOTE: {s['n_missing']} case(s) without an answer were scored as empty answers (R7)")
         for title, key in (("by fault category", "by_category"), ("by injection level", "by_level")):
             print(f"  {title}:")
             for k, g in s[key].items():

@@ -46,8 +46,8 @@ def load_jsonl_shards(patterns: List[str]) -> List[dict]:
                     continue
                 item = json.loads(line)
                 uuid = item.get("uuid")
-                if uuid and uuid not in records:
-                    records[uuid] = item
+                if uuid and (uuid not in records or item.get("component") or not records[uuid].get("component")):
+                    records[uuid] = item                       # a non-empty answer replaces an earlier one; the last one wins
     print(f"Loaded {len(records)} unique JSONL records from {len(files)} files.")
     return list(records.values())
 
@@ -69,6 +69,8 @@ def load_csv_shards(patterns: List[str]) -> pd.DataFrame:
     dfs = [pd.read_csv(f) for f in files]
     merged = pd.concat(dfs, ignore_index=True)
     if "case_id" in merged.columns:
+        if "error" in merged.columns:                          # a row without error is preferred over an errored one
+            merged = merged.assign(_bad=merged["error"].notna()).sort_values("_bad", kind="stable").drop(columns="_bad")
         merged = merged.drop_duplicates(subset=["case_id"], keep="first")
     print(f"Loaded {len(merged)} unique CSV rows from {len(files)} files.")
     return merged

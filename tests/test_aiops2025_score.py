@@ -100,6 +100,16 @@ def an_unfinished_run_is_not_scored():
     assert s["partial"] and s["n"] == 1 and s["n_missing"] == 1
 
 
+@test
+def a_missing_case_can_count_as_an_empty_answer_and_the_last_nonempty_answer_wins():
+    gts = [gt("a", "stress test", "cpu stress", "service", "x", ["cpu stress"], metrics=["m1"]),
+           gt("b", "stress test", "cpu stress", "service", "y", ["cpu stress"], metrics=["m1"])]
+    preds = [ans("a", "", ""), ans("a", "x", "cpu stress at x", ["m1: up"])]            # empty line first (an earlier errored try)
+    d, s = S.score(preds, gts, missing_as_empty=True)
+    assert s["n_missing"] == 1 and not s["partial"] and s["n"] == 2
+    assert abs(s["LA"] - 0.5) < 1e-9 and abs(s["TA"] - 0.5) < 1e-9
+
+
 if __name__ == "__main__":
     ok = 0
     for fn in T:

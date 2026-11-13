@@ -30,34 +30,28 @@ results/aiops2025/
 
 ---
 
-## ⚡ Running on CPU (Sequential & Parallel)
+## ⚡ Running on CPU (parallel, resumable)
 
-### 1. Single Command Multi-Core Execution (Fastest on Kaggle)
-Kaggle CPU notebooks provide 4 vCPUs. To utilize all 4 CPU cores simultaneously:
+### 1. One command, several processes (Kaggle CPU session: 4 vCPUs)
 ```bash
-python scripts/aiops2025_run.py \
-  --data /kaggle/input/aiops2025 \
-  --out results/aiops2025/core \
-  --workers 4
+python scripts/aiops2025_run.py --data /kaggle/input/aiops2025 --out results/aiops2025/core --workers 4
 ```
+`--workers n` starts n independent shard processes (contiguous blocks of the cases sorted by window start; neighbouring cases share
+files, so the file cache is reused). Each shard writes its own files under `<out>/<name>_shards/` after every case. A shard that dies
+(out of memory, killed session) is restarted up to `--retries` times and continues where it stopped; at the end the shards are merged
+into `<out>/AIOPS_GAMA_core.{jsonl,csv}`. The partition does not change any result. If memory is short: `AIOPS_CACHE_FILES=8` and fewer
+workers; the per-case peak memory is in the `peak_rss_mb` column.
 
-### 2. Parallel Sharding & Merging (Distributed / Multi-session)
-If running multiple background shards:
+If the session ends, run **the same command again**: finished cases are kept, the rest are run.
+
+### 2. Several sessions
 ```bash
-# Run 4 parallel shards
-for k in 0 1 2 3; do
-  python scripts/aiops2025_run.py \
-    --data /kaggle/input/aiops2025 \
-    --out /kaggle/working/shards \
-    --shard ${k}/4 &
-done
-wait
-
-# Merge all shards
-python scripts/aiops2025_merge.py \
-  --inputs "/kaggle/working/shards/*.jsonl" \
-  --out results/aiops2025/core
+python scripts/aiops2025_run.py --data ... --out /kaggle/working/shards --shard 0/4     # one per session: 0/4 .. 3/4
+python scripts/aiops2025_merge.py --inputs /kaggle/working/shards --out results/aiops2025/core --name AIOPS_GAMA_core
 ```
+LLM arms use one process per shard (`--shard k/n`, not `--workers`): the API has a rate limit.
+
+---
 
 ### 3. Scoring (once, after every arm has answered all 400 cases)
 The scorer is the only code that opens the ground truth; it refuses an unfinished run.
@@ -71,18 +65,7 @@ python scripts/aiops2025_score.py \
 
 ---
 
-## 📋 CSV Format (12 Clean Columns)
+## 📋 CSV Format
 
-The output `summary.csv` provides clean, tabular diagnostics:
-1. `case_id`: Incident identifier (UUID)
-2. `component`: Identified root cause entity (pod / service / node)
-3. `fault_type`: Identified fault mechanism (e.g. `cpu_stress`, `network_delay`)
-4. `confidence`: Posterior Bayesian confidence $P(e^*)$
-5. `reason`: Concise summary of the root cause and holding evidence
-6. `n_steps`: Number of causal reasoning steps in the evidence chain
-7. `n_metrics`: Total metric time-series points evaluated
-8. `n_logs`: Total container log lines evaluated
-9. `n_traces`: Total distributed trace spans evaluated
-10. `load_time_s`: Telemetry data loading duration (seconds)
-11. `pipeline_time_s`: GAMA evidence calibration & Bayesian reasoning duration (seconds)
-12. `wall_s`: Total execution wall-clock time per case (seconds)
+`<name>.csv` has one row per case: `case_id`, `component`, `fault_type`, `confidence` (posterior P(e*)), `reason`, `n_steps`, `n_metrics`,
+`n_logs`, `n_traces`, `load_time_s`, `pipeline_time_s`, `wall_s`, `peak_rss_mb`; a case that errored has `error` set and no answer line.
