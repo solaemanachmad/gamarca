@@ -44,12 +44,23 @@ workers; the per-case peak memory is in the `peak_rss_mb` column.
 
 If the session ends, run **the same command again**: finished cases are kept, the rest are run.
 
-### 2. Several sessions
+### 2. Four sessions (one quarter each)
+In each of four Kaggle sessions / accounts run one shard (k = 0, 1, 2, 3):
 ```bash
-python scripts/aiops2025_run.py --data ... --out /kaggle/working/shards --shard 0/4     # one per session: 0/4 .. 3/4
-python scripts/aiops2025_merge.py --inputs /kaggle/working/shards --out results/aiops2025/core --name AIOPS_GAMA_core
+python scripts/aiops2025_run.py --data /kaggle/input/aiops2025 --out /kaggle/working/out --shard 0/4
+```
+Each session ends with `/kaggle/working/out/AIOPS_GAMA_core_shard0of4_all.zip` (answers, table, manifest). Download the four zips and merge
+them (the zips are read directly):
+```bash
+python scripts/aiops2025_merge.py --inputs AIOPS_GAMA_core_shard*of4_all.zip --out results/aiops2025/core --name AIOPS_GAMA_core
 ```
 LLM arms use one process per shard (`--shard k/n`, not `--workers`): the API has a rate limit.
+
+### Saving the output on Kaggle
+Files in `/kaggle/working` are kept only for a notebook version that finished: use **Save Version → Save & Run All (Commit)** and download
+the zip from that version's Output tab (an interactive session loses them when it stops). The zip is rewritten every 20 cases
+(`--workers`: every minute), so a stopped run still leaves what it had done; run the same command again in a new session to continue
+(copy the zip back, unzip it into `--out`, then run the command: the finished cases are kept).
 
 ---
 

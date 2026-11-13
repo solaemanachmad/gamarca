@@ -58,6 +58,23 @@ def main_tests(rel, tmp):
         assert len(csv) == 2 and "peak_rss_mb" in csv.columns and csv["peak_rss_mb"].gt(0).all()
 
     @test
+    def every_run_leaves_a_zip_and_four_sessions_merge_from_their_zips():
+        import zipfile
+        many = os.path.join(tmp, "many")
+        z = zipfile.ZipFile(os.path.join(many, "AIOPS_GAMA_core_all.zip"))
+        names = z.namelist()
+        assert "AIOPS_GAMA_core.jsonl" in names and any(n.endswith("shard0of2.jsonl") for n in names), names
+        for k in (0, 1):                                                         # two sessions, one shard each
+            run(["--data", rel, "--out", os.path.join(tmp, f"sess{k}"), "--shard", f"{k}/2"])
+            assert os.path.exists(os.path.join(tmp, f"sess{k}", f"AIOPS_GAMA_core_shard{k}of2_all.zip"))
+        merged = os.path.join(tmp, "merged")
+        p = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "aiops2025_merge.py"), "--inputs",
+                            os.path.join(tmp, "sess0", "*_all.zip"), os.path.join(tmp, "sess1", "*_all.zip"), "--out", merged,
+                            "--name", "AIOPS_GAMA_core"], capture_output=True, text=True)
+        assert p.returncode == 0, p.stderr[-500:]
+        assert answers(os.path.join(merged, "AIOPS_GAMA_core.jsonl")) == answers(os.path.join(tmp, "one", "AIOPS_GAMA_core.jsonl"))
+
+    @test
     def resume_keeps_finished_cases_and_reruns_an_answer_without_its_row():
         out = os.path.join(tmp, "resume")
         run(["--data", rel, "--out", out])

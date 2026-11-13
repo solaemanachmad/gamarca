@@ -147,7 +147,7 @@ Expected output:
 3/3 passed     (test_api_client.py)
 4/4 passed     (test_rules.py)
 7/7 passed     (test_aiops2025_score.py)
-4/4 passed     (test_aiops2025_run.py)
+5/5 passed     (test_aiops2025_run.py)
 ```
 
 ### 3. Run Leave-One-Out Ablation Study

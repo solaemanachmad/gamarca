@@ -126,6 +126,21 @@ def check(case, m) -> list:
             for (k, s), n in sorted(tot.items())]
 
 
+def zip_outputs(directory: str, zip_name: str, roots: list) -> str:
+    """<directory>/<zip_name>: the answer / table / manifest files of the given outputs (python zipfile; no external zip needed).
+    Written again during the run, so a session that is cut still leaves a downloadable archive of what was done."""
+    import zipfile
+    path = os.path.join(directory, zip_name)
+    tmp = path + ".tmp"
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
+        for root in roots:
+            for f in sorted(os.listdir(root)):
+                if f.endswith((".jsonl", ".csv", ".manifest.json")) and not f.endswith("_scored.csv"):
+                    z.write(os.path.join(root, f), os.path.relpath(os.path.join(root, f), directory))
+    os.replace(tmp, path)
+    return path
+
+
 _REL = None                                            # the release index, built once per process (os.walk of the whole release is slow)
 
 
@@ -289,6 +304,8 @@ def main():
             jl.flush()
         if not a.check:
             pd.DataFrame(rows).to_csv(p_csv, index=False)             # every case: a killed process loses nothing
+            if (i + 1) % 20 == 0:
+                zip_outputs(a.out, f"{name}_all.zip", [a.out])
         if err:
             print(f"[{i + 1}/{len(specs)}] {uuid} [error] {err}", flush=True)
         elif a.check:
@@ -311,8 +328,7 @@ def main():
     manifest.update(finished=time.strftime("%Y-%m-%dT%H:%M:%S%z"), wall_s=round(time.time() - t_all, 1),
                     n_errors=sum(1 for r in rows if r.get("error")))
     json.dump(manifest, open(os.path.join(a.out, f"{name}.manifest.json"), "w"), indent=1)
-    subprocess.run(f"cd {a.out} && rm -f {name}_all.zip && zip -q {name}_all.zip {name}.* {name}_check.csv 2>/dev/null", shell=True)
-    print("download:", os.path.join(a.out, f"{name}_all.zip"))
+    print("download:", zip_outputs(a.out, f"{name}_all.zip", [a.out]), flush=True)
     n_err = sum(1 for r in rows if isinstance(r.get("error"), str))
     if n_err:
         print(f"{n_err} case(s) errored and have no answer; run the same command again to retry them", flush=True)
@@ -343,8 +359,12 @@ def supervise(a, name) -> int:
     tries = [0] * n
     procs = {k: subprocess.Popen(cmds[k]) for k in range(n)}
     status = {}
+    t_zip = 0.0
     while procs:
         time.sleep(5)
+        if time.time() - t_zip > 60:                                 # a downloadable archive of what is done so far
+            zip_outputs(a.out, f"{name}_all.zip", [shard_dir])
+            t_zip = time.time()
         for k in list(procs):
             rc = procs[k].poll()
             if rc is None:
@@ -361,6 +381,7 @@ def supervise(a, name) -> int:
     print("[supervisor]", status, flush=True)
     merge = [sys.executable, os.path.join(HERE, "aiops2025_merge.py"), "--inputs", shard_dir, "--out", a.out, "--name", name]
     subprocess.run(merge)
+    print("download:", zip_outputs(a.out, f"{name}_all.zip", [a.out, shard_dir]), flush=True)
     bad = {k: v for k, v in status.items() if v != "ok"}
     return 1 if bad else 0
 

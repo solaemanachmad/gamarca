@@ -28,7 +28,7 @@ def load_jsonl_shards(patterns: List[str]) -> List[dict]:
     files = []
     for pat in patterns:
         if os.path.isdir(pat):
-            files.extend(glob.glob(os.path.join(pat, "*.jsonl")))
+            files.extend(glob.glob(os.path.join(pat, "**", "*.jsonl"), recursive=True))
         else:
             files.extend(glob.glob(pat))
     files = [f for f in files if f.endswith(".jsonl")]
@@ -57,7 +57,7 @@ def load_csv_shards(patterns: List[str]) -> pd.DataFrame:
     files = []
     for pat in patterns:
         if os.path.isdir(pat):
-            files.extend(glob.glob(os.path.join(pat, "*.csv")))
+            files.extend(glob.glob(os.path.join(pat, "**", "*.csv"), recursive=True))
         else:
             files.extend(glob.glob(pat))
     # Exclude scored or check files
@@ -95,14 +95,34 @@ def jsonl_to_rows(records: List[dict]) -> List[dict]:
     return rows
 
 
+def expand_zips(patterns: List[str], tmp: str) -> List[str]:
+    """Shard outputs downloaded as *_all.zip (one per session): extract each into its own folder under tmp and use the folders."""
+    import zipfile
+    out = []
+    for pat in patterns:
+        hits = [h for h in (glob.glob(pat) or [pat]) if h.endswith(".zip") and os.path.isfile(h)]
+        if not hits:
+            out.append(pat)
+            continue
+        for h in sorted(hits):
+            d = os.path.join(tmp, f"z{len(out)}")
+            with zipfile.ZipFile(h) as z:
+                z.extractall(d)
+            out.append(d)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="Merge parallel AIOps2025 shards")
-    ap.add_argument("--inputs", nargs="+", required=True, help="paths, globs, or directory of shard outputs")
+    ap.add_argument("--inputs", nargs="+", required=True, help="paths, globs, directories or the *_all.zip files of the shard sessions")
     ap.add_argument("--out", default="results/aiops2025/core", help="output directory for merged results")
     ap.add_argument("--name", default="summary", help="base output name (default: summary)")
     a = ap.parse_args()
 
     os.makedirs(a.out, exist_ok=True)
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix="aiops_merge_")
+    a.inputs = expand_zips(a.inputs, tmp)
 
     jsonl_records = load_jsonl_shards(a.inputs)
     csv_df = load_csv_shards(a.inputs)
@@ -121,6 +141,8 @@ def main():
     if not csv_df.empty:
         csv_df.to_csv(out_csv, index=False)
         print(f"Saved merged CSV   -> {out_csv}")
+    import shutil
+    shutil.rmtree(tmp, ignore_errors=True)
 
 
 if __name__ == "__main__":
